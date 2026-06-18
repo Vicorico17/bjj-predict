@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { initialState } from "./data";
+import smoothcompLiveSnapshot from "./generated/smoothcomp-live-snapshot.json";
 import {
   formatDateTime,
   formatPercent,
@@ -40,7 +41,13 @@ import {
   roundShares,
   settleMarket
 } from "./market";
-import { importSmoothcompEvent, parseSmoothcompEventId } from "./smoothcomp";
+import {
+  applySmoothcompSnapshot,
+  importSmoothcompEvent,
+  parseSmoothcompEventId,
+  summarizeSmoothcompSnapshot,
+  type SmoothcompSnapshot
+} from "./smoothcomp";
 import { loadState, resetState, saveState } from "./storage";
 import type { AppState, Competitor, Market, Match, Position, TradeQuote, TradeSide } from "./types";
 
@@ -60,19 +67,24 @@ const communityLeaderboard = [
   { name: "You", academy: "Independent", score: 0, hitRate: "0%" }
 ];
 
+const smoothcompSnapshot = smoothcompLiveSnapshot as SmoothcompSnapshot;
+
+function hydrateStateFromSnapshot(baseState: AppState) {
+  const hydrated = applySmoothcompSnapshot(baseState, smoothcompSnapshot);
+  return { ...hydrated, positions: markPositions(hydrated) };
+}
+
 function App() {
-  const [state, setState] = useState<AppState>(() => {
-    const loaded = loadState();
-    return { ...loaded, positions: markPositions(loaded) };
-  });
+  const [state, setState] = useState<AppState>(() => hydrateStateFromSnapshot(loadState()));
   const [view, setView] = useState<View>("markets");
-  const [selectedEventId, setSelectedEventId] = useState(() => loadState().events[0]?.id ?? "");
+  const [selectedEventId, setSelectedEventId] = useState(() => hydrateStateFromSnapshot(loadState()).events[0]?.id ?? "");
   const [tradeSide, setTradeSide] = useState<TradeSide>("buy");
   const [amount, setAmount] = useState(100);
   const [sellShares, setSellShares] = useState(1);
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [smoothcompUrl, setSmoothcompUrl] = useState("https://smoothcomp.com/en/event/19240");
   const [settlementFinish, setSettlementFinish] = useState(finishOptions[0]);
+  const [syncNotice, setSyncNotice] = useState("");
 
   useEffect(() => {
     saveState(state);
@@ -89,6 +101,7 @@ function App() {
   const activePositions = state.positions.filter((position) => position.shares > 0 && !position.isResolved);
   const portfolioMarkValue = state.positions.reduce((sum, position) => sum + position.markValue, 0);
   const portfolioValue = roundMoney(state.balance + portfolioMarkValue);
+  const smoothcompSummary = useMemo(() => summarizeSmoothcompSnapshot(smoothcompSnapshot), []);
 
   const selectedTicketData = useMemo(() => {
     if (!ticket) {
@@ -147,14 +160,37 @@ function App() {
   function handleImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const eventNumber = parseSmoothcompEventId(smoothcompUrl);
-    setState((current) => importSmoothcompEvent(current, smoothcompUrl));
+    setState((current) => hydrateStateFromSnapshot(importSmoothcompEvent(current, smoothcompUrl, smoothcompSnapshot)));
     if (eventNumber) {
       setSelectedEventId(`e-smoothcomp-${eventNumber}`);
     }
   }
 
+  function applyLatestSmoothcompSnapshot(options: { eventId?: string; sourceEventId?: string } = {}) {
+    const targetEventId =
+      options.eventId || (options.sourceEventId ? `e-smoothcomp-${options.sourceEventId}` : smoothcompSnapshot.events[0]?.id);
+
+    setState((current) => {
+      const next = applySmoothcompSnapshot(current, smoothcompSnapshot, options);
+      return { ...next, positions: markPositions(next) };
+    });
+
+    if (targetEventId) {
+      setSelectedEventId(targetEventId);
+    }
+
+    setSyncNotice(
+      `Applied ${smoothcompSummary.eventCount} events and ${smoothcompSummary.matchCount} matches from the latest Smoothcomp snapshot.`
+    );
+  }
+
   function syncSelectedEvent() {
     if (!selectedEvent) {
+      return;
+    }
+
+    if (selectedEvent.source === "smoothcomp") {
+      applyLatestSmoothcompSnapshot({ eventId: selectedEvent.id });
       return;
     }
 
@@ -168,8 +204,9 @@ function App() {
 
   function handleReset() {
     resetState();
-    setState(initialState);
-    setSelectedEventId(initialState.events[0]?.id ?? "");
+    const nextState = hydrateStateFromSnapshot(initialState);
+    setState(nextState);
+    setSelectedEventId(nextState.events[0]?.id ?? "");
     setTicket(null);
   }
 
@@ -225,11 +262,16 @@ function App() {
       </aside>
 
       <main className="main-content">
-        <header className="topbar">
-          <div>
-            <span className="eyebrow">LMSR market maker</span>
-            <h1>Trade BJJ winner markets before the bracket starts.</h1>
-            <p>Buy shares, watch probabilities move, and settle from verified Smoothcomp results.</p>
+        <header className="topbar topbar-compact">
+          <div className="source-summary">
+            <span className="status-pill live">
+              <RefreshCw size={12} aria-hidden="true" />
+              Smoothcomp sync
+            </span>
+            <span>{smoothcompSummary.eventCount} events</span>
+            <span>{smoothcompSummary.matchCount} matches</span>
+            <span>{smoothcompSummary.liveCount} live</span>
+            <span>{smoothcompSummary.settledCount} settled</span>
           </div>
           <div className="topbar-actions">
             <a className="icon-link" href={selectedEvent?.sourceUrl} target="_blank" rel="noreferrer">
@@ -429,7 +471,22 @@ function App() {
                   <RefreshCw size={17} aria-hidden="true" />
                   <span>Sync selected</span>
                 </button>
+                <button className="primary-button" type="button" onClick={() => applyLatestSmoothcompSnapshot()}>
+                  <DatabaseZap size={17} aria-hidden="true" />
+                  <span>Apply snapshot</span>
+                </button>
               </div>
+              <div className="snapshot-summary">
+                <div>
+                  <strong>Latest Smoothcomp snapshot</strong>
+                  <span>
+                    {smoothcompSummary.eventCount} events · {smoothcompSummary.matchCount} matches ·{" "}
+                    {smoothcompSummary.liveCount} live · {smoothcompSummary.settledCount} settled
+                  </span>
+                </div>
+                <span>{smoothcompSummary.syncedAt ? formatDateTime(smoothcompSummary.syncedAt) : "Not synced yet"}</span>
+              </div>
+              {syncNotice && <div className="ticket-alert muted">{syncNotice}</div>}
             </div>
 
             <div className="panel">
@@ -552,6 +609,7 @@ type MarketCardProps = {
 function MarketCard({ competitors, market, match, positions, onPick }: MarketCardProps) {
   const quote = getQuote(market, match);
   const disabled = market.status !== "open";
+  const matchScore = formatMatchScore(match.score);
 
   return (
     <article className="market-card">
@@ -567,8 +625,11 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
       </div>
 
       <div className="match-meta">
+        <span>{match.status === "live" ? "Live" : match.status}</span>
         <span>{match.mat}</span>
         <span>{formatDateTime(match.scheduledAt)}</span>
+        {match.liveClock && <span>Clock {match.liveClock}</span>}
+        {matchScore && <span>{matchScore}</span>}
         <span>{market.volume.toLocaleString()} pts</span>
         <span>{market.tradeCount} trades</span>
         <span>LP risk {market.liquidityRisk.toLocaleString()} pts</span>
@@ -604,6 +665,17 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
       </div>
     </article>
   );
+}
+
+function formatMatchScore(score: Match["score"]) {
+  if (!score?.left && !score?.right) {
+    return "";
+  }
+
+  const side = (value: NonNullable<Match["score"]>["left"]) =>
+    `${value?.points ?? 0}/${value?.advantages ?? 0}/${value?.penalties ?? 0}`;
+
+  return `Score ${side(score.left)} - ${side(score.right)} pts/adv/pen`;
 }
 
 function ownedSharesFor(positions: Position[], marketId: string, competitorId: string) {

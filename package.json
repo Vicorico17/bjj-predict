@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc && vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "sync:smoothcomp": "node scripts/smoothcomp-sync.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

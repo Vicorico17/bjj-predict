@@ -6,14 +6,18 @@ export type MarketStatus = "open" | "locked" | "settled";
 
 export type TradeSide = "buy" | "sell";
 
+export type BeltRank = "white" | "grey" | "yellow" | "orange" | "green" | "blue" | "purple" | "brown" | "black";
+
 export type Competitor = {
   id: string;
   name: string;
   academy: string;
   country: string;
-  belt: "blue" | "purple" | "brown" | "black";
+  belt: BeltRank;
   seed: number;
   record: string;
+  sourceId?: string;
+  sourceUrl?: string;
 };
 
 export type Event = {
@@ -29,6 +33,17 @@ export type Event = {
   lastSyncedAt: string;
 };
 
+export type MatchScoreSide = {
+  points?: number | null;
+  advantages?: number | null;
+  penalties?: number | null;
+};
+
+export type MatchScore = {
+  left?: MatchScoreSide;
+  right?: MatchScoreSide;
+};
+
 export type Match = {
   id: string;
   eventId: string;
@@ -41,6 +56,12 @@ export type Match = {
   competitorBId: string;
   winnerId?: string;
   finish?: string;
+  liveClock?: string;
+  score?: MatchScore;
+  sourceBracketId?: string;
+  sourceMatchId?: string;
+  sourceState?: string;
+  sourceUrl?: string;
 };
 
 export type Market = {

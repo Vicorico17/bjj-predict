@@ -1,0 +1,1022 @@
+{
+  "source": "smoothcomp",
+  "syncedAt": "2026-06-18T05:45:08.100Z",
+  "calendarUrl": "https://smoothcomp.com/en/events/upcoming",
+  "events": [
+    {
+      "id": "e-smoothcomp-27144",
+      "sourceEventId": "27144",
+      "name": "Grappling Industries CANBERRA",
+      "organizer": "Grappling Industries Australia",
+      "city": "Canberra",
+      "country": "",
+      "startsAt": "2026-06-20T09:00:00+10:00",
+      "endsAt": "2026-06-20T23:00:00+10:00",
+      "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144",
+      "status": "upcoming",
+      "categoryGroups": [],
+      "coverImage": "https://smoothcomp.com/pictures/t/7180544-w3u1/grappling-industries-canberra-2026.png",
+      "matches": [
+        {
+          "sourceMatchId": "15652231",
+          "sourceBracketId": "2029007",
+          "division": "Gi Kids / 4 - 5 years / White / -55 lbs",
+          "round": "Match 1/3",
+          "mat": "Mat 3",
+          "scheduledAt": "2026-06-20T09:11:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029007",
+          "competitorA": {
+            "sourceId": "9193578",
+            "name": "Aleena Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "27 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349476"
+          },
+          "competitorB": {
+            "sourceId": "8892093",
+            "name": "Cohen Steele",
+            "academy": "Chave De Ouro",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2743857"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652232",
+          "sourceBracketId": "2029007",
+          "division": "Gi Kids / 4 - 5 years / White / -55 lbs",
+          "round": "Match 2/3",
+          "mat": "Mat 3",
+          "scheduledAt": "2026-06-20T09:18:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029007",
+          "competitorA": {
+            "sourceId": "9193578",
+            "name": "Aleena Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "27 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349476"
+          },
+          "competitorB": {
+            "sourceId": "8966836",
+            "name": "Barry Williams",
+            "academy": "Team Perosh MMA",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "1 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2687205"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652233",
+          "sourceBracketId": "2029007",
+          "division": "Gi Kids / 4 - 5 years / White / -55 lbs",
+          "round": "Match 3/3",
+          "mat": "Mat 3",
+          "scheduledAt": "2026-06-20T09:25:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029007",
+          "competitorA": {
+            "sourceId": "8966836",
+            "name": "Barry Williams",
+            "academy": "Team Perosh MMA",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "1 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2687205"
+          },
+          "competitorB": {
+            "sourceId": "8892093",
+            "name": "Cohen Steele",
+            "academy": "Chave De Ouro",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2743857"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652260",
+          "sourceBracketId": "2029012",
+          "division": "Gi Kids / 4 - 5 years / Grey / -45 lbs",
+          "round": "Match 1/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:05:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029012",
+          "competitorA": {
+            "sourceId": "9193327",
+            "name": "Tommy Vandersteen",
+            "academy": "Legends Brazilian Jiu Jitsu Australia",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2784842"
+          },
+          "competitorB": {
+            "sourceId": "8991082",
+            "name": "Brian Merheb",
+            "academy": "Gracie Barra Kiama",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 2,
+            "record": "23 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2303560"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652261",
+          "sourceBracketId": "2029012",
+          "division": "Gi Kids / 4 - 5 years / Grey / -45 lbs",
+          "round": "Match 2/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:12:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029012",
+          "competitorA": {
+            "sourceId": "9193327",
+            "name": "Tommy Vandersteen",
+            "academy": "Legends Brazilian Jiu Jitsu Australia",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2784842"
+          },
+          "competitorB": {
+            "sourceId": "8991082",
+            "name": "Brian Merheb",
+            "academy": "Gracie Barra Kiama",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 2,
+            "record": "23 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2303560"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652262",
+          "sourceBracketId": "2029012",
+          "division": "Gi Kids / 4 - 5 years / Grey / -45 lbs",
+          "round": "Match 3/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:19:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029012",
+          "competitorA": {
+            "sourceId": "9193327",
+            "name": "Tommy Vandersteen",
+            "academy": "Legends Brazilian Jiu Jitsu Australia",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2784842"
+          },
+          "competitorB": {
+            "sourceId": "8991082",
+            "name": "Brian Merheb",
+            "academy": "Gracie Barra Kiama",
+            "country": "AU",
+            "belt": "grey",
+            "seed": 2,
+            "record": "23 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2303560"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652214",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 1/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:27:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8858689",
+            "name": "Niamh Hennessy",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2800647"
+          },
+          "competitorB": {
+            "sourceId": "8925427",
+            "name": "Caesar Tran",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2572686"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652215",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 2/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:31:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8892234",
+            "name": "Alan Liu",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2831783"
+          },
+          "competitorB": {
+            "sourceId": "9066294",
+            "name": "Aster Wei",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2724517"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652216",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 3/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:34:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "9193557",
+            "name": "Iliyaas Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "14 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349467"
+          },
+          "competitorB": {
+            "sourceId": "8966848",
+            "name": "Isaac Churchward",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2882465"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652217",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 4/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:38:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8925427",
+            "name": "Caesar Tran",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2572686"
+          },
+          "competitorB": {
+            "sourceId": "8892234",
+            "name": "Alan Liu",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2831783"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652218",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 5/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:41:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "9066294",
+            "name": "Aster Wei",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2724517"
+          },
+          "competitorB": {
+            "sourceId": "9193557",
+            "name": "Iliyaas Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "14 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349467"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652219",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 6/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:45:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8858689",
+            "name": "Niamh Hennessy",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2800647"
+          },
+          "competitorB": {
+            "sourceId": "8966848",
+            "name": "Isaac Churchward",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2882465"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652220",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 7/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:48:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8925427",
+            "name": "Caesar Tran",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2572686"
+          },
+          "competitorB": {
+            "sourceId": "9066294",
+            "name": "Aster Wei",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2724517"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652221",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 8/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:52:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8858689",
+            "name": "Niamh Hennessy",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2800647"
+          },
+          "competitorB": {
+            "sourceId": "8892234",
+            "name": "Alan Liu",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2831783"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652222",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 9/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:55:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "9066294",
+            "name": "Aster Wei",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2724517"
+          },
+          "competitorB": {
+            "sourceId": "8966848",
+            "name": "Isaac Churchward",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2882465"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652223",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 10/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T09:59:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8892234",
+            "name": "Alan Liu",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2831783"
+          },
+          "competitorB": {
+            "sourceId": "9193557",
+            "name": "Iliyaas Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "14 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349467"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652224",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 11/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T10:02:30+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8925427",
+            "name": "Caesar Tran",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2572686"
+          },
+          "competitorB": {
+            "sourceId": "8966848",
+            "name": "Isaac Churchward",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2882465"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652225",
+          "sourceBracketId": "2029004",
+          "division": "Gi Kids / 6 - 7 years / White / -55 lbs",
+          "round": "Match 12/12",
+          "mat": "Mat 1",
+          "scheduledAt": "2026-06-20T10:06:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029004",
+          "competitorA": {
+            "sourceId": "8858689",
+            "name": "Niamh Hennessy",
+            "academy": "Grappling Bros / GFTeam",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2800647"
+          },
+          "competitorB": {
+            "sourceId": "9193557",
+            "name": "Iliyaas Idowu-Thomas",
+            "academy": "Sydney Wrestling Academy",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "14 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2349467"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652211",
+          "sourceBracketId": "2029003",
+          "division": "Gi Kids / 6 - 7 years / White / -65 lbs",
+          "round": "Match 1/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:09:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029003",
+          "competitorA": {
+            "sourceId": "9022904",
+            "name": "Charlie Lewis",
+            "academy": "CIRILLO'S RMA BJJ",
+            "country": "TW",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2877362"
+          },
+          "competitorB": {
+            "sourceId": "9051273",
+            "name": "Noah Rankine",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2035497"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652212",
+          "sourceBracketId": "2029003",
+          "division": "Gi Kids / 6 - 7 years / White / -65 lbs",
+          "round": "Match 2/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:16:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029003",
+          "competitorA": {
+            "sourceId": "9022904",
+            "name": "Charlie Lewis",
+            "academy": "CIRILLO'S RMA BJJ",
+            "country": "TW",
+            "belt": "white",
+            "seed": 1,
+            "record": "Smoothcomp",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2877362"
+          },
+          "competitorB": {
+            "sourceId": "9128777",
+            "name": "Soakai Tai",
+            "academy": "Australian Elite Team",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "4 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2211839"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "15652213",
+          "sourceBracketId": "2029003",
+          "division": "Gi Kids / 6 - 7 years / White / -65 lbs",
+          "round": "Match 3/3",
+          "mat": "Mat 4",
+          "scheduledAt": "2026-06-20T09:23:00+10:00",
+          "status": "open",
+          "sourceState": "seeded",
+          "sourceUrl": "https://grapplingindustries.smoothcomp.com/en/event/27144/bracket/2029003",
+          "competitorA": {
+            "sourceId": "9128777",
+            "name": "Soakai Tai",
+            "academy": "Australian Elite Team",
+            "country": "AU",
+            "belt": "white",
+            "seed": 1,
+            "record": "4 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2211839"
+          },
+          "competitorB": {
+            "sourceId": "9051273",
+            "name": "Noah Rankine",
+            "academy": "High Rollers",
+            "country": "AU",
+            "belt": "white",
+            "seed": 2,
+            "record": "2 Smoothcomp wins",
+            "sourceUrl": "https://smoothcomp.com/en/profile/2035497"
+          },
+          "winnerSide": null,
+          "winnerSourceId": null,
+          "finish": null,
+          "liveClock": "03:00",
+          "score": {
+            "left": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            },
+            "right": {
+              "points": 0,
+              "advantages": 0,
+              "penalties": 0
+            }
+          }
+        }
+      ],
+      "warnings": []
+    }
+  ],
+  "stats": {
+    "discoveredEvents": 1,
+    "importedEvents": 1,
+    "importedMatches": 21,
+    "liveMatches": 0,
+    "settledMatches": 0,
+    "failedEvents": 0,
+    "failedBrackets": 0,
+    "failedLiveScores": 0
+  },
+  "warnings": []
+}

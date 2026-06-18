@@ -176,6 +176,21 @@ a {
   gap: 20px;
 }
 
+.topbar-compact {
+  align-items: center;
+  min-height: 48px;
+}
+
+.source-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
 .topbar h1,
 .hero-copy h2,
 .section-heading h2,
@@ -272,6 +287,32 @@ a {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.snapshot-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #000000;
+}
+
+.snapshot-summary strong,
+.snapshot-summary span {
+  display: block;
+}
+
+.snapshot-summary strong {
+  color: var(--text);
+  font-size: 0.94rem;
+}
+
+.snapshot-summary span {
+  color: var(--faint);
+  font-size: 0.84rem;
 }
 
 .status-pill {
