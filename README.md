@@ -11,7 +11,7 @@ A BJJ-first prediction-market MVP for Smoothcomp-style event data. The launch pr
 - Play-money buy/sell trade ticket with shares, average price, and price impact
 - Portfolio positions with mark value, realized PnL, unrealized PnL, and recent trades
 - LocalStorage persistence for balance, trades, positions, imported events, and settlements
-- Smoothcomp sync worker that imports public grappling events, published brackets, match status, score fields, and winners
+- Smoothcomp sync worker that imports public grappling events, published brackets, athlete photos, club logos, match status, score fields, and winners
 - Generated app snapshot at `src/generated/smoothcomp-live-snapshot.json`
 - Admin controls for syncing, locking, and settling winner markets
 - Generated BJJ mat visual asset at `public/bjj-mat-hero.png`
@@ -45,9 +45,10 @@ The worker currently uses Smoothcomp public pages and public JSON endpoints:
 1. Discover BJJ/grappling events from the public event calendar.
 2. Fetch each event's published `schedule/brackets.json`.
 3. Fetch bracket match JSON for the selected brackets.
-4. Poll per-match data for clock, points, advantages, penalties, state, and winners.
-5. Write `src/generated/smoothcomp-live-snapshot.json`.
-6. The app hydrates from that snapshot on load and settles matching markets when a winner appears.
+4. Poll per-match live data for clock, points, advantages, penalties, state, and winners.
+5. Fetch per-match athlete details for player photos and club logos when Smoothcomp exposes them publicly.
+6. Write `src/generated/smoothcomp-live-snapshot.json`.
+7. The app hydrates from that snapshot on load and settles matching markets when a winner appears.
 
 For production, run the sync job on a short schedule during event hours and a slower schedule outside event hours. Keep limits/rate controls in place. If we need every scoreboard globally with stronger guarantees, we should get Smoothcomp partner/API access instead of relying only on public endpoints.
 

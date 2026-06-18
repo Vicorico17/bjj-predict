@@ -765,7 +765,7 @@ type FighterOptionProps = {
 
 function FighterOption({ competitor, disabled, ownedShares, probability, won, onPick }: FighterOptionProps) {
   return (
-    <div className={won ? "fighter-option winner" : "fighter-option"}>
+    <button className={won ? "fighter-option winner" : "fighter-option"} disabled={disabled} onClick={onPick} type="button">
       <div className="fighter-main">
         {competitor.imageUrl ? (
           <img className="fighter-avatar" src={competitor.imageUrl} alt="" loading="lazy" />
@@ -788,11 +788,11 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
         <span>{competitor.record}</span>
         <span>{roundShares(ownedShares).toLocaleString()} shares</span>
       </div>
-      <button className="pick-button" disabled={disabled} onClick={onPick} type="button">
+      <div className="fighter-probability">
         {won ? <Trophy size={16} aria-hidden="true" /> : <CircleDollarSign size={16} aria-hidden="true" />}
         <span>{formatPercent(probability)}</span>
-      </button>
-    </div>
+      </div>
+    </button>
   );
 }
 

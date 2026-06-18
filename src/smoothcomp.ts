@@ -64,6 +64,7 @@ export type SmoothcompSnapshot = {
     failedEvents?: number;
     failedBrackets?: number;
     failedLiveScores?: number;
+    failedMatchDetails?: number;
   };
   warnings?: string[];
 };
@@ -256,7 +257,7 @@ function competitorFromSnapshot(
     country: (snapshotCompetitor.country || "SC").toUpperCase(),
     belt: snapshotCompetitor.belt || beltFromDivision(division),
     seed: snapshotCompetitor.seed && snapshotCompetitor.seed > 0 ? snapshotCompetitor.seed : side === "left" ? 1 : 2,
-    record: snapshotCompetitor.record || "Smoothcomp",
+    record: snapshotCompetitor.record || "0 Smoothcomp wins",
     imageUrl: snapshotCompetitor.imageUrl,
     clubLogoUrl: snapshotCompetitor.clubLogoUrl,
     sourceId,

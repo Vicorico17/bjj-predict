@@ -26,7 +26,8 @@ async function main() {
     settledMatches: 0,
     failedEvents: 0,
     failedBrackets: 0,
-    failedLiveScores: 0
+    failedLiveScores: 0,
+    failedMatchDetails: 0
   };
 
   for (const event of selectedEvents) {
@@ -147,13 +148,19 @@ async function syncEvent(calendarEvent, stats) {
           try {
             await pause();
             liveData = await fetchJson(`https://smoothcomp.com/en/getBracketMatchData/${rawMatch.id}`);
-            await pause();
-            detailData = await fetchJson(`https://smoothcomp.com/en/getBracketMatch/${rawMatch.id}`);
             liveScoreRequests += 1;
           } catch (error) {
             stats.failedLiveScores += 1;
-            eventWarnings.push(`Live score unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
+            eventWarnings.push(`Live score data unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
           }
+        }
+
+        try {
+          await pause();
+          detailData = await fetchJson(`https://smoothcomp.com/en/getBracketMatch/${rawMatch.id}`);
+        } catch (error) {
+          stats.failedMatchDetails += 1;
+          eventWarnings.push(`Athlete detail unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
         }
 
         const normalized = normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, eventBase);
@@ -233,7 +240,7 @@ function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
     country: String(detailSeat?.player_country || seat?.country || liveSide?.country_flag || liveSide?.country || "").toUpperCase(),
     belt: beltFromDivision(division),
     seed: Number(detailSeat?.seed || seat?.seed || 0) || (side === "left" ? 1 : 2),
-    record: liveSide?.wins ? `${liveSide.wins} Smoothcomp wins` : "Smoothcomp",
+    record: liveSide?.wins !== undefined && liveSide?.wins !== null ? `${liveSide.wins} Smoothcomp wins` : "0 Smoothcomp wins",
     imageUrl: absoluteAssetUrl(
       liveSide?.profile_image || detailSeat?.player_profile_image || seat?.image || seat?.player_profile_image || null
     ),
