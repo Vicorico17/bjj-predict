@@ -405,10 +405,16 @@ a {
   align-content: start;
   gap: 8px;
   min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(39, 39, 42, 0.72);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.32);
 }
 
 .event-group-label {
   min-height: 28px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-soft);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 800;
@@ -427,13 +433,16 @@ a {
 
 .event-button-list {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 8px;
 }
 
 .event-choice-button {
   display: grid;
+  align-content: space-between;
   gap: 6px;
-  min-height: 78px;
+  aspect-ratio: 1;
+  min-height: 142px;
   width: 100%;
   padding: 13px;
   border: 1px solid var(--line);
@@ -441,6 +450,10 @@ a {
   background: #000000;
   color: var(--text);
   text-align: left;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
 .event-choice-button strong,
@@ -455,16 +468,25 @@ a {
 .event-choice-button strong {
   font-size: 0.98rem;
   line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .event-choice-button span {
   color: var(--faint);
   font-size: 0.83rem;
+  white-space: normal;
+}
+
+.event-choice-button:hover,
+.event-choice-button.active {
+  border-color: rgba(52, 211, 153, 0.38);
+  background: #111113;
+  transform: translateY(-1px);
 }
 
 .event-choice-button.active {
-  border-color: rgba(52, 211, 153, 0.58);
-  background: var(--emerald-soft);
+  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, 0.08);
 }
 
 .event-choice-button.empty {
@@ -697,6 +719,41 @@ input[type="url"]:focus,
 
 .fighter-main strong {
   color: var(--text);
+}
+
+.fighter-avatar {
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #111113;
+  object-fit: cover;
+}
+
+.fighter-avatar.fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--emerald);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.fighter-academy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fighter-academy img {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #111113;
+  object-fit: cover;
 }
 
 .seed-badge {
@@ -1314,16 +1371,13 @@ input[type="url"]:focus,
   }
 
   .event-button-list {
-    grid-auto-columns: minmax(220px, 86%);
-    grid-auto-flow: column;
-    overflow-x: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow-x: visible;
     padding-bottom: 4px;
-    scroll-snap-type: x mandatory;
   }
 
   .event-choice-button {
-    min-height: 86px;
-    scroll-snap-align: start;
+    min-height: 132px;
   }
 
   .match-meta {
@@ -1336,5 +1390,16 @@ input[type="url"]:focus,
 
   .pnl-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .event-button-list {
+    grid-template-columns: 1fr;
+  }
+
+  .event-choice-button {
+    aspect-ratio: auto;
+    min-height: 112px;
   }
 }

@@ -9,6 +9,8 @@ type SmoothcompCompetitorSnapshot = {
   belt?: BeltRank;
   seed?: number;
   record?: string;
+  imageUrl?: string;
+  clubLogoUrl?: string;
   sourceUrl?: string;
 };
 
@@ -255,6 +257,8 @@ function competitorFromSnapshot(
     belt: snapshotCompetitor.belt || beltFromDivision(division),
     seed: snapshotCompetitor.seed && snapshotCompetitor.seed > 0 ? snapshotCompetitor.seed : side === "left" ? 1 : 2,
     record: snapshotCompetitor.record || "Smoothcomp",
+    imageUrl: snapshotCompetitor.imageUrl,
+    clubLogoUrl: snapshotCompetitor.clubLogoUrl,
     sourceId,
     sourceUrl: snapshotCompetitor.sourceUrl
   };

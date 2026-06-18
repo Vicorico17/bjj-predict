@@ -141,11 +141,14 @@ async function syncEvent(calendarEvent, stats) {
         }
 
         let liveData = null;
+        let detailData = null;
 
         if (liveScoreRequests < options.liveScoreLimit) {
           try {
             await pause();
             liveData = await fetchJson(`https://smoothcomp.com/en/getBracketMatchData/${rawMatch.id}`);
+            await pause();
+            detailData = await fetchJson(`https://smoothcomp.com/en/getBracketMatch/${rawMatch.id}`);
             liveScoreRequests += 1;
           } catch (error) {
             stats.failedLiveScores += 1;
@@ -153,7 +156,7 @@ async function syncEvent(calendarEvent, stats) {
           }
         }
 
-        const normalized = normalizeMatch(rawMatch, liveData, bracket, eventSnapshot, eventBase);
+        const normalized = normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, eventBase);
 
         if (normalized) {
           eventSnapshot.matches.push(normalized);
@@ -181,10 +184,13 @@ async function fetchEventBrackets(eventBase, eventSnapshot, stats) {
   }
 }
 
-function normalizeMatch(rawMatch, liveData, bracket, eventSnapshot, eventBase) {
+function normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, eventBase) {
   const seats = Array.isArray(rawMatch.seats) ? rawMatch.seats : [];
+  const detailSeats = Array.isArray(detailData?.seats) ? detailData.seats : [];
   const leftSeat = seats[0] || null;
   const rightSeat = seats[1] || null;
+  const leftDetailSeat = detailSeats.find((seat) => Number(seat.position) === 0) || detailSeats[0] || null;
+  const rightDetailSeat = detailSeats.find((seat) => Number(seat.position) === 1) || detailSeats[1] || null;
   const leftName = leftSeat?.name || nameFromLiveSide(liveData?.left);
   const rightName = rightSeat?.name || nameFromLiveSide(liveData?.right);
 
@@ -209,8 +215,8 @@ function normalizeMatch(rawMatch, liveData, bracket, eventSnapshot, eventBase) {
     status,
     sourceState,
     sourceUrl: `${eventBase}/bracket/${sourceBracketId}`,
-    competitorA: competitorFromSeat(leftSeat, liveData?.left, division, "left"),
-    competitorB: competitorFromSeat(rightSeat, liveData?.right, division, "right"),
+    competitorA: competitorFromSeat(leftSeat, liveData?.left, leftDetailSeat, division, "left"),
+    competitorB: competitorFromSeat(rightSeat, liveData?.right, rightDetailSeat, division, "right"),
     winnerSide,
     winnerSourceId: winnerSide === "left" ? sourceIdForSeat(leftSeat, liveData?.left) : winnerSide === "right" ? sourceIdForSeat(rightSeat, liveData?.right) : null,
     finish: finishFor(rawMatch, liveData),
@@ -219,15 +225,19 @@ function normalizeMatch(rawMatch, liveData, bracket, eventSnapshot, eventBase) {
   };
 }
 
-function competitorFromSeat(seat, liveSide, division, side) {
+function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
   return {
     sourceId: sourceIdForSeat(seat, liveSide),
     name: seat?.name || nameFromLiveSide(liveSide) || "Unknown competitor",
-    academy: seat?.club || liveSide?.club || liveSide?.affiliation || "Independent",
-    country: String(seat?.country || liveSide?.country_flag || liveSide?.country || "").toUpperCase(),
+    academy: detailSeat?.player_club || seat?.club || liveSide?.club || liveSide?.affiliation || "Independent",
+    country: String(detailSeat?.player_country || seat?.country || liveSide?.country_flag || liveSide?.country || "").toUpperCase(),
     belt: beltFromDivision(division),
-    seed: Number(seat?.seed || 0) || (side === "left" ? 1 : 2),
+    seed: Number(detailSeat?.seed || seat?.seed || 0) || (side === "left" ? 1 : 2),
     record: liveSide?.wins ? `${liveSide.wins} Smoothcomp wins` : "Smoothcomp",
+    imageUrl: absoluteAssetUrl(
+      liveSide?.profile_image || detailSeat?.player_profile_image || seat?.image || seat?.player_profile_image || null
+    ),
+    clubLogoUrl: absoluteAssetUrl(detailSeat?.player_club_logo || detailSeat?.player_competition_team_logo || null),
     sourceUrl: liveSide?.profile_link || seat?.profile_link || null
   };
 }
@@ -413,6 +423,15 @@ function nameFromLiveSide(side) {
 function numberOrNull(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
+}
+
+function absoluteAssetUrl(value) {
+  if (!value) {
+    return null;
+  }
+
+  const url = String(value);
+  return url.startsWith("/") ? `https://smoothcomp.com${url}` : url;
 }
 
 function beltFromDivision(division) {

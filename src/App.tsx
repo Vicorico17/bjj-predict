@@ -105,31 +105,26 @@ function App() {
   const eventGroups = useMemo(() => {
     const byDate = (left: AppEvent, right: AppEvent) =>
       new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime();
-    const selectedFirst = (events: AppEvent[]) =>
-      [...events].sort((left, right) => {
-        if (left.id === selectedEventId) return -1;
-        if (right.id === selectedEventId) return 1;
-        return byDate(left, right);
-      });
+    const byDateOnly = (events: AppEvent[]) => [...events].sort(byDate);
 
     return [
       {
         id: "current",
         label: "Current events",
-        events: selectedFirst(state.events.filter((event) => event.status === "live"))
+        events: byDateOnly(state.events.filter((event) => event.status === "live"))
       },
       {
         id: "upcoming",
         label: "Upcoming events",
-        events: selectedFirst(state.events.filter((event) => event.status === "upcoming"))
+        events: byDateOnly(state.events.filter((event) => event.status === "upcoming"))
       },
       {
         id: "complete",
         label: "Completed events",
-        events: selectedFirst(state.events.filter((event) => event.status === "complete"))
+        events: byDateOnly(state.events.filter((event) => event.status === "complete"))
       }
     ];
-  }, [selectedEventId, state.events]);
+  }, [state.events]);
 
   const selectedTicketData = useMemo(() => {
     if (!ticket) {
@@ -614,8 +609,8 @@ function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps
     <div className="event-switcher" aria-label="Event switcher">
       <div className="event-switcher-head">
         <div>
-          <span className="eyebrow">Change event</span>
-          <strong>Choose current or upcoming events</strong>
+          <span className="eyebrow">Events</span>
+          <strong>Current and upcoming</strong>
         </div>
         <span>{groups.reduce((count, group) => count + group.events.length, 0)} events</span>
       </div>
@@ -646,7 +641,7 @@ function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps
                 ) : (
                   <button className="event-choice-button empty" disabled type="button">
                     <strong>No {group.id} events</strong>
-                    <span>Run Smoothcomp sync to refresh the list</span>
+                    <span>Nothing synced in this group</span>
                   </button>
                 )}
               </div>
@@ -772,10 +767,20 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
   return (
     <div className={won ? "fighter-option winner" : "fighter-option"}>
       <div className="fighter-main">
+        {competitor.imageUrl ? (
+          <img className="fighter-avatar" src={competitor.imageUrl} alt="" loading="lazy" />
+        ) : (
+          <div className="fighter-avatar fallback" aria-hidden="true">
+            {initialsFor(competitor.name)}
+          </div>
+        )}
         <div className="seed-badge">#{competitor.seed}</div>
         <div>
           <strong>{competitor.name}</strong>
-          <span>{competitor.academy}</span>
+          <span className="fighter-academy">
+            {competitor.clubLogoUrl && <img src={competitor.clubLogoUrl} alt="" loading="lazy" />}
+            {competitor.academy}
+          </span>
         </div>
       </div>
       <div className="fighter-stats">
@@ -789,6 +794,15 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
       </button>
     </div>
   );
+}
+
+function initialsFor(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 }
 
 type TicketPanelProps = {

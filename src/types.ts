@@ -16,6 +16,8 @@ export type Competitor = {
   belt: BeltRank;
   seed: number;
   record: string;
+  imageUrl?: string;
+  clubLogoUrl?: string;
   sourceId?: string;
   sourceUrl?: string;
 };
