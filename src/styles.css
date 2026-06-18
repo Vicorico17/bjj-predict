@@ -1,0 +1,845 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f6f2;
+  color: #171a18;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #171a18;
+  --muted: #69706a;
+  --line: #d8ded6;
+  --paper: #ffffff;
+  --soft: #eef3ee;
+  --mat: #235e54;
+  --mat-dark: #143b37;
+  --gold: #d29b2e;
+  --red: #b84a49;
+  --blue: #3f6fb4;
+  --success: #267647;
+  --shadow: 0 16px 40px rgba(23, 26, 24, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.side-nav {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  height: 100vh;
+  padding: 22px 16px;
+  background: #161916;
+  color: #f8fbf6;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-weight: 800;
+}
+
+.brand-mark svg {
+  color: var(--gold);
+}
+
+.nav-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.nav-button,
+.ghost-button,
+.primary-button,
+.success-button,
+.icon-link,
+.pick-button,
+.icon-only {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.nav-button {
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0 12px;
+  background: transparent;
+  color: #c8d1c8;
+}
+
+.nav-button.active,
+.nav-button:hover {
+  background: #25302a;
+  color: #ffffff;
+}
+
+.wallet-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #2d352f;
+  border-radius: 8px;
+  background: #20261f;
+}
+
+.wallet-block span,
+.metric span,
+.fighter-main span,
+.fighter-stats,
+.ticket-lines dt,
+.small-note {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.wallet-block span {
+  color: #9fa99f;
+}
+
+.wallet-block strong {
+  display: block;
+  margin-top: 2px;
+}
+
+.main-content {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: 24px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.topbar h1,
+.hero-copy h2,
+.section-heading h2,
+.ticket-panel h2,
+.market-card h3 {
+  margin: 0;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.topbar h1 {
+  max-width: 760px;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: var(--mat);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.icon-link,
+.ghost-button {
+  padding: 0 13px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.ghost-button:hover,
+.icon-link:hover {
+  border-color: #b7c1b7;
+  background: #f8faf7;
+}
+
+.event-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(230px, 320px);
+  gap: 20px;
+  overflow: hidden;
+  min-height: 250px;
+  padding: 28px;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(20, 35, 31, 0.92), rgba(20, 35, 31, 0.68), rgba(20, 35, 31, 0.24)),
+    url("/bjj-mat-hero.png") center / cover;
+  color: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  max-width: 780px;
+}
+
+.status-row,
+.event-meta,
+.match-meta,
+.fighter-stats,
+.settlement-actions,
+.admin-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.status-pill.live svg {
+  color: #77dfa1;
+}
+
+.hero-copy h2 {
+  margin-top: 14px;
+  font-size: clamp(2rem, 5vw, 4rem);
+  max-width: 820px;
+}
+
+.event-meta {
+  margin-top: 18px;
+  color: #dce8de;
+}
+
+.event-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.event-controls {
+  align-self: end;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(10, 18, 16, 0.62);
+}
+
+label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.event-controls label {
+  color: #dce8de;
+}
+
+select,
+input[type="url"] {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+.event-controls select {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: #ffffff;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric,
+.panel,
+.ticket-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 86px;
+  padding: 16px;
+}
+
+.metric-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #e3eee8;
+  color: var(--mat);
+}
+
+.metric strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.25rem;
+}
+
+.content-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+  align-items: start;
+}
+
+.market-column,
+.admin-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-heading h2 {
+  font-size: 1.45rem;
+}
+
+.stake-control {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.stake-control input {
+  width: 150px;
+  accent-color: var(--mat);
+}
+
+.stake-control strong {
+  min-width: 56px;
+  text-align: right;
+}
+
+.market-list,
+.settlement-list {
+  display: grid;
+  gap: 12px;
+}
+
+.market-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.market-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.market-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #eef3ee;
+  color: var(--mat);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.market-status.locked {
+  color: #8c6a17;
+}
+
+.market-status.settled {
+  color: var(--success);
+}
+
+.match-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.fighter-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.fighter-option {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e0e5df;
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.fighter-option.winner {
+  border-color: #9bd0ad;
+  background: #f1faf3;
+}
+
+.fighter-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.fighter-main strong,
+.fighter-main span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.seed-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #eaf1f0;
+  color: var(--mat-dark);
+  font-weight: 800;
+}
+
+.fighter-stats {
+  gap: 7px;
+}
+
+.fighter-stats span {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #eef3ee;
+}
+
+.pick-button {
+  width: 100%;
+  background: var(--mat);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.pick-button:hover {
+  background: #1c4e46;
+}
+
+.pick-button:disabled,
+.ghost-button:disabled,
+.success-button:disabled,
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.versus {
+  align-self: center;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #f2efe9;
+  color: #766858;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.probability-bar {
+  display: flex;
+  overflow: hidden;
+  height: 9px;
+  border-radius: 999px;
+  background: #f0f1ee;
+}
+
+.probability-bar span:first-child {
+  background: var(--blue);
+}
+
+.probability-bar span:last-child {
+  background: var(--red);
+}
+
+.ticket-panel {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+
+.ticket-panel.empty {
+  min-height: 240px;
+  align-content: center;
+  justify-items: start;
+  color: var(--muted);
+}
+
+.ticket-panel.empty h2,
+.ticket-panel.empty p {
+  margin: 0;
+}
+
+.ticket-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.icon-only {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.ticket-lines {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.ticket-lines div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf1ec;
+}
+
+.ticket-lines dd {
+  margin: 0;
+  font-weight: 800;
+}
+
+.primary-button,
+.success-button {
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--mat);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.primary-button:hover,
+.success-button:hover {
+  background: #1d4f47;
+}
+
+.primary-button.full {
+  width: 100%;
+}
+
+.success-button {
+  background: var(--success);
+}
+
+.success-button:hover {
+  background: #1f623a;
+}
+
+.leaderboard-panel {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.leaderboard-table {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 70px minmax(140px, 1.1fr) minmax(140px, 1fr) 100px 100px;
+  gap: 12px;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.table-row:last-child {
+  border-bottom: 0;
+}
+
+.table-head {
+  min-height: 42px;
+  background: #edf3ee;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.table-row.highlight {
+  background: #fff8e7;
+}
+
+.admin-grid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.panel {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.import-form {
+  display: grid;
+  gap: 10px;
+}
+
+.url-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.url-row svg {
+  justify-self: center;
+  color: var(--muted);
+}
+
+.url-row input {
+  border: 0;
+}
+
+.settlement-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.settlement-row strong,
+.settlement-row span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.settlement-row span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 1100px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .side-nav {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    padding: 12px;
+  }
+
+  .nav-stack {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(110px, auto);
+    overflow-x: auto;
+  }
+
+  .wallet-block {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  .content-layout,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 820px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .topbar,
+  .section-heading,
+  .market-card-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .event-hero,
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fighter-options {
+    grid-template-columns: 1fr;
+  }
+
+  .versus {
+    width: 100%;
+    height: 28px;
+  }
+
+  .stake-control {
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .stake-control input {
+    width: 100%;
+  }
+
+  .table-row {
+    grid-template-columns: 48px minmax(120px, 1fr) 90px;
+  }
+
+  .table-row span:nth-child(3),
+  .table-row span:nth-child(5),
+  .table-row strong:nth-child(3) {
+    display: none;
+  }
+
+  .settlement-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .side-nav {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .nav-stack {
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .wallet-block {
+    margin-left: 0;
+  }
+
+  .topbar-actions {
+    justify-content: flex-start;
+  }
+
+  .hero-copy h2 {
+    font-size: 2rem;
+  }
+
+  .event-hero {
+    min-height: 300px;
+    padding: 20px;
+  }
+}
