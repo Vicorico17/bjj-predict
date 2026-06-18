@@ -1,7 +1,7 @@
 import { initialState, STARTING_BALANCE } from "./data";
 import type { AppState } from "./types";
 
-const STORAGE_KEY = "bjj-predict-state-v1";
+const STORAGE_KEY = "bjj-predict-state-v2";
 
 export function loadState(): AppState {
   if (typeof window === "undefined") {
@@ -22,7 +22,8 @@ export function loadState(): AppState {
       events: saved.events?.length ? saved.events : initialState.events,
       markets: saved.markets?.length ? saved.markets : initialState.markets,
       matches: saved.matches?.length ? saved.matches : initialState.matches,
-      predictions: Array.isArray(saved.predictions) ? saved.predictions : []
+      positions: Array.isArray(saved.positions) ? saved.positions : [],
+      trades: Array.isArray(saved.trades) ? saved.trades : []
     };
   } catch {
     return initialState;

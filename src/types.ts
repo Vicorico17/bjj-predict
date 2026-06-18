@@ -4,7 +4,7 @@ export type MatchStatus = "open" | "locked" | "live" | "settled";
 
 export type MarketStatus = "open" | "locked" | "settled";
 
-export type PredictionStatus = "active" | "settled";
+export type TradeSide = "buy" | "sell";
 
 export type Competitor = {
   id: string;
@@ -48,22 +48,50 @@ export type Market = {
   matchId: string;
   sport: SportKind;
   status: MarketStatus;
-  baseLiquidityA: number;
-  baseLiquidityB: number;
+  liquidity: number;
+  liquidityRisk: number;
+  quantities: Record<string, number>;
+  volume: number;
+  tradeCount: number;
+  participantCount: number;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt?: string;
+  resolvedOutcomeId?: string;
+  resolverNotes?: string;
 };
 
-export type Prediction = {
+export type Trade = {
+  id: string;
+  marketId: string;
+  matchId: string;
+  side: TradeSide;
+  competitorId: string;
+  amount: number;
+  shares: number;
+  averagePrice: number;
+  probabilityBefore: number;
+  probabilityAfter: number;
+  priceImpact: number;
+  createdAt: string;
+};
+
+export type Position = {
   id: string;
   marketId: string;
   matchId: string;
   competitorId: string;
-  stake: number;
-  impliedProbability: number;
+  shares: number;
+  costBasis: number;
+  averagePrice: number;
+  realizedPnl: number;
+  currentProbability: number;
+  markValue: number;
   payoutIfCorrect: number;
-  createdAt: string;
-  status: PredictionStatus;
-  settledAt?: string;
-  won?: boolean;
+  unrealizedPnl: number;
+  isResolved: boolean;
+  isWinner: boolean;
+  updatedAt: string;
 };
 
 export type AppState = {
@@ -72,13 +100,26 @@ export type AppState = {
   events: Event[];
   markets: Market[];
   matches: Match[];
-  predictions: Prediction[];
+  positions: Position[];
+  trades: Trade[];
 };
 
 export type MarketQuote = {
   probabilityA: number;
   probabilityB: number;
-  totalStakeA: number;
-  totalStakeB: number;
+  sharesA: number;
+  sharesB: number;
   totalVolume: number;
+  volumeToRisk: number;
+};
+
+export type TradeQuote = {
+  side: TradeSide;
+  competitorId: string;
+  amount: number;
+  shares: number;
+  averagePrice: number;
+  probabilityBefore: number;
+  probabilityAfter: number;
+  priceImpact: number;
 };

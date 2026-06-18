@@ -1,3 +1,4 @@
+import { liquidityRiskFor, quantitiesFromProbabilities } from "./market";
 import type { AppState, Competitor, Event, Market, Match } from "./types";
 
 export const STARTING_BALANCE = 2500;
@@ -151,14 +152,39 @@ export const matches: Match[] = [
   }
 ];
 
-export const markets: Market[] = matches.map((match, index) => ({
-  id: `mk-${match.id}`,
-  matchId: match.id,
-  sport: "bjj",
-  status: "open",
-  baseLiquidityA: [740, 620, 680, 520][index] ?? 500,
-  baseLiquidityB: [560, 710, 570, 610][index] ?? 500
-}));
+const marketSeeds = [
+  { probabilities: [0.57, 0.43], liquidity: 170, volume: 1320, tradeCount: 34, participantCount: 18 },
+  { probabilities: [0.47, 0.53], liquidity: 155, volume: 960, tradeCount: 27, participantCount: 14 },
+  { probabilities: [0.54, 0.46], liquidity: 145, volume: 790, tradeCount: 21, participantCount: 11 },
+  { probabilities: [0.45, 0.55], liquidity: 130, volume: 520, tradeCount: 16, participantCount: 9 }
+];
+
+export const markets: Market[] = matches.map((match, index) => {
+  const seed = marketSeeds[index] ?? {
+    probabilities: [0.5, 0.5],
+    liquidity: 140,
+    volume: 0,
+    tradeCount: 0,
+    participantCount: 0
+  };
+  const outcomeIds = [match.competitorAId, match.competitorBId];
+  const createdAt = "2026-06-18T04:00:00.000Z";
+
+  return {
+    id: `mk-${match.id}`,
+    matchId: match.id,
+    sport: "bjj",
+    status: "open",
+    liquidity: seed.liquidity,
+    liquidityRisk: liquidityRiskFor(seed.probabilities, seed.liquidity),
+    quantities: quantitiesFromProbabilities(outcomeIds, seed.probabilities, seed.liquidity),
+    volume: seed.volume,
+    tradeCount: seed.tradeCount,
+    participantCount: seed.participantCount,
+    createdAt,
+    updatedAt: createdAt
+  };
+});
 
 export const initialState: AppState = {
   balance: STARTING_BALANCE,
@@ -166,5 +192,6 @@ export const initialState: AppState = {
   events,
   markets,
   matches,
-  predictions: []
+  positions: [],
+  trades: []
 };

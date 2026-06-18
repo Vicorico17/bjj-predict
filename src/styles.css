@@ -319,7 +319,8 @@ input[type="url"] {
 
 .metric,
 .panel,
-.ticket-panel {
+.ticket-panel,
+.portfolio-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
@@ -355,6 +356,13 @@ input[type="url"] {
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: 16px;
   align-items: start;
+}
+
+.right-rail {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 12px;
 }
 
 .market-column,
@@ -442,6 +450,14 @@ input[type="url"] {
 .match-meta {
   color: var(--muted);
   font-size: 0.88rem;
+}
+
+.market-footnote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.84rem;
 }
 
 .fighter-options {
@@ -555,9 +571,8 @@ input[type="url"] {
   background: var(--red);
 }
 
-.ticket-panel {
-  position: sticky;
-  top: 24px;
+.ticket-panel,
+.portfolio-panel {
   display: grid;
   gap: 16px;
   padding: 16px;
@@ -582,6 +597,30 @@ input[type="url"] {
   gap: 12px;
 }
 
+.segmented-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f3f6f2;
+}
+
+.segmented-control button {
+  min-height: 36px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.segmented-control button.active {
+  background: var(--mat);
+  color: #ffffff;
+}
+
 .icon-only {
   width: 38px;
   height: 38px;
@@ -596,6 +635,52 @@ input[type="url"] {
   margin: 0;
 }
 
+.amount-field {
+  display: grid;
+  gap: 8px;
+}
+
+.amount-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.amount-input input {
+  min-width: 0;
+  height: 42px;
+  border: 0;
+  padding: 0 12px;
+  outline: 0;
+}
+
+.amount-input span {
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.text-button {
+  justify-self: start;
+  min-height: 30px;
+  padding: 0;
+  background: transparent;
+  color: var(--mat);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.text-button:disabled {
+  cursor: not-allowed;
+  color: var(--muted);
+}
+
 .ticket-lines div {
   display: flex;
   align-items: center;
@@ -608,6 +693,35 @@ input[type="url"] {
 .ticket-lines dd {
   margin: 0;
   font-weight: 800;
+}
+
+.warning-text {
+  color: #9a6a0a;
+}
+
+.ticket-alert {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.ticket-alert.warning {
+  border: 1px solid rgba(210, 155, 46, 0.45);
+  background: rgba(210, 155, 46, 0.12);
+  color: #75500b;
+}
+
+.ticket-alert.error {
+  border: 1px solid rgba(184, 74, 73, 0.38);
+  background: rgba(184, 74, 73, 0.1);
+  color: #8b2f2f;
+}
+
+.ticket-alert.muted {
+  border: 1px dashed var(--line);
+  background: #fbfcfa;
+  color: var(--muted);
 }
 
 .primary-button,
@@ -640,6 +754,94 @@ input[type="url"] {
   display: grid;
   gap: 16px;
   padding: 18px;
+}
+
+.section-heading.compact {
+  align-items: center;
+}
+
+.section-heading.compact h2 {
+  font-size: 1.1rem;
+}
+
+.pnl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.pnl-grid div {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.pnl-grid span,
+.position-row span,
+.trade-row span,
+.empty-list {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.positive {
+  color: var(--success);
+}
+
+.negative {
+  color: var(--red);
+}
+
+.position-list,
+.trade-list {
+  display: grid;
+  gap: 8px;
+}
+
+.position-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.position-row strong,
+.position-row span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.position-row div:last-child {
+  text-align: right;
+}
+
+.trade-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 34px;
+}
+
+.trade-row span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-list {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
 }
 
 .leaderboard-table {
@@ -760,6 +962,7 @@ input[type="url"] {
     grid-template-columns: 1fr;
   }
 
+  .right-rail,
   .ticket-panel {
     position: static;
   }

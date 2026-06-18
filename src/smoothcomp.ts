@@ -1,4 +1,5 @@
 import type { AppState, Event, Market, Match } from "./types";
+import { liquidityRiskFor, quantitiesFromProbabilities } from "./market";
 
 const importedCompetitorPairs = [
   ["c-ana-rios", "c-rafa-silva"],
@@ -53,14 +54,26 @@ export function importSmoothcompEvent(state: AppState, url: string): AppState {
     competitorBId: pair[1]
   }));
 
-  const importedMarkets: Market[] = importedMatches.map((match, index) => ({
-    id: `mk-${match.id}`,
-    matchId: match.id,
-    sport: "bjj",
-    status: "open",
-    baseLiquidityA: 500 + index * 70,
-    baseLiquidityB: 500 + index * 45
-  }));
+  const importedMarkets: Market[] = importedMatches.map((match, index) => {
+    const probabilities = index === 0 ? [0.52, 0.48] : [0.48, 0.52];
+    const liquidity = 135 + index * 20;
+    const createdAt = now.toISOString();
+
+    return {
+      id: `mk-${match.id}`,
+      matchId: match.id,
+      sport: "bjj",
+      status: "open",
+      liquidity,
+      liquidityRisk: liquidityRiskFor(probabilities, liquidity),
+      quantities: quantitiesFromProbabilities([match.competitorAId, match.competitorBId], probabilities, liquidity),
+      volume: 0,
+      tradeCount: 0,
+      participantCount: 0,
+      createdAt,
+      updatedAt: createdAt
+    };
+  });
 
   return {
     ...state,
