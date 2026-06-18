@@ -49,7 +49,7 @@ import {
   type SmoothcompSnapshot
 } from "./smoothcomp";
 import { loadState, resetState, saveState } from "./storage";
-import type { AppState, Competitor, Market, Match, Position, TradeQuote, TradeSide } from "./types";
+import type { AppState, Competitor, Event as AppEvent, Market, Match, Position, TradeQuote, TradeSide } from "./types";
 
 type View = "markets" | "leaderboard" | "admin";
 
@@ -102,6 +102,34 @@ function App() {
   const portfolioMarkValue = state.positions.reduce((sum, position) => sum + position.markValue, 0);
   const portfolioValue = roundMoney(state.balance + portfolioMarkValue);
   const smoothcompSummary = useMemo(() => summarizeSmoothcompSnapshot(smoothcompSnapshot), []);
+  const eventGroups = useMemo(() => {
+    const byDate = (left: AppEvent, right: AppEvent) =>
+      new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime();
+    const selectedFirst = (events: AppEvent[]) =>
+      [...events].sort((left, right) => {
+        if (left.id === selectedEventId) return -1;
+        if (right.id === selectedEventId) return 1;
+        return byDate(left, right);
+      });
+
+    return [
+      {
+        id: "current",
+        label: "Current events",
+        events: selectedFirst(state.events.filter((event) => event.status === "live"))
+      },
+      {
+        id: "upcoming",
+        label: "Upcoming events",
+        events: selectedFirst(state.events.filter((event) => event.status === "upcoming"))
+      },
+      {
+        id: "complete",
+        label: "Completed events",
+        events: selectedFirst(state.events.filter((event) => event.status === "complete"))
+      }
+    ];
+  }, [selectedEventId, state.events]);
 
   const selectedTicketData = useMemo(() => {
     if (!ticket) {
@@ -286,6 +314,11 @@ function App() {
         </header>
 
         <section className="event-hero" aria-label="Selected event">
+          <EventSwitcher
+            groups={eventGroups}
+            selectedEventId={selectedEvent?.id ?? ""}
+            onSelect={(eventId) => setSelectedEventId(eventId)}
+          />
           <div className="hero-copy">
             <div className="status-row">
               <span className="status-pill live">
@@ -312,20 +345,6 @@ function App() {
                 {selectedEvent ? formatDateTime(selectedEvent.lastSyncedAt) : "Not synced"}
               </span>
             </div>
-          </div>
-          <div className="event-controls">
-            <label htmlFor="eventSelect">Event</label>
-            <select
-              id="eventSelect"
-              value={selectedEvent?.id ?? ""}
-              onChange={(event) => setSelectedEventId(event.target.value)}
-            >
-              {state.events.map((event) => (
-                <option key={event.id} value={event.id}>
-                  {event.name}
-                </option>
-              ))}
-            </select>
           </div>
         </section>
 
@@ -576,6 +595,64 @@ function App() {
           </section>
         )}
       </main>
+    </div>
+  );
+}
+
+type EventSwitcherProps = {
+  groups: Array<{
+    id: string;
+    label: string;
+    events: AppEvent[];
+  }>;
+  selectedEventId: string;
+  onSelect: (eventId: string) => void;
+};
+
+function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps) {
+  return (
+    <div className="event-switcher" aria-label="Event switcher">
+      <div className="event-switcher-head">
+        <div>
+          <span className="eyebrow">Change event</span>
+          <strong>Choose current or upcoming events</strong>
+        </div>
+        <span>{groups.reduce((count, group) => count + group.events.length, 0)} events</span>
+      </div>
+      <div className="event-group-grid">
+        {groups
+          .filter((group) => group.id !== "complete" || group.events.length > 0)
+          .map((group) => (
+            <div className="event-group" key={group.id}>
+              <div className="event-group-label">
+                <span>{group.label}</span>
+                <strong>{group.events.length}</strong>
+              </div>
+              <div className="event-button-list">
+                {group.events.length > 0 ? (
+                  group.events.map((event) => (
+                    <button
+                      className={event.id === selectedEventId ? "event-choice-button active" : "event-choice-button"}
+                      key={event.id}
+                      onClick={() => onSelect(event.id)}
+                      type="button"
+                    >
+                      <strong>{event.name}</strong>
+                      <span>
+                        {formatDateTime(event.startsAt)} · {event.city}
+                      </span>
+                    </button>
+                  ))
+                ) : (
+                  <button className="event-choice-button empty" disabled type="button">
+                    <strong>No {group.id} events</strong>
+                    <span>Run Smoothcomp sync to refresh the list</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
