@@ -228,7 +228,8 @@ function App() {
         <header className="topbar">
           <div>
             <span className="eyebrow">LMSR market maker</span>
-            <h1>BJJ winner markets with shares, price impact, and live probabilities</h1>
+            <h1>Trade BJJ winner markets before the bracket starts.</h1>
+            <p>Buy shares, watch probabilities move, and settle from verified Smoothcomp results.</p>
           </div>
           <div className="topbar-actions">
             <a className="icon-link" href={selectedEvent?.sourceUrl} target="_blank" rel="noreferrer">
