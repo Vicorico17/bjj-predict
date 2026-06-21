@@ -221,14 +221,23 @@ function App() {
     setSyncNoticeType("warning");
 
     try {
-      const response = await fetch("/api/smoothcomp/refresh", { method: "POST" });
-      const payload = await response.json().catch(() => ({}));
+      await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh", { method: "POST" }));
 
-      if (!response.ok || !payload.snapshot) {
+      let payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh"));
+      while (payload.status === "running") {
+        await delay(3000);
+        payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh"));
+        if (payload.startedAt) {
+          const elapsedSeconds = Math.max(1, Math.round((Date.now() - Date.parse(payload.startedAt)) / 1000));
+          setSyncNotice(`Refreshing all Smoothcomp games. Running for ${elapsedSeconds}s.`);
+        }
+      }
+
+      if (payload.status === "error" || !payload.snapshot) {
         throw new Error(payload.error || "Smoothcomp refresh failed");
       }
 
-      const freshSnapshot = payload.snapshot as SmoothcompSnapshot;
+      const freshSnapshot = payload.snapshot;
       const summary = summarizeSmoothcompSnapshot(freshSnapshot);
       setLatestSmoothcompSnapshot(freshSnapshot);
       applyLatestSmoothcompSnapshot(
@@ -240,11 +249,36 @@ function App() {
       );
       setSyncNoticeType("muted");
     } catch (error) {
-      setSyncNotice(error instanceof Error ? error.message : "Smoothcomp refresh failed");
+      const message = error instanceof Error ? error.message : "Smoothcomp refresh failed";
+      setSyncNotice(message.includes("JSON") ? "Smoothcomp refresh returned an invalid server response." : message);
       setSyncNoticeType("error");
     } finally {
       setIsRefreshingSmoothcomp(false);
     }
+  }
+
+  async function readSmoothcompRefreshResponse(response: Response) {
+    const responseText = await response.text();
+    const payload = responseText ? JSON.parse(responseText) : {};
+
+    if (!response.ok) {
+      const fallback =
+        response.status === 404
+          ? "Smoothcomp refresh is only available from the Vite dev server. Run npm run dev and open that local URL."
+          : "Smoothcomp refresh failed";
+      throw new Error(payload.error || fallback);
+    }
+
+    return payload as {
+      status?: "idle" | "running" | "complete" | "error";
+      startedAt?: string | null;
+      snapshot?: SmoothcompSnapshot;
+      error?: string;
+    };
+  }
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   function syncSelectedEvent() {
