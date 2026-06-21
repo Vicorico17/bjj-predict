@@ -1051,6 +1051,16 @@ input[type="url"]:focus,
   background: var(--emerald-strong);
 }
 
+.spin-icon {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .leaderboard-panel {
   display: grid;
   gap: 16px;

@@ -69,13 +69,14 @@ const communityLeaderboard = [
 
 const smoothcompSnapshot = smoothcompLiveSnapshot as SmoothcompSnapshot;
 
-function hydrateStateFromSnapshot(baseState: AppState) {
-  const hydrated = applySmoothcompSnapshot(baseState, smoothcompSnapshot);
+function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnapshot) {
+  const hydrated = applySmoothcompSnapshot(baseState, snapshot);
   return { ...hydrated, positions: markPositions(hydrated) };
 }
 
 function App() {
   const [state, setState] = useState<AppState>(() => hydrateStateFromSnapshot(loadState()));
+  const [latestSmoothcompSnapshot, setLatestSmoothcompSnapshot] = useState<SmoothcompSnapshot>(smoothcompSnapshot);
   const [view, setView] = useState<View>("markets");
   const [selectedEventId, setSelectedEventId] = useState(() => hydrateStateFromSnapshot(loadState()).events[0]?.id ?? "");
   const [tradeSide, setTradeSide] = useState<TradeSide>("buy");
@@ -85,6 +86,8 @@ function App() {
   const [smoothcompUrl, setSmoothcompUrl] = useState("https://smoothcomp.com/en/event/19240");
   const [settlementFinish, setSettlementFinish] = useState(finishOptions[0]);
   const [syncNotice, setSyncNotice] = useState("");
+  const [syncNoticeType, setSyncNoticeType] = useState<"muted" | "warning" | "error">("muted");
+  const [isRefreshingSmoothcomp, setIsRefreshingSmoothcomp] = useState(false);
 
   useEffect(() => {
     saveState(state);
@@ -101,7 +104,7 @@ function App() {
   const activePositions = state.positions.filter((position) => position.shares > 0 && !position.isResolved);
   const portfolioMarkValue = state.positions.reduce((sum, position) => sum + position.markValue, 0);
   const portfolioValue = roundMoney(state.balance + portfolioMarkValue);
-  const smoothcompSummary = useMemo(() => summarizeSmoothcompSnapshot(smoothcompSnapshot), []);
+  const smoothcompSummary = useMemo(() => summarizeSmoothcompSnapshot(latestSmoothcompSnapshot), [latestSmoothcompSnapshot]);
   const eventGroups = useMemo(() => {
     const byDate = (left: AppEvent, right: AppEvent) =>
       new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime();
@@ -183,18 +186,22 @@ function App() {
   function handleImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const eventNumber = parseSmoothcompEventId(smoothcompUrl);
-    setState((current) => hydrateStateFromSnapshot(importSmoothcompEvent(current, smoothcompUrl, smoothcompSnapshot)));
+    setState((current) => hydrateStateFromSnapshot(importSmoothcompEvent(current, smoothcompUrl, latestSmoothcompSnapshot), latestSmoothcompSnapshot));
     if (eventNumber) {
       setSelectedEventId(`e-smoothcomp-${eventNumber}`);
     }
   }
 
-  function applyLatestSmoothcompSnapshot(options: { eventId?: string; sourceEventId?: string } = {}) {
+  function applyLatestSmoothcompSnapshot(
+    options: { eventId?: string; sourceEventId?: string } = {},
+    snapshot = latestSmoothcompSnapshot
+  ) {
     const targetEventId =
-      options.eventId || (options.sourceEventId ? `e-smoothcomp-${options.sourceEventId}` : smoothcompSnapshot.events[0]?.id);
+      options.eventId || (options.sourceEventId ? `e-smoothcomp-${options.sourceEventId}` : snapshot.events[0]?.id);
+    const summary = summarizeSmoothcompSnapshot(snapshot);
 
     setState((current) => {
-      const next = applySmoothcompSnapshot(current, smoothcompSnapshot, options);
+      const next = applySmoothcompSnapshot(current, snapshot, options);
       return { ...next, positions: markPositions(next) };
     });
 
@@ -203,8 +210,41 @@ function App() {
     }
 
     setSyncNotice(
-      `Applied ${smoothcompSummary.eventCount} events and ${smoothcompSummary.matchCount} matches from the latest Smoothcomp snapshot.`
+      `Applied ${summary.eventCount} events and ${summary.matchCount} matches from the latest Smoothcomp snapshot.`
     );
+    setSyncNoticeType("muted");
+  }
+
+  async function refreshSmoothcompSnapshot() {
+    setIsRefreshingSmoothcomp(true);
+    setSyncNotice("Refreshing all Smoothcomp games. This can take a while when many brackets are published.");
+    setSyncNoticeType("warning");
+
+    try {
+      const response = await fetch("/api/smoothcomp/refresh", { method: "POST" });
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.snapshot) {
+        throw new Error(payload.error || "Smoothcomp refresh failed");
+      }
+
+      const freshSnapshot = payload.snapshot as SmoothcompSnapshot;
+      const summary = summarizeSmoothcompSnapshot(freshSnapshot);
+      setLatestSmoothcompSnapshot(freshSnapshot);
+      applyLatestSmoothcompSnapshot(
+        selectedEvent?.source === "smoothcomp" ? { eventId: selectedEvent.id } : {},
+        freshSnapshot
+      );
+      setSyncNotice(
+        `Refreshed from Smoothcomp and applied ${summary.eventCount} events, ${summary.matchCount} matches, ${summary.liveCount} live, and ${summary.settledCount} settled.`
+      );
+      setSyncNoticeType("muted");
+    } catch (error) {
+      setSyncNotice(error instanceof Error ? error.message : "Smoothcomp refresh failed");
+      setSyncNoticeType("error");
+    } finally {
+      setIsRefreshingSmoothcomp(false);
+    }
   }
 
   function syncSelectedEvent() {
@@ -485,6 +525,15 @@ function App() {
                   <RefreshCw size={17} aria-hidden="true" />
                   <span>Sync selected</span>
                 </button>
+                <button
+                  className="primary-button"
+                  type="button"
+                  disabled={isRefreshingSmoothcomp}
+                  onClick={refreshSmoothcompSnapshot}
+                >
+                  <RefreshCw className={isRefreshingSmoothcomp ? "spin-icon" : undefined} size={17} aria-hidden="true" />
+                  <span>{isRefreshingSmoothcomp ? "Refreshing..." : "Refresh all games"}</span>
+                </button>
                 <button className="primary-button" type="button" onClick={() => applyLatestSmoothcompSnapshot()}>
                   <DatabaseZap size={17} aria-hidden="true" />
                   <span>Apply snapshot</span>
@@ -500,7 +549,7 @@ function App() {
                 </div>
                 <span>{smoothcompSummary.syncedAt ? formatDateTime(smoothcompSummary.syncedAt) : "Not synced yet"}</span>
               </div>
-              {syncNotice && <div className="ticket-alert muted">{syncNotice}</div>}
+              {syncNotice && <div className={`ticket-alert ${syncNoticeType}`}>{syncNotice}</div>}
             </div>
 
             <div className="panel">
