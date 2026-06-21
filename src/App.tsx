@@ -221,9 +221,8 @@ function App() {
     setSyncNoticeType("warning");
 
     try {
-      await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh", { method: "POST" }));
+      let payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh", { method: "POST" }));
 
-      let payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh"));
       while (payload.status === "running") {
         await delay(3000);
         payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh"));

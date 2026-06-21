@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/smoothcomp/refresh.mjs": {
+      "maxDuration": 300
+    }
+  }
+}
