@@ -249,8 +249,7 @@ function App() {
       );
       setSyncNoticeType("muted");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Smoothcomp refresh failed";
-      setSyncNotice(message.includes("JSON") ? "Smoothcomp refresh returned an invalid server response." : message);
+      setSyncNotice(error instanceof Error ? error.message : "Smoothcomp refresh failed");
       setSyncNoticeType("error");
     } finally {
       setIsRefreshingSmoothcomp(false);
@@ -266,9 +265,10 @@ function App() {
         payload = JSON.parse(responseText);
       } catch {
         const isHtml = responseText.trim().startsWith("<");
+        const preview = responseText.trim().replace(/\s+/g, " ").slice(0, 140);
         const fallback = isHtml
           ? "Smoothcomp refresh API is not available at this URL. Run npm run dev and open http://127.0.0.1:5173/."
-          : "Smoothcomp refresh returned a non-JSON server response.";
+          : `Smoothcomp refresh returned a non-JSON server response: ${preview || "empty response"}`;
         throw new Error(fallback);
       }
     }
