@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 const CALENDAR_URL = "https://smoothcomp.com/en/events/upcoming";
@@ -10,8 +11,14 @@ const REQUEST_PAUSE_MS = 90;
 const USER_AGENT = "bjj-predict-sync/0.1 (+https://github.com/Vicorico17/bjj-predict)";
 const execFileAsync = promisify(execFile);
 
-const options = parseArgs(process.argv.slice(2));
-const warnings = [];
+let options = parseArgs(process.argv.slice(2));
+let warnings = [];
+
+export async function runSmoothcompSync(args = process.argv.slice(2)) {
+  options = parseArgs(args);
+  warnings = [];
+  return main();
+}
 
 async function main() {
   const startedAt = new Date().toISOString();
@@ -64,6 +71,8 @@ async function main() {
   if (warnings.length > 0) {
     console.warn(`Warnings: ${warnings.length}`);
   }
+
+  return snapshot;
 }
 
 async function discoverEvents() {
@@ -558,7 +567,11 @@ function messageFor(error) {
   return error instanceof Error ? error.message : String(error);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+
+if (isDirectRun) {
+  runSmoothcompSync().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

@@ -1,10 +1,8 @@
-import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
+import { runSmoothcompSync } from "../../scripts/smoothcomp-sync.mjs";
 
-const execFileAsync = promisify(execFile);
 const OUTPUT_PATH = path.join(os.tmpdir(), "smoothcomp-live-snapshot.json");
 
 export default async function handler(req, res) {
@@ -43,33 +41,23 @@ export default async function handler(req, res) {
       return;
     }
 
-    const { stdout, stderr } = await execFileAsync(
-      "node",
-      [
-        "scripts/smoothcomp-sync.mjs",
-        "--out",
-        OUTPUT_PATH,
-        "--event-limit=all",
-        "--bracket-limit=all",
-        "--match-limit=all",
-        "--live-score-limit=500",
-        ...eventUrls.flatMap((url) => ["--event", url])
-      ],
-      {
-        cwd: process.cwd(),
-        maxBuffer: 50 * 1024 * 1024,
-        timeout: 280000
-      }
-    );
-    const snapshotText = await readFile(OUTPUT_PATH, "utf8");
+    const snapshot = await runSmoothcompSync([
+      "--out",
+      OUTPUT_PATH,
+      "--event-limit=all",
+      "--bracket-limit=all",
+      "--match-limit=all",
+      "--live-score-limit=500",
+      ...eventUrls.flatMap((url) => ["--event", url])
+    ]);
 
     res.status(200).json({
       status: "complete",
       startedAt,
       finishedAt: new Date().toISOString(),
-      snapshot: JSON.parse(snapshotText),
-      stdout: stdout.slice(-4000),
-      stderr: stderr.slice(-4000)
+      snapshot,
+      stdout: "",
+      stderr: ""
     });
   } catch (error) {
     res.status(500).json({
