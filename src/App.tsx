@@ -259,14 +259,26 @@ function App() {
 
   async function readSmoothcompRefreshResponse(response: Response) {
     const responseText = await response.text();
-    const payload = responseText ? JSON.parse(responseText) : {};
+    let payload: Record<string, unknown> = {};
+
+    if (responseText) {
+      try {
+        payload = JSON.parse(responseText);
+      } catch {
+        const isHtml = responseText.trim().startsWith("<");
+        const fallback = isHtml
+          ? "Smoothcomp refresh API is not available at this URL. Run npm run dev and open http://127.0.0.1:5173/."
+          : "Smoothcomp refresh returned a non-JSON server response.";
+        throw new Error(fallback);
+      }
+    }
 
     if (!response.ok) {
       const fallback =
         response.status === 404
           ? "Smoothcomp refresh is only available from the Vite dev server. Run npm run dev and open that local URL."
           : "Smoothcomp refresh failed";
-      throw new Error(payload.error || fallback);
+      throw new Error(typeof payload.error === "string" ? payload.error : fallback);
     }
 
     return payload as {
