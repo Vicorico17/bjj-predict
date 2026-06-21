@@ -1,6 +1,10 @@
 {
   "functions": {
     "api/smoothcomp/refresh.mjs": {
+      "includeFiles": [
+        "scripts/smoothcomp-sync.mjs",
+        "src/generated/smoothcomp-live-snapshot.json"
+      ],
       "maxDuration": 300
     }
   }
