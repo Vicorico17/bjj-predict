@@ -920,6 +920,17 @@ input[type="url"]:focus,
 .upcoming-match-footer > span { display: inline-flex; align-items: center; gap: 5px; }
 .upcoming-match-footer .text-button { margin-left: auto; }
 .match-result-score { color: var(--text); font-size: .9rem; }
+.archive-result { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: -5px 0 14px; padding: 12px 14px; border: 1px solid rgba(251,191,36,.2); border-radius: 8px; background: linear-gradient(100deg, rgba(251,191,36,.08), rgba(15,17,18,.85) 55%); }
+.archive-winner { display: inline-flex; align-items: center; gap: 9px; min-width: 0; color: #fbbf24; }
+.archive-winner strong { overflow-wrap: anywhere; color: #fef3c7; font-size: .95rem; }
+.archive-winner b { padding: 4px 7px; border: 1px solid rgba(251,191,36,.3); border-radius: 999px; color: #fcd34d; font-size: .61rem; letter-spacing: .08em; }
+.archive-no-winner { color: var(--muted); font-size: .82rem; }
+.archive-score { display: grid; gap: 3px; justify-items: end; flex: 0 0 auto; }
+.archive-score small { color: var(--faint); font-size: .59rem; font-weight: 800; letter-spacing: .09em; }
+.archive-score strong { display: flex; align-items: center; gap: 9px; color: #d4d4d8; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.archive-score strong .score-winner { color: #fbbf24; }
+.archive-score i { color: var(--faint); font-size: .95rem; font-style: normal; }
+.archive-score.missing strong { color: var(--muted); font-size: .8rem; font-weight: 600; }
 .text-button { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: #a7f3d0; cursor: pointer; font-size: .8rem; font-weight: 750; }
 .text-button:hover { color: white; }
 .competitor-portrait { display: block; flex: 0 0 auto; width: 54px; height: 54px; overflow: hidden; border: 1px solid #343a3b; border-radius: 50%; background: linear-gradient(145deg, #202624, #101212); object-fit: cover; }
