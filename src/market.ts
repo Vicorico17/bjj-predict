@@ -6,6 +6,7 @@ const MIN_SELL_SHARES = 0.0001;
 const MAX_SELL_SHARES = 1_000_000;
 
 export function formatDateTime(value: string) {
+  if (!Number.isFinite(Date.parse(value))) return "Time not published";
   return new Intl.DateTimeFormat(undefined, {
     month: "short",
     day: "numeric",
@@ -263,7 +264,7 @@ export function placeTrade(
   const market = state.markets.find((candidate) => candidate.id === marketId);
   const match = market ? state.matches.find((candidate) => candidate.id === market.matchId) : undefined;
 
-  if (!market || !match || market.status !== "open") {
+  if (!market || !match || market.status !== "open" || !isMatchTradable(match)) {
     return state;
   }
 
@@ -327,6 +328,13 @@ export function placeTrade(
     ...nextState,
     positions: markPositions(nextState)
   };
+}
+
+export function isMatchTradable(match: Match) {
+  if (match.status !== "open") return false;
+  if (!match.sourceMatchId) return true; // Existing manual demo fixtures.
+  return Date.parse(match.scheduledAt) > Date.now() &&
+    Number.isFinite(Date.parse(match.sourceObservedAt || "")) && Date.now() - Date.parse(match.sourceObservedAt || "") <= 120000;
 }
 
 function updatePositionAfterTrade(positions: Position[], trade: Trade, existing?: Position) {

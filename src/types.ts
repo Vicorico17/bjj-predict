@@ -1,3 +1,10 @@
+export type DataProvider = "smoothcomp" | "ajp" | "ibjjf" | "floarena" | "flo";
+
+export type DataCoverage = {
+  level: "discovered" | "partial" | "limited" | "published";
+  matchCount: number; scoredMatches: number; totalBrackets?: number; importedBrackets?: number; liveScores?: boolean;
+};
+
 export type SportKind = "bjj" | "mma" | "boxing" | "wrestling" | "judo";
 
 export type MatchStatus = "open" | "locked" | "live" | "settled";
@@ -6,7 +13,7 @@ export type MarketStatus = "open" | "locked" | "settled";
 
 export type TradeSide = "buy" | "sell";
 
-export type BeltRank = "white" | "grey" | "yellow" | "orange" | "green" | "blue" | "purple" | "brown" | "black";
+export type BeltRank = "unknown" | "white" | "grey" | "yellow" | "orange" | "green" | "blue" | "purple" | "brown" | "black";
 
 export type Competitor = {
   id: string;
@@ -29,9 +36,12 @@ export type Event = {
   organizer: string;
   city: string;
   startsAt: string;
+  endsAt?: string;
   sourceUrl: string;
-  source: "smoothcomp" | "manual";
-  status: "upcoming" | "live" | "complete";
+  source: DataProvider | "manual";
+  coverage?: DataCoverage;
+  warnings?: string[];
+  status: "upcoming" | "live" | "complete" | "unknown";
   lastSyncedAt: string;
 };
 
@@ -64,6 +74,7 @@ export type Match = {
   sourceMatchId?: string;
   sourceState?: string;
   sourceUrl?: string;
+  sourceObservedAt?: string;
 };
 
 export type Market = {

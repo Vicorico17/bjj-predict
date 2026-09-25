@@ -1,0 +1,35 @@
+🥋 BJJ DATA — FINDINGS & BUILD ORDER
+
+1. FLO / FLOARENA — first new integration
+ADCC Worlds results, scores and finishes. Confirmed examples: Ryan–Simões 21–0 and Bodoni–Rodriguez 9–0.
+https://www.flograppling.com/events/11302663/results
+ADCC 2024 brackets:
+https://arena.flograppling.com/event/1f471e33-0648-4fbb-9c08-f4a25af3f4f3?page=brackets
+
+2. SMOOTHCOMP — improve our existing importer
+Local events, schedules, brackets and match details.
+https://smoothcomp.com
+
+3. IBJJF — next new provider
+IBJJF competitions and official results.
+https://www.bjjcompsystem.com
+https://ibjjf.com/events/results
+
+4. AJP TOUR — expand coverage
+Abu Dhabi circuit; Smoothcomp-based pages may let us reuse importer logic.
+https://ajptour.com
+
+5. ADCC OFFICIAL — historical verification
+https://adcombat.com/2024-adcc-world-championship-day-2-full-results/
+
+6. BJJ HEROES — athlete history & statistics
+https://www.bjjheroes.com
+
+7. UWW — federation grappling results
+https://uww.org
+
+No single documented public API covering all these sources was verified. Public website data exists; supported API access and complete coverage still need validation.
+
+Build order: Flo → Smoothcomp discovery improvements → IBJJF → AJP. ADCC official, BJJ Heroes and UWW are later enrichment sources.
+
+Progress: first Flo results importer built and tested locally. ADCC 2024 import returned 114 published results across 7 pages. This is published-results coverage, not live FloArena brackets or a guarantee of every match. Not deployed yet.

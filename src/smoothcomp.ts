@@ -1,5 +1,5 @@
 import { liquidityRiskFor, quantitiesFromProbabilities, settleMarket } from "./market";
-import type { AppState, BeltRank, Competitor, Event, Market, Match, MatchScore, MatchStatus } from "./types";
+import type { AppState, DataProvider, DataCoverage, BeltRank, Competitor, Event, Market, Match, MatchScore, MatchStatus } from "./types";
 
 type SmoothcompCompetitorSnapshot = {
   sourceId?: string;
@@ -36,6 +36,9 @@ export type SmoothcompMatchSnapshot = {
 export type SmoothcompEventSnapshot = {
   id: string;
   sourceEventId: string;
+  source?: DataProvider;
+  observedAt?: string;
+  coverage?: DataCoverage;
   name: string;
   organizer?: string;
   city?: string;
@@ -51,7 +54,7 @@ export type SmoothcompEventSnapshot = {
 };
 
 export type SmoothcompSnapshot = {
-  source: "smoothcomp";
+  source: DataProvider | "mixed";
   syncedAt: string;
   calendarUrl: string;
   events: SmoothcompEventSnapshot[];
@@ -166,7 +169,12 @@ export function applySmoothcompSnapshot(
   const settlements: Array<{ marketId: string; winnerId: string; finish: string }> = [];
 
   for (const snapshotEvent of scopedEvents) {
-    const event = eventFromSnapshot(snapshotEvent, snapshot.syncedAt);
+    const source = snapshotEvent.source || snapshot.source;
+    if (source === "mixed") continue;
+    const observedAt = snapshotEvent.observedAt || snapshot.syncedAt;
+    const existingEvent = events.find(event => event.id === snapshotEvent.id);
+    if (existingEvent && Date.parse(existingEvent.lastSyncedAt) > Date.parse(observedAt)) continue;
+    const event = eventFromSnapshot(snapshotEvent, observedAt, source);
     events = upsertById(events, event);
 
     for (const snapshotMatch of snapshotEvent.matches) {
@@ -175,22 +183,32 @@ export function applySmoothcompSnapshot(
         snapshotEvent.sourceEventId,
         snapshotMatch.sourceMatchId,
         "left",
-        snapshotMatch.division
+        snapshotMatch.division,
+        source
       );
       const competitorB = competitorFromSnapshot(
         snapshotMatch.competitorB,
         snapshotEvent.sourceEventId,
         snapshotMatch.sourceMatchId,
         "right",
-        snapshotMatch.division
+        snapshotMatch.division,
+        source
       );
 
       competitors = upsertById(competitors, competitorA);
       competitors = upsertById(competitors, competitorB);
 
-      const winnerId = winnerIdFor(snapshotMatch, competitorA.id, competitorB.id);
-      const localMatch = matchFromSnapshot(snapshotEvent, snapshotMatch, competitorA.id, competitorB.id, winnerId);
+      const winnerId = winnerIdFor(snapshotMatch, competitorA.id, competitorB.id, source);
+      const localMatch = matchFromSnapshot(snapshotEvent, snapshotMatch, competitorA.id, competitorB.id, winnerId, source, observedAt);
       const existingMatch = matches.find((match) => match.id === localMatch.id);
+      if (existingMatch && (existingMatch.competitorAId !== localMatch.competitorAId || existingMatch.competitorBId !== localMatch.competitorBId ||
+          existingMatch.winnerId && winnerId && existingMatch.winnerId !== winnerId)) {
+        const warning = `Match ${snapshotMatch.sourceMatchId} changed participants or winner; review required.`;
+        events = events.map(item => item.id === event.id ? { ...item, warnings: [...new Set([...(item.warnings || []), warning])] } : item);
+        markets = markets.map(item => item.matchId === existingMatch.id && item.status === "open" ? { ...item, status: "locked" } : item);
+        matches = matches.map(item => item.id === existingMatch.id && item.status === "open" ? { ...item, status: "locked" } : item);
+        continue;
+      }
       const mergedMatch = existingMatch ? mergeMatch(existingMatch, localMatch) : localMatch;
 
       matches = upsertById(matches, mergedMatch);
@@ -224,16 +242,19 @@ export function applySmoothcompSnapshot(
   return nextState;
 }
 
-function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: string): Event {
+function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: string, source: DataProvider): Event {
   return {
     id: snapshotEvent.id,
     sport: "bjj",
     name: snapshotEvent.name,
     organizer: snapshotEvent.organizer || "Smoothcomp",
-    city: [snapshotEvent.city, snapshotEvent.country].filter(Boolean).join(", ") || "Smoothcomp",
-    startsAt: snapshotEvent.startsAt || syncedAt,
+    city: [snapshotEvent.city, snapshotEvent.country].filter(Boolean).join(", ") || "Location not listed",
+    startsAt: snapshotEvent.startsAt || "",
+    endsAt: snapshotEvent.endsAt || "",
+    coverage: snapshotEvent.coverage,
+    warnings: snapshotEvent.warnings,
     sourceUrl: snapshotEvent.sourceUrl,
-    source: "smoothcomp",
+    source,
     status: snapshotEvent.status,
     lastSyncedAt: syncedAt
   };
@@ -244,20 +265,21 @@ function competitorFromSnapshot(
   sourceEventId: string,
   sourceMatchId: string,
   side: "left" | "right",
-  division: string
+  division: string,
+  source: DataProvider
 ): Competitor {
   const sourceId =
     snapshotCompetitor.sourceId ||
     `${sourceEventId}-${sourceMatchId}-${side}-${slugify(snapshotCompetitor.name || "unknown")}`;
 
   return {
-    id: `c-smoothcomp-${sourceId}`,
+    id: `c-${source}-${sourceId}`,
     name: snapshotCompetitor.name || "Unknown competitor",
-    academy: snapshotCompetitor.academy || "Independent",
-    country: (snapshotCompetitor.country || "SC").toUpperCase(),
+    academy: snapshotCompetitor.academy || "Not listed",
+    country: (snapshotCompetitor.country || "Not listed").toUpperCase(),
     belt: snapshotCompetitor.belt || beltFromDivision(division),
-    seed: snapshotCompetitor.seed && snapshotCompetitor.seed > 0 ? snapshotCompetitor.seed : side === "left" ? 1 : 2,
-    record: snapshotCompetitor.record || "0 Smoothcomp wins",
+    seed: snapshotCompetitor.seed && snapshotCompetitor.seed > 0 ? snapshotCompetitor.seed : 0,
+    record: snapshotCompetitor.record || "Record not listed",
     imageUrl: snapshotCompetitor.imageUrl,
     clubLogoUrl: snapshotCompetitor.clubLogoUrl,
     sourceId,
@@ -270,16 +292,21 @@ function matchFromSnapshot(
   snapshotMatch: SmoothcompMatchSnapshot,
   competitorAId: string,
   competitorBId: string,
-  winnerId?: string
+  winnerId: string | undefined,
+  source: DataProvider,
+  observedAt: string
 ): Match {
+  const scheduledAt = snapshotMatch.scheduledAt || "";
+  const canOpen = Date.parse(scheduledAt) > Date.now() && Date.now() - Date.parse(observedAt) <= 120000;
   return {
-    id: `m-smoothcomp-${snapshotMatch.sourceMatchId}`,
+    id: `m-${source}-${snapshotMatch.sourceMatchId}`,
     eventId: snapshotEvent.id,
     division: snapshotMatch.division,
     round: snapshotMatch.round || `Match ${snapshotMatch.sourceMatchId}`,
     mat: snapshotMatch.mat || "TBD",
-    scheduledAt: snapshotMatch.scheduledAt || snapshotEvent.startsAt || new Date().toISOString(),
-    status: winnerId ? "settled" : snapshotMatch.status,
+    scheduledAt,
+    sourceObservedAt: observedAt,
+    status: winnerId ? "settled" : snapshotMatch.status === "settled" || snapshotMatch.status === "open" && !canOpen ? "locked" : snapshotMatch.status,
     competitorAId,
     competitorBId,
     winnerId,
@@ -307,7 +334,7 @@ function mergeMatch(existingMatch: Match, incomingMatch: Match): Match {
 
 function marketFromMatch(match: Match, existingMarket: Market | undefined, syncedAt: string): Market {
   if (existingMarket) {
-    const shouldLock = match.status === "live" && existingMarket.status === "open";
+    const shouldLock = match.status !== "open" && existingMarket.status === "open";
     return {
       ...existingMarket,
       status: shouldLock ? "locked" : existingMarket.status,
@@ -316,7 +343,7 @@ function marketFromMatch(match: Match, existingMarket: Market | undefined, synce
   }
 
   const probabilities = initialProbabilitiesFor(match);
-  const status = match.status === "settled" ? "settled" : match.status === "live" ? "locked" : "open";
+  const status = match.status === "settled" ? "settled" : match.status === "open" ? "open" : "locked";
 
   return {
     id: `mk-${match.id}`,
@@ -337,7 +364,7 @@ function marketFromMatch(match: Match, existingMarket: Market | undefined, synce
   };
 }
 
-function winnerIdFor(snapshotMatch: SmoothcompMatchSnapshot, competitorAId: string, competitorBId: string) {
+function winnerIdFor(snapshotMatch: SmoothcompMatchSnapshot, competitorAId: string, competitorBId: string, source: DataProvider) {
   if (snapshotMatch.winnerSide === "left") {
     return competitorAId;
   }
@@ -347,7 +374,7 @@ function winnerIdFor(snapshotMatch: SmoothcompMatchSnapshot, competitorAId: stri
   }
 
   if (snapshotMatch.winnerSourceId) {
-    const sourceId = `c-smoothcomp-${snapshotMatch.winnerSourceId}`;
+    const sourceId = `c-${source}-${snapshotMatch.winnerSourceId}`;
     return sourceId === competitorAId || sourceId === competitorBId ? sourceId : undefined;
   }
 
@@ -361,7 +388,7 @@ function initialProbabilitiesFor(match: Match) {
 function beltFromDivision(division: string): BeltRank {
   const lower = division.toLowerCase();
   const belts: BeltRank[] = ["black", "brown", "purple", "blue", "green", "orange", "yellow", "grey", "white"];
-  return belts.find((belt) => lower.includes(belt)) || "white";
+  return belts.find((belt) => lower.includes(belt)) || "unknown";
 }
 
 function slugify(value: string) {
@@ -382,3 +409,7 @@ function upsertById<T extends { id: string }>(items: T[], nextItem: T) {
   nextItems[index] = { ...items[index], ...nextItem };
   return nextItems;
 }
+
+// Provider-neutral entry point; retain the existing name for compatibility.
+export const applyDataSnapshot = applySmoothcompSnapshot;
+export type DataSnapshot = SmoothcompSnapshot;

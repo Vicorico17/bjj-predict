@@ -1,0 +1,1728 @@
+{
+  "status": "SUCCESS",
+  "response": {
+    "bouts": [
+      {
+        "guid": "316a521a-4e8a-4c59-a229-7321868f22c0",
+        "bottomWrestler": {
+          "guid": "2800a45a-7129-4071-8f54-225752b755c2",
+          "firstName": "Yuri",
+          "lastName": "Simoes",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": null,
+          "zipCode": null,
+          "state": null,
+          "weightClass": {
+            "guid": "6f06248e-56fb-444d-a7e6-b1982c05b3af",
+            "name": "Super Fight Sun",
+            "division": {
+              "guid": "57f943db-3ec9-4c29-b5b6-04d65e596062",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "57",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "21-0 20:00",
+        "roundName": {
+          "guid": "0dd7df65-3636-4667-a1d7-a11cf5aace81",
+          "displayName": "Super Fight"
+        },
+        "roundSpot": 0,
+        "trueRound": 1,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": null,
+        "sequenceNumber": 57,
+        "topWrestler": {
+          "guid": "f383b349-dbb3-4194-b949-2f0153625f61",
+          "firstName": "Gordon",
+          "lastName": "Ryan",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": null,
+          "zipCode": null,
+          "state": null,
+          "weightClass": {
+            "guid": "6f06248e-56fb-444d-a7e6-b1982c05b3af",
+            "name": "Super Fight Sun",
+            "division": {
+              "guid": "57f943db-3ec9-4c29-b5b6-04d65e596062",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": null,
+        "winnerToTop": null,
+        "weightClass": {
+          "guid": "6f06248e-56fb-444d-a7e6-b1982c05b3af",
+          "name": "Super Fight Sun",
+          "division": {
+            "guid": "57f943db-3ec9-4c29-b5b6-04d65e596062",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786480&limit=60",
+        "winnerWrestlerGuid": "f383b349-dbb3-4194-b949-2f0153625f61",
+        "redWrestlerGuid": "f383b349-dbb3-4194-b949-2f0153625f61"
+      },
+      {
+        "guid": "e9618cd1-b37f-47d2-a6e8-e2ad0e9a30fe",
+        "bottomWrestler": {
+          "guid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+          "firstName": "Roberto",
+          "lastName": "Abreu",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "56",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 3:24",
+        "roundName": {
+          "guid": "f84feafa-7230-41cc-a04b-96a62e0a1cbd",
+          "displayName": "Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 1,
+        "winnerPoints": 0,
+        "topPlacementPoints": 0,
+        "maxPlace": 1,
+        "sequenceNumber": 55.12068965517239,
+        "topWrestler": {
+          "guid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+          "firstName": "Kaynan",
+          "lastName": "Duarte",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": null,
+        "winnerToTop": null,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786477&limit=60",
+        "winnerWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+        "redWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b"
+      },
+      {
+        "guid": "84f54526-f2c6-472e-864f-9bf65155c90b",
+        "bottomWrestler": {
+          "guid": "041fdfc2-0acf-4273-b47d-d8c0cc0a3f0f",
+          "firstName": "Bia",
+          "lastName": "Mesquita",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "55",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 10:00 TB1",
+        "roundName": {
+          "guid": "f84feafa-7230-41cc-a04b-96a62e0a1cbd",
+          "displayName": "Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 1,
+        "winnerPoints": 0,
+        "topPlacementPoints": 0,
+        "maxPlace": 1,
+        "sequenceNumber": 53.181034482758605,
+        "topWrestler": {
+          "guid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+          "firstName": "Adele",
+          "lastName": "Fornarino",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": null,
+        "winnerToTop": null,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786476&limit=60",
+        "winnerWrestlerGuid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+        "redWrestlerGuid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1"
+      },
+      {
+        "guid": "26c96fd0-d74a-43eb-a2bf-30268d6447f7",
+        "bottomWrestler": {
+          "guid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19",
+          "firstName": "Giancarlo",
+          "lastName": "Bodoni",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "54",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 15:00 TB1",
+        "roundName": {
+          "guid": "1a0780f8-14ee-48fc-b97d-822df6506f12",
+          "displayName": "3rd Place"
+        },
+        "roundSpot": 1,
+        "trueRound": 1,
+        "winnerPoints": 0,
+        "topPlacementPoints": 0,
+        "maxPlace": 3,
+        "sequenceNumber": 53.120689655172406,
+        "topWrestler": {
+          "guid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb",
+          "firstName": "Dante",
+          "lastName": "Leon",
+          "team": {
+            "guid": "08b89e43-dccd-44af-9da2-662629f950ab",
+            "name": "Canada",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "REF",
+        "winnerToBoutGuid": null,
+        "winnerToTop": null,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786465&limit=60",
+        "winnerWrestlerGuid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb",
+        "redWrestlerGuid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb"
+      },
+      {
+        "guid": "bab147f2-ef15-4eee-8054-261ba8f02b80",
+        "bottomWrestler": {
+          "guid": "4d16e9b9-886d-4d94-b938-1b303903c6d5",
+          "firstName": "Rafaela",
+          "lastName": "Guedes",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "53",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0",
+        "roundName": {
+          "guid": "0dd7df65-3636-4667-a1d7-a11cf5aace81",
+          "displayName": "Super Fight"
+        },
+        "roundSpot": 0,
+        "trueRound": 1,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": null,
+        "sequenceNumber": 53,
+        "topWrestler": {
+          "guid": "f07adb04-2cef-4798-b498-d5b889cd69d9",
+          "firstName": "Amy",
+          "lastName": "Campo",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "FOR",
+        "winnerToBoutGuid": null,
+        "winnerToTop": null,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786455&limit=60",
+        "winnerWrestlerGuid": "f07adb04-2cef-4798-b498-d5b889cd69d9",
+        "redWrestlerGuid": "f07adb04-2cef-4798-b498-d5b889cd69d9"
+      },
+      {
+        "guid": "a29d1a8a-46e0-4cc3-b555-81663b0a3a82",
+        "bottomWrestler": {
+          "guid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+          "firstName": "Roberto",
+          "lastName": "Abreu",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "52",
+        "loserToBoutGuid": "26c96fd0-d74a-43eb-a2bf-30268d6447f7",
+        "loserToTop": false,
+        "result": "3-0 15:00 TB1",
+        "roundName": {
+          "guid": "f5c8eff3-48d3-4bc0-9500-974726cd3d92",
+          "displayName": "Semi-Finals"
+        },
+        "roundSpot": 2,
+        "trueRound": 2,
+        "winnerPoints": 0,
+        "topPlacementPoints": 0,
+        "maxPlace": 1,
+        "sequenceNumber": 40.585748922413785,
+        "topWrestler": {
+          "guid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19",
+          "firstName": "Giancarlo",
+          "lastName": "Bodoni",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "e9618cd1-b37f-47d2-a6e8-e2ad0e9a30fe",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786452&limit=60",
+        "winnerWrestlerGuid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+        "redWrestlerGuid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19"
+      },
+      {
+        "guid": "bbb5b353-5d33-472d-87c9-c8765a925dcc",
+        "bottomWrestler": {
+          "guid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb",
+          "firstName": "Dante",
+          "lastName": "Leon",
+          "team": {
+            "guid": "08b89e43-dccd-44af-9da2-662629f950ab",
+            "name": "Canada",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "51",
+        "loserToBoutGuid": "26c96fd0-d74a-43eb-a2bf-30268d6447f7",
+        "loserToTop": true,
+        "result": "2-0 10:00",
+        "roundName": {
+          "guid": "f5c8eff3-48d3-4bc0-9500-974726cd3d92",
+          "displayName": "Semi-Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 2,
+        "winnerPoints": 0,
+        "topPlacementPoints": 0,
+        "maxPlace": 1,
+        "sequenceNumber": 40.585290948275855,
+        "topWrestler": {
+          "guid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+          "firstName": "Kaynan",
+          "lastName": "Duarte",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "e9618cd1-b37f-47d2-a6e8-e2ad0e9a30fe",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786448&limit=60",
+        "winnerWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+        "redWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b"
+      },
+      {
+        "guid": "0a7bb3e5-4440-466a-be98-e9fa271e9a51",
+        "bottomWrestler": {
+          "guid": "041fdfc2-0acf-4273-b47d-d8c0cc0a3f0f",
+          "firstName": "Bia",
+          "lastName": "Mesquita",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "50",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "2-0 10:00",
+        "roundName": {
+          "guid": "f5c8eff3-48d3-4bc0-9500-974726cd3d92",
+          "displayName": "Semi-Finals"
+        },
+        "roundSpot": 2,
+        "trueRound": 2,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.584374999999994,
+        "topWrestler": {
+          "guid": "f07adb04-2cef-4798-b498-d5b889cd69d9",
+          "firstName": "Amy",
+          "lastName": "Campo",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "84f54526-f2c6-472e-864f-9bf65155c90b",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786447&limit=60",
+        "winnerWrestlerGuid": "041fdfc2-0acf-4273-b47d-d8c0cc0a3f0f",
+        "redWrestlerGuid": "f07adb04-2cef-4798-b498-d5b889cd69d9"
+      },
+      {
+        "guid": "041c6d66-c49d-4e5b-85a2-93e942aae448",
+        "bottomWrestler": {
+          "guid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+          "firstName": "Adele",
+          "lastName": "Fornarino",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "49",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 9:18",
+        "roundName": {
+          "guid": "f5c8eff3-48d3-4bc0-9500-974726cd3d92",
+          "displayName": "Semi-Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 2,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.58254310344827,
+        "topWrestler": {
+          "guid": "4d16e9b9-886d-4d94-b938-1b303903c6d5",
+          "firstName": "Rafaela",
+          "lastName": "Guedes",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "84f54526-f2c6-472e-864f-9bf65155c90b",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786446&limit=60",
+        "winnerWrestlerGuid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+        "redWrestlerGuid": "4d16e9b9-886d-4d94-b938-1b303903c6d5"
+      },
+      {
+        "guid": "c47a00e2-2275-48c6-b2f0-42ebfd8edfba",
+        "bottomWrestler": {
+          "guid": "fc98e81e-df86-4b43-bc0d-941c8eceac2b",
+          "firstName": "Izaak",
+          "lastName": "Michell",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "48",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "2-0 10:00",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 4,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.57887931034483,
+        "topWrestler": {
+          "guid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+          "firstName": "Roberto",
+          "lastName": "Abreu",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "a29d1a8a-46e0-4cc3-b555-81663b0a3a82",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786445&limit=60",
+        "winnerWrestlerGuid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+        "redWrestlerGuid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6"
+      },
+      {
+        "guid": "9257756a-16d8-4494-8ca4-c2456c0bf3d3",
+        "bottomWrestler": {
+          "guid": "6cba12d0-fa68-4090-bb25-11393a868973",
+          "firstName": "Vagner",
+          "lastName": "Rocha",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "47",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "6-0 6:22",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 3,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.57155172413793,
+        "topWrestler": {
+          "guid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19",
+          "firstName": "Giancarlo",
+          "lastName": "Bodoni",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "a29d1a8a-46e0-4cc3-b555-81663b0a3a82",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786442&limit=60",
+        "winnerWrestlerGuid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19",
+        "redWrestlerGuid": "e36a53cb-1bbc-4675-a7e7-39a7266d5c19"
+      },
+      {
+        "guid": "431c1da1-4c79-44ff-a6d0-2dcae9377d5c",
+        "bottomWrestler": {
+          "guid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb",
+          "firstName": "Dante",
+          "lastName": "Leon",
+          "team": {
+            "guid": "08b89e43-dccd-44af-9da2-662629f950ab",
+            "name": "Canada",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "46",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 1:30",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 2,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.55689655172414,
+        "topWrestler": {
+          "guid": "9b808c9e-e05b-4b73-8239-e98c4d673682",
+          "firstName": "Mica",
+          "lastName": "Galvao",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "bbb5b353-5d33-472d-87c9-c8765a925dcc",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786439&limit=60",
+        "winnerWrestlerGuid": "0d5d61ad-7d25-443d-a4a3-38d29c0107bb",
+        "redWrestlerGuid": "9b808c9e-e05b-4b73-8239-e98c4d673682"
+      },
+      {
+        "guid": "aed0303d-ac0b-461f-89ec-27a33ca1fad7",
+        "bottomWrestler": {
+          "guid": "44fce956-5c41-4f4a-b2ac-b47b392192b2",
+          "firstName": "Declan",
+          "lastName": "Moody",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "45",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 1:41",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.527586206896544,
+        "topWrestler": {
+          "guid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+          "firstName": "Kaynan",
+          "lastName": "Duarte",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "bbb5b353-5d33-472d-87c9-c8765a925dcc",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786436&limit=60",
+        "winnerWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b",
+        "redWrestlerGuid": "ca21c2f9-59c4-4342-bb96-0d6f7f0ad48b"
+      },
+      {
+        "guid": "6535adda-d0bf-495c-b23b-e38461608bc8",
+        "bottomWrestler": {
+          "guid": "409c137b-aa1e-458e-9ed2-61270b243e19",
+          "firstName": "Amanda",
+          "lastName": "Leve",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "43",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "2-0 10:00",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 3,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.35172413793103,
+        "topWrestler": {
+          "guid": "f07adb04-2cef-4798-b498-d5b889cd69d9",
+          "firstName": "Amy",
+          "lastName": "Campo",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "0a7bb3e5-4440-466a-be98-e9fa271e9a51",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786434&limit=60",
+        "winnerWrestlerGuid": "f07adb04-2cef-4798-b498-d5b889cd69d9",
+        "redWrestlerGuid": "f07adb04-2cef-4798-b498-d5b889cd69d9"
+      },
+      {
+        "guid": "51b4e5ac-cfa8-4911-9e08-6b601bb9f147",
+        "bottomWrestler": {
+          "guid": "041fdfc2-0acf-4273-b47d-d8c0cc0a3f0f",
+          "firstName": "Bia",
+          "lastName": "Mesquita",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "44",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 0:00",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 4,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.46896551724137,
+        "topWrestler": {
+          "guid": "7dba5da0-279b-44ae-ba0a-064415ae4d41",
+          "firstName": "Kendall",
+          "lastName": "Reusing",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "0a7bb3e5-4440-466a-be98-e9fa271e9a51",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786433&limit=60",
+        "winnerWrestlerGuid": "041fdfc2-0acf-4273-b47d-d8c0cc0a3f0f",
+        "redWrestlerGuid": "7dba5da0-279b-44ae-ba0a-064415ae4d41"
+      },
+      {
+        "guid": "e07e1fb5-b803-4748-a3d3-a5d4e720810f",
+        "bottomWrestler": {
+          "guid": "3f66752f-e2b1-48d6-88e5-320043be6d27",
+          "firstName": "Bianca",
+          "lastName": "Basilio",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "41",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "6-0 10:00",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 1,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.11724137931034,
+        "topWrestler": {
+          "guid": "4d16e9b9-886d-4d94-b938-1b303903c6d5",
+          "firstName": "Rafaela",
+          "lastName": "Guedes",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "041c6d66-c49d-4e5b-85a2-93e942aae448",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786431&limit=60",
+        "winnerWrestlerGuid": "4d16e9b9-886d-4d94-b938-1b303903c6d5",
+        "redWrestlerGuid": "4d16e9b9-886d-4d94-b938-1b303903c6d5"
+      },
+      {
+        "guid": "a801d457-2e3c-4eb2-8da2-15d452a73deb",
+        "bottomWrestler": {
+          "guid": "c94a4155-2c13-485b-9a95-8fdcc117bb9f",
+          "firstName": "Brianna",
+          "lastName": "Ste-Marie",
+          "team": {
+            "guid": "08b89e43-dccd-44af-9da2-662629f950ab",
+            "name": "Canada",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "42",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 7:25",
+        "roundName": {
+          "guid": "e670d41d-3c93-4b29-b610-62741b58b5a1",
+          "displayName": "Quarter-Finals"
+        },
+        "roundSpot": 2,
+        "trueRound": 3,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40.234482758620686,
+        "topWrestler": {
+          "guid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+          "firstName": "Adele",
+          "lastName": "Fornarino",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+            "name": "Absolute",
+            "division": {
+              "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SUB",
+        "winnerToBoutGuid": "041c6d66-c49d-4e5b-85a2-93e942aae448",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "43297e71-9d6d-4bdd-9f5d-7a7a713a7287",
+          "name": "Absolute",
+          "division": {
+            "guid": "5f90c7d2-3f7a-4d86-bc66-28cfb703153a",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786428&limit=60",
+        "winnerWrestlerGuid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1",
+        "redWrestlerGuid": "b212193a-9f2e-488b-bbdd-c29bfe41d9a1"
+      },
+      {
+        "guid": "a508dcfb-c9d6-4836-a0d2-0344ebbdd55d",
+        "bottomWrestler": {
+          "guid": "fc98e81e-df86-4b43-bc0d-941c8eceac2b",
+          "firstName": "Izaak",
+          "lastName": "Michell",
+          "team": {
+            "guid": "fad965da-e5ea-4c61-9133-b16b496739d9",
+            "name": "Australia",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "40",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "7-0 10:00",
+        "roundName": {
+          "guid": "644a3072-435a-4803-9ed9-2bcf35f6d5df",
+          "displayName": "Round of 16"
+        },
+        "roundSpot": 8,
+        "trueRound": 4,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 40,
+        "topWrestler": {
+          "guid": "20a01b5b-2742-41d8-87e6-48782a38b28f",
+          "firstName": "Ryan",
+          "lastName": "Aitken",
+          "team": {
+            "guid": "2dcfa077-6ccd-4283-9ed8-a7862947e518",
+            "name": "Usa",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "c47a00e2-2275-48c6-b2f0-42ebfd8edfba",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786426&limit=60",
+        "winnerWrestlerGuid": "fc98e81e-df86-4b43-bc0d-941c8eceac2b",
+        "redWrestlerGuid": "20a01b5b-2742-41d8-87e6-48782a38b28f"
+      },
+      {
+        "guid": "925ad2a9-7152-4f88-a59c-01590e64e5f4",
+        "bottomWrestler": {
+          "guid": "01d2639a-9e93-4514-befa-d1bd1f5855d5",
+          "firstName": "Luiz",
+          "lastName": "Paulo",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "39",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "6-0 10:00",
+        "roundName": {
+          "guid": "644a3072-435a-4803-9ed9-2bcf35f6d5df",
+          "displayName": "Round of 16"
+        },
+        "roundSpot": 7,
+        "trueRound": 4,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 39,
+        "topWrestler": {
+          "guid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+          "firstName": "Roberto",
+          "lastName": "Abreu",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "SCORE",
+        "winnerToBoutGuid": "c47a00e2-2275-48c6-b2f0-42ebfd8edfba",
+        "winnerToTop": true,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786422&limit=60",
+        "winnerWrestlerGuid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6",
+        "redWrestlerGuid": "de159c25-d8fb-40c9-88b3-edd1cc735ec6"
+      },
+      {
+        "guid": "2eb2134e-b0d6-4879-9167-d2c1e1d0e387",
+        "bottomWrestler": {
+          "guid": "6cba12d0-fa68-4090-bb25-11393a868973",
+          "firstName": "Vagner",
+          "lastName": "Rocha",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "boutNumber": "38",
+        "loserToBoutGuid": null,
+        "loserToTop": null,
+        "result": "0-0 40:00 TB2",
+        "roundName": {
+          "guid": "644a3072-435a-4803-9ed9-2bcf35f6d5df",
+          "displayName": "Round of 16"
+        },
+        "roundSpot": 6,
+        "trueRound": 4,
+        "winnerPoints": 0,
+        "topPlacementPoints": null,
+        "maxPlace": 1,
+        "sequenceNumber": 38,
+        "topWrestler": {
+          "guid": "032943de-5b08-4e5e-bc55-7036ea80b481",
+          "firstName": "Fabricio",
+          "lastName": "Andrey",
+          "team": {
+            "guid": "b341e170-3975-4c43-8062-42aabfd4fc1d",
+            "name": "Brazil",
+            "abbreviation": null
+          },
+          "city": "",
+          "zipCode": "",
+          "state": "",
+          "weightClass": {
+            "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+            "name": "Absolute",
+            "division": {
+              "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+              "maskSeeds": false,
+              "showSeedsTo": null,
+              "measurementUnit": null
+            }
+          },
+          "seed": null,
+          "identityPersonGuid": null
+        },
+        "winType": "REF",
+        "winnerToBoutGuid": "9257756a-16d8-4494-8ca4-c2456c0bf3d3",
+        "winnerToTop": false,
+        "weightClass": {
+          "guid": "477bda24-314e-4ce9-a394-53a7085e6822",
+          "name": "Absolute",
+          "division": {
+            "guid": "6655725b-929f-4b6f-80ba-d81e110d4990",
+            "maskSeeds": false,
+            "showSeedsTo": null,
+            "measurementUnit": null
+          }
+        },
+        "isTopBye": false,
+        "isBottomBye": false,
+        "boutVideoUrl": "https://www.flograppling.com/events/11302663-2024-adcc-world-championships-presented-by-flograppling/videos?playing=12786419&limit=60",
+        "winnerWrestlerGuid": "6cba12d0-fa68-4090-bb25-11393a868973",
+        "redWrestlerGuid": "032943de-5b08-4e5e-bc55-7036ea80b481"
+      }
+    ],
+    "pager": {
+      "last": 7,
+      "current": 1,
+      "numItemsPerPage": 20,
+      "first": 1,
+      "pageCount": 7,
+      "totalCount": 137,
+      "next": 2,
+      "pagesInRange": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "firstPageInRange": 1,
+      "lastPageInRange": 5,
+      "currentItemCount": 20,
+      "firstItemNumber": 1,
+      "lastItemNumber": 20
+    }
+  }
+}

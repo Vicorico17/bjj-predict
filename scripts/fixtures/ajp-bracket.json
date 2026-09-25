@@ -1,0 +1,226 @@
+{
+  "bracket": {
+    "id": 227559,
+    "name": "Boys GI / Kids 2 / White / 23KG",
+    "mats": "Mat 1",
+    "bracket_bundle_id": 132617,
+    "estimated_start": "2026-09-12T11:15:21+02:00",
+    "registrations_count": 4,
+    "bracket_id": 134707
+  },
+  "raw": {
+    "matches": [
+      {
+        "id": 1243794,
+        "bracket_id": 134707,
+        "name": null,
+        "group": "Boys GI / Kids 2 / White / 23KG",
+        "round": 1,
+        "state": "finished",
+        "match_nr": 1,
+        "schedule_block_id": [
+          174895
+        ],
+        "isTeamMatch": false,
+        "mat_match_nr": "1-1",
+        "estimated_start": "2026-09-12T11:15:21+02:00",
+        "winnerFromBracket": null,
+        "time_passed": "01:12",
+        "wonBy": "submission",
+        "seats": [
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276238-gcle/ismail-beholz.jpg",
+            "name": "Ismail Beholz",
+            "country": "DE",
+            "event_registration_id": 741534,
+            "club": "Team Ganbaru",
+            "affiliation": null,
+            "approved": 1,
+            "isWinner": true,
+            "status": "ok"
+          },
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276239-4ahc/lian-messaadi.jpg",
+            "name": "Lian Messaadi",
+            "country": "DE",
+            "event_registration_id": 739404,
+            "club": "Gracie Barra Sternschanze",
+            "affiliation": "Gracie Barra International",
+            "approved": 1,
+            "isWinner": false,
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "id": 1243795,
+        "bracket_id": 134707,
+        "name": "Bronze match",
+        "group": "Boys GI / Kids 2 / White / 23KG",
+        "round": 1,
+        "state": "finished",
+        "match_nr": 2,
+        "schedule_block_id": [
+          174895
+        ],
+        "isTeamMatch": false,
+        "mat_match_nr": "",
+        "estimated_start": "2026-09-12T11:26:04+02:00",
+        "winnerFromBracket": null,
+        "time_passed": null,
+        "wonBy": "walkover",
+        "seats": [
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276240-cvz1/elias-adam-zallama.jpg",
+            "name": "Elias Zallama",
+            "country": "DE",
+            "event_registration_id": 727117,
+            "club": "FIGHT XPERIENCE",
+            "affiliation": "GFTEAM International",
+            "approved": 1,
+            "isWinner": true,
+            "status": "ok"
+          },
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276239-4ahc/lian-messaadi.jpg",
+            "name": "Lian Messaadi",
+            "country": "DE",
+            "event_registration_id": 739404,
+            "club": "Gracie Barra Sternschanze",
+            "affiliation": "Gracie Barra International",
+            "approved": 1,
+            "isWinner": false,
+            "status": "ok"
+          }
+        ]
+      },
+      {
+        "id": 1243796,
+        "bracket_id": 134707,
+        "name": "Final",
+        "group": "Boys GI / Kids 2 / White / 23KG",
+        "round": 2,
+        "state": "finished",
+        "match_nr": 3,
+        "schedule_block_id": [
+          174895
+        ],
+        "isTeamMatch": false,
+        "mat_match_nr": "1-6",
+        "estimated_start": "2026-09-12T11:32:55+02:00",
+        "winnerFromBracket": null,
+        "time_passed": "00:34",
+        "wonBy": "submission",
+        "seats": [
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276238-gcle/ismail-beholz.jpg",
+            "name": "Ismail Beholz",
+            "country": "DE",
+            "event_registration_id": 741534,
+            "club": "Team Ganbaru",
+            "affiliation": null,
+            "approved": 1,
+            "isWinner": true,
+            "status": "ok"
+          },
+          {
+            "type": "registration",
+            "image": "https://ajptour.com/pictures/t/2276240-cvz1/elias-adam-zallama.jpg",
+            "name": "Elias Zallama",
+            "country": "DE",
+            "event_registration_id": 727117,
+            "club": "FIGHT XPERIENCE",
+            "affiliation": "GFTEAM International",
+            "approved": 1,
+            "isWinner": false,
+            "status": "ok"
+          }
+        ]
+      }
+    ],
+    "inTeamBracket": false
+  },
+  "live": {
+    "left": {
+      "public": true,
+      "color": "red",
+      "profile_image": "https://ajptour.com/pictures/t/2274820-cd6t/ismail-beholz.jpg",
+      "wonBy": "Won by Submission",
+      "isWinner": true,
+      "profile_link": "https://ajptour.com/en/profile/483738",
+      "result": "won",
+      "score": 4,
+      "penalty": 0,
+      "advantage": 0,
+      "first_name": "Ismail",
+      "last_name": "Beholz",
+      "country_flag": "de",
+      "country": "Germany",
+      "affiliation": null,
+      "club": "Team Ganbaru",
+      "club_id": 735,
+      "age": 7,
+      "id": 483738,
+      "weight": "20.00 kg",
+      "wins": "2"
+    },
+    "right": {
+      "public": true,
+      "color": "blue",
+      "profile_image": "https://ajptour.com/pictures/t/2270202-hfp4/lian-messaadi.jpg",
+      "wonBy": "Won by Submission",
+      "isWinner": false,
+      "profile_link": "https://ajptour.com/en/profile/509182",
+      "result": "lost",
+      "score": 0,
+      "penalty": 0,
+      "advantage": 0,
+      "first_name": "Lian",
+      "last_name": "Messaadi",
+      "country_flag": "de",
+      "country": "Germany",
+      "affiliation": "Gracie Barra International",
+      "club": "Gracie Barra Sternschanze",
+      "club_id": 829,
+      "age": 7,
+      "id": 509182,
+      "weight": "20.55 kg",
+      "wins": 0
+    },
+    "group": "Boys GI / Kids 2 / White / 23KG",
+    "matchInfo": {
+      "time": "01:12",
+      "timeRemaining": 48000,
+      "lastRound": 1,
+      "state": "end",
+      "judgeScores": null,
+      "round": null,
+      "day": null,
+      "estimated_date": null,
+      "days_left": null,
+      "start_time": null,
+      "start_time_raw": null,
+      "start_time_humans": null,
+      "mat": null,
+      "match_number": null,
+      "bracket_id": 134707,
+      "event_id": 1552
+    },
+    "scoreboardLink": null,
+    "commentatorLink": null,
+    "judgeCount": null,
+    "judgeCountA": null,
+    "judgeCountB": null,
+    "judgeCountC": null,
+    "resolveCancelLink": null,
+    "videoLink": null,
+    "video": null,
+    "gameType": "ajp",
+    "bracketType": "bjj-three"
+  }
+}

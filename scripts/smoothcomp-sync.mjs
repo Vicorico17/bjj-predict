@@ -1,24 +1,15 @@
-import { execFile } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { promisify } from "node:util";
+import { allowedSourceUrl, createSourceClient, finiteScore, coverage } from "./lib/source-http.mjs";
 
 const CALENDAR_URL = "https://smoothcomp.com/en/events/upcoming";
 const GRAPPLING_CATEGORY_GROUPS = new Set(["1", "3", "4", "7", "24"]);
 const DEFAULT_OUTPUT = "src/generated/smoothcomp-live-snapshot.json";
-const REQUEST_PAUSE_MS = 90;
-const USER_AGENT = "bjj-predict-sync/0.1 (+https://github.com/Vicorico17/bjj-predict)";
-const execFileAsync = promisify(execFile);
-
-let options = parseArgs(process.argv.slice(2));
-let warnings = [];
-
-export async function runSmoothcompSync(args = process.argv.slice(2)) {
-  options = parseArgs(args);
-  warnings = [];
-  return main();
-}
+export function createSmoothcompWorker(args = [], { persist = false, fetchImpl = fetch, maxRequests = 400, pauseMs = 100 } = {}) {
+const options = parseArgs(args);
+const warnings = [];
+const client = createSourceClient({ fetchImpl, maxRequests, pauseMs });
 
 async function main() {
   const startedAt = new Date().toISOString();
@@ -52,7 +43,7 @@ async function main() {
   }
 
   const snapshot = {
-    source: "smoothcomp",
+    source: new URL(options.calendarUrl).hostname.includes("ajptour.com") ? "ajp" : "smoothcomp",
     syncedAt: startedAt,
     calendarUrl: options.calendarUrl,
     events: snapshotEvents,
@@ -60,15 +51,17 @@ async function main() {
     warnings
   };
 
-  await mkdir(path.dirname(options.output), { recursive: true });
-  await writeFile(options.output, `${JSON.stringify(snapshot, null, 2)}\n`);
+  if (persist) {
+    await mkdir(path.dirname(options.output), { recursive: true });
+    await writeFile(options.output, `${JSON.stringify(snapshot, null, 2)}\n`);
+  }
 
-  console.log(
+  if (persist) console.log(
     `Smoothcomp snapshot wrote ${stats.importedEvents} events, ${stats.importedMatches} matches, ` +
       `${stats.liveMatches} live, ${stats.settledMatches} settled -> ${options.output}`
   );
 
-  if (warnings.length > 0) {
+  if (persist && warnings.length > 0) {
     console.warn(`Warnings: ${warnings.length}`);
   }
 
@@ -101,6 +94,8 @@ async function syncEvent(calendarEvent, stats) {
   const sourceEventId = String(calendarEvent.id || parseSmoothcompEventId(calendarEvent.url));
   const eventUrl = canonicalEventUrl(calendarEvent.url || sourceEventId);
   const eventBase = eventUrl.replace(/\/$/, "");
+  const origin = new URL(eventUrl).origin;
+  const source = new URL(eventUrl).hostname.includes("ajptour.com") ? "ajp" : "smoothcomp";
   const eventWarnings = [];
   let sportsEvent = null;
 
@@ -111,10 +106,11 @@ async function syncEvent(calendarEvent, stats) {
     eventWarnings.push(`Event page metadata unavailable: ${messageFor(error)}`);
   }
 
-  const startsAt = sportsEvent?.startDate || dateToIso(calendarEvent.startdate) || new Date().toISOString();
-  const endsAt = sportsEvent?.endDate || dateToIso(calendarEvent.enddate) || startsAt;
+  const startsAt = sportsEvent?.startDate || dateToIso(calendarEvent.startdate) || "";
+  const endsAt = sportsEvent?.endDate || dateToIso(calendarEvent.enddate, true) || "";
   const eventSnapshot = {
-    id: `e-smoothcomp-${sourceEventId}`,
+    id: `e-${source}-${sourceEventId}`,
+    source,
     sourceEventId,
     name: sportsEvent?.name || calendarEvent.title || `Smoothcomp Event ${sourceEventId}`,
     organizer: sportsEvent?.organizer?.name || "Smoothcomp",
@@ -133,7 +129,9 @@ async function syncEvent(calendarEvent, stats) {
   const brackets = await fetchEventBrackets(eventBase, eventSnapshot, stats);
   let liveScoreRequests = 0;
 
+  let importedBrackets = 0;
   for (const bracket of limitItems(brackets, options.bracketLimit)) {
+    if (eventSnapshot.matches.length >= options.matchLimit) break;
     const bracketId = String(bracket.bracket_id || bracket.id || "");
 
     if (!bracketId) {
@@ -143,7 +141,9 @@ async function syncEvent(calendarEvent, stats) {
     try {
       await pause();
       const bracketData = await fetchJson(`${eventBase}/schedule/new/bracket.json/${bracketId}`);
-      const rawMatches = Array.isArray(bracketData.matches) ? bracketData.matches : [];
+      if (!Array.isArray(bracketData.matches)) throw new Error("Invalid bracket matches response");
+      importedBrackets += 1;
+      const rawMatches = bracketData.matches;
 
       for (const rawMatch of rawMatches) {
         if (Number.isFinite(options.matchLimit) && eventSnapshot.matches.length >= options.matchLimit) {
@@ -154,19 +154,19 @@ async function syncEvent(calendarEvent, stats) {
         let detailData = null;
 
         if (liveScoreRequests < options.liveScoreLimit) {
+          liveScoreRequests += 1;
           try {
             await pause();
-            liveData = await fetchJson(`https://smoothcomp.com/en/getBracketMatchData/${rawMatch.id}`);
-            liveScoreRequests += 1;
+            liveData = await fetchJson(`${origin}/en/getBracketMatchData/${rawMatch.id}`);
           } catch (error) {
             stats.failedLiveScores += 1;
             eventWarnings.push(`Live score data unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
           }
         }
 
-        try {
+        if (options.details) try {
           await pause();
-          detailData = await fetchJson(`https://smoothcomp.com/en/getBracketMatch/${rawMatch.id}`);
+          detailData = await fetchJson(`${origin}/en/getBracketMatch/${rawMatch.id}`);
         } catch (error) {
           stats.failedMatchDetails += 1;
           eventWarnings.push(`Athlete detail unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
@@ -184,6 +184,12 @@ async function syncEvent(calendarEvent, stats) {
     }
   }
 
+  eventSnapshot.coverage = coverage(eventSnapshot.matches, {
+    totalBrackets: brackets.length, importedBrackets,
+    level: eventWarnings.length ? "partial" : importedBrackets < brackets.length || eventSnapshot.matches.length >= options.matchLimit ? "limited" : "published",
+    liveScores: true
+  });
+  if (importedBrackets < brackets.length) eventWarnings.push(`Imported ${importedBrackets} of ${brackets.length} published brackets. Increase limits to expand coverage.`);
   return eventSnapshot;
 }
 
@@ -210,13 +216,14 @@ function normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, 
   const leftName = leftSeat?.name || nameFromLiveSide(liveData?.left);
   const rightName = rightSeat?.name || nameFromLiveSide(liveData?.right);
 
-  if (!rawMatch.id || !leftName || !rightName) {
+  if (!rawMatch.id || !leftName || !rightName || isBracketPlaceholder(leftName) || isBracketPlaceholder(rightName)) {
     return null;
   }
 
   const winnerSide = winnerSideFor(leftSeat, rightSeat, liveData);
   const sourceState = String(liveData?.matchInfo?.state || rawMatch.state || "").toLowerCase();
-  const status = statusForMatch(sourceState, winnerSide);
+  let status = statusForMatch(sourceState, winnerSide);
+  if (!winnerSide && (eventSnapshot.status === "complete" || sourceState === "finished" || sourceState === "end")) status = "locked";
   const sourceMatchId = String(rawMatch.id);
   const division = rawMatch.group || liveData?.group || bracket.name || "Smoothcomp division";
   const sourceBracketId = String(rawMatch.bracket_id || bracket.bracket_id || bracket.id || "");
@@ -241,15 +248,19 @@ function normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, 
   };
 }
 
+function isBracketPlaceholder(name) {
+  return /^(?:(?:winner|loser)(?:\s+from\b|\s*$)|tbd\b|to be determined\b|bye\b|unknown competitor\b)/i.test(String(name).trim());
+}
+
 function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
   return {
     sourceId: sourceIdForSeat(seat, liveSide),
     name: seat?.name || nameFromLiveSide(liveSide) || "Unknown competitor",
-    academy: detailSeat?.player_club || seat?.club || liveSide?.club || liveSide?.affiliation || "Independent",
-    country: String(detailSeat?.player_country || seat?.country || liveSide?.country_flag || liveSide?.country || "").toUpperCase(),
+    academy: detailSeat?.player_club || seat?.club || liveSide?.club || liveSide?.affiliation || "Not listed",
+    country: String(detailSeat?.player_country || seat?.country || liveSide?.country_flag || liveSide?.country || "Not listed").toUpperCase(),
     belt: beltFromDivision(division),
-    seed: Number(detailSeat?.seed || seat?.seed || 0) || (side === "left" ? 1 : 2),
-    record: liveSide?.wins !== undefined && liveSide?.wins !== null ? `${liveSide.wins} Smoothcomp wins` : "0 Smoothcomp wins",
+    seed: Number(detailSeat?.seed || seat?.seed || 0) || 0,
+    record: liveSide?.wins !== undefined && liveSide?.wins !== null ? `Wins listed: ${liveSide.wins}` : "Record not listed",
     imageUrl: absoluteAssetUrl(
       liveSide?.profile_image || detailSeat?.player_profile_image || seat?.image || seat?.player_profile_image || null
     ),
@@ -299,19 +310,15 @@ function compactScoreSide(side) {
 }
 
 function winnerSideFor(leftSeat, rightSeat, liveData) {
-  if (leftSeat?.isWinner || liveData?.left?.isWinner) {
-    return "left";
-  }
-
-  if (rightSeat?.isWinner || liveData?.right?.isWinner) {
-    return "right";
-  }
+  const left = leftSeat?.isWinner === true || liveData?.left?.isWinner === true;
+  const right = rightSeat?.isWinner === true || liveData?.right?.isWinner === true;
+  if (left !== right) return left ? "left" : "right";
 
   return null;
 }
 
 function statusForMatch(sourceState, winnerSide) {
-  if (winnerSide || ["finished", "done", "resolved"].includes(sourceState)) {
+  if (winnerSide) {
     return "settled";
   }
 
@@ -319,7 +326,7 @@ function statusForMatch(sourceState, winnerSide) {
     return "live";
   }
 
-  if (["cancelled", "canceled", "walkover"].includes(sourceState)) {
+  if (["finished", "end", "done", "resolved", "cancelled", "canceled", "walkover"].includes(sourceState)) {
     return "locked";
   }
 
@@ -377,16 +384,14 @@ function eventSeedFromInput(input) {
 }
 
 function canonicalEventUrl(input) {
-  if (/^https?:\/\//i.test(String(input))) {
-    return String(input);
-  }
-
-  return `https://smoothcomp.com/en/event/${input}`;
+  const url = allowedSourceUrl(/^\d+$/.test(String(input)) ? `https://smoothcomp.com/en/event/${input}` : input);
+  const id = parseSmoothcompEventId(url.href);
+  if (!id || !(url.hostname === "smoothcomp.com" || url.hostname.endsWith(".smoothcomp.com") || ["ajptour.com", "www.ajptour.com"].includes(url.hostname))) throw new Error("Use a Smoothcomp or AJP event URL.");
+  return `${url.origin}/en/event/${id}`;
 }
 
 function parseSmoothcompEventId(url) {
-  const match = String(url).match(/smoothcomp\.com\/(?:[a-z]{2}(?:_[A-Z]{2})?\/)?event\/(\d+)/i);
-  return match?.[1] || "";
+  return new URL(url).pathname.match(/^\/(?:[a-z]{2}(?:_[A-Z]{2})?\/)?event\/(\d+)(?:\/|$)/)?.[1] || "";
 }
 
 function eventStatusFor(startsAt, endsAt, eventEnded) {
@@ -398,11 +403,11 @@ function eventStatusFor(startsAt, endsAt, eventEnded) {
     return "complete";
   }
 
-  if (Number.isFinite(start) && Number.isFinite(end) && start <= now && now <= end) {
-    return "live";
-  }
-
-  return "upcoming";
+  if (Number.isFinite(start) && start > now) return "upcoming";
+  if (Number.isFinite(start) && Number.isFinite(end) && start <= now && now <= end) return "live";
+  if (Number.isFinite(start) && !Number.isFinite(end) && now - start < 24 * 60 * 60 * 1000) return "live";
+  if (Number.isFinite(start)) return "complete";
+  return "unknown";
 }
 
 function locationCityFor(calendarEvent, sportsEvent) {
@@ -414,12 +419,12 @@ function locationCityFor(calendarEvent, sportsEvent) {
   );
 }
 
-function dateToIso(value) {
+function dateToIso(value, endOfDay = false) {
   if (!value) {
     return "";
   }
 
-  const date = new Date(`${value}T00:00:00.000Z`);
+  const date = new Date(`${value}T${endOfDay ? "23:59:59.999" : "00:00:00.000"}Z`);
   return Number.isFinite(date.getTime()) ? date.toISOString() : "";
 }
 
@@ -437,8 +442,7 @@ function nameFromLiveSide(side) {
 }
 
 function numberOrNull(value) {
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
+  return finiteScore(value);
 }
 
 function absoluteAssetUrl(value) {
@@ -447,6 +451,7 @@ function absoluteAssetUrl(value) {
   }
 
   const url = String(value);
+  if (url.includes("placeholder-image-profile")) return null;
   return url.startsWith("/") ? `https://smoothcomp.com${url}` : url;
 }
 
@@ -454,7 +459,7 @@ function beltFromDivision(division) {
   const lower = String(division).toLowerCase();
   return ["black", "brown", "purple", "blue", "green", "orange", "yellow", "grey", "white"].find((belt) =>
     lower.includes(belt)
-  ) || "white";
+  ) || "unknown";
 }
 
 async function fetchJson(url) {
@@ -463,36 +468,7 @@ async function fetchJson(url) {
 }
 
 async function fetchText(url) {
-  try {
-    const response = await fetch(url, {
-      redirect: "follow",
-      headers: {
-        accept: "application/json,text/html;q=0.9,*/*;q=0.8",
-        "user-agent": USER_AGENT
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-
-    return response.text();
-  } catch (error) {
-    return fetchTextWithCurl(url, error);
-  }
-}
-
-async function fetchTextWithCurl(url, originalError) {
-  try {
-    const { stdout } = await execFileAsync(
-      "curl",
-      ["-sSL", "--fail-with-body", "-H", "accept: application/json,text/html;q=0.9,*/*;q=0.8", "-A", USER_AGENT, url],
-      { maxBuffer: 30 * 1024 * 1024 }
-    );
-    return stdout;
-  } catch (curlError) {
-    throw new Error(`${messageFor(originalError)}; curl fallback failed: ${messageFor(curlError)}`);
-  }
+  return client.text(url);
 }
 
 function limitItems(items, limit) {
@@ -507,6 +483,7 @@ function parseArgs(args) {
     bracketLimit: toLimit(process.env.SMOOTHCOMP_BRACKET_LIMIT, 12),
     matchLimit: toLimit(process.env.SMOOTHCOMP_MATCH_LIMIT, 240),
     liveScoreLimit: toLimit(process.env.SMOOTHCOMP_LIVE_SCORE_LIMIT, 120),
+    details: !args.includes("--no-details"),
     eventUrls: []
   };
 
@@ -560,11 +537,18 @@ function toLimit(value, fallback) {
 }
 
 function pause() {
-  return new Promise((resolve) => setTimeout(resolve, REQUEST_PAUSE_MS));
+  return Promise.resolve();
 }
 
 function messageFor(error) {
   return error instanceof Error ? error.message : String(error);
+}
+
+return { run: main, discover: discoverEvents, syncEvent, normalizeMatch, scoreFor, statusForMatch, winnerSideFor, parseCalendarEvents };
+}
+
+export async function runSmoothcompSync(args = process.argv.slice(2)) {
+  return createSmoothcompWorker(args, { persist: true, maxRequests: 20000 }).run();
 }
 
 const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);

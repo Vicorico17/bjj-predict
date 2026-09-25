@@ -1,0 +1,3604 @@
+{
+  "source": "flo",
+  "syncedAt": "2026-09-12T16:52:16.441Z",
+  "calendarUrl": "",
+  "events": [
+    {
+      "id": "e-flo-11302663",
+      "sourceEventId": "11302663",
+      "name": "2024 ADCC World Championships Presented by FloGrappling",
+      "organizer": "FloGrappling",
+      "startsAt": "2024-08-17T17:00:00+0000",
+      "endsAt": "2024-08-19T06:59:59+0000",
+      "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+      "status": "complete",
+      "matches": [
+        {
+          "sourceMatchId": "11302663-5e374a4ec5898ec30d3a47c1",
+          "division": "Male",
+          "round": "Matchup",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "brd5H9yBcFRN8bBVW6Jq",
+            "name": "Gordon Ryan",
+            "sourceUrl": "https://www.flograppling.com/people/5950166",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "pWKH36Rew7Tr1x4kRo2T",
+            "name": "Yuri Simões",
+            "sourceUrl": "https://www.flograppling.com/people/5950742",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 21
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5e505fa90200998038692695",
+          "division": "Male",
+          "round": "Matchup",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "brd5H9yBcFRN8bBVW6Jq",
+            "name": "Gordon Ryan",
+            "sourceUrl": "https://www.flograppling.com/people/5950166",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "GaEcuABpUXxuCzEk3OjK",
+            "name": "Felipe Pena",
+            "sourceUrl": "https://www.flograppling.com/people/5947288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-fe76a7c1e26d35515240d2cf",
+          "division": "Absolute Division, Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-b3f21d84f6c6b7063b0de6a1",
+          "division": "-99kgs, Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "JElp8no8wsOOKbIwLPa1",
+            "name": "Rafael Lovato Jr.",
+            "sourceUrl": "https://www.flograppling.com/people/5950194",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5e25d6ebe14d6b1c50162152",
+          "division": "-88kgs, Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7qwXP6WKzv579Esa15vr",
+            "name": "Jacob Rodriguez",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 9
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-3b0ba3598e124551a3d2a3bf",
+          "division": "-77kgs, Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "RNC",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d45f125863616f11422ffee4",
+          "division": "-66kgs, Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Ins08hFiCqu3fpHDpdxM",
+            "name": "Diogo Reis",
+            "sourceUrl": "https://www.flograppling.com/people/7215937",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Y8jP9S9YDNb3nkIPXM2R",
+            "name": "Diego “Pato” Oliveira Batista",
+            "sourceUrl": "https://www.flograppling.com/people/6749273",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Katagatame",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-38357bb9df228e742c2143c0",
+          "division": "Male",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "GaEcuABpUXxuCzEk3OjK",
+            "name": "Felipe Pena",
+            "sourceUrl": "https://www.flograppling.com/people/5947288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "C1NLpL3VNNgULaGUwujj",
+            "name": "Luke Griffith",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-3fc1ba0da640208e232ba611",
+          "division": "Absolute Division, Male",
+          "round": "3rd Place Match",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "sL2AVy5KTQndYyF6iBBB",
+            "name": "Dante Leon",
+            "sourceUrl": "https://www.flograppling.com/people/5950334",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-12d4919ea040ca0d9bcaf4fc",
+          "division": "-77kgs, Male",
+          "round": "3rd Place Match",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "N42q2fI1CY8f6WdHcezj",
+            "name": "PJ Barch",
+            "sourceUrl": "https://www.flograppling.com/people/6749124",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Q7X6Nq73zNqRv9Ix2rZi",
+            "name": "Elijah Dorsey",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Leg Lock",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-67e197ba5aca9b8209923fc7",
+          "division": "Absolute Division, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-50edb551391196314171aaf6",
+          "division": "Absolute Division, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "sL2AVy5KTQndYyF6iBBB",
+            "name": "Dante Leon",
+            "sourceUrl": "https://www.flograppling.com/people/5950334",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-da20ae74aae6cdc771f2ca85",
+          "division": "-99kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-02320a529de6eee4e16c2dc9",
+          "division": "-99kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "mkVLvUTmG7MppdhPDwwg",
+            "name": "Michael Pixley",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "JElp8no8wsOOKbIwLPa1",
+            "name": "Rafael Lovato Jr.",
+            "sourceUrl": "https://www.flograppling.com/people/5950194",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5e6c2db9aa9f050209366b15",
+          "division": "-88kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "oeN4SlbVvqB5Mop1Sn8V",
+            "name": "Felipe Costa",
+            "sourceUrl": "https://www.flograppling.com/people/5951191",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-e23043a05abe96987d54f5ab",
+          "division": "-88kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "7qwXP6WKzv579Esa15vr",
+            "name": "Jacob Rodriguez",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "njahVCpavPffCywGhRUL",
+            "name": "Chris Wojcik",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-694ac7e191b57a30eb580fda",
+          "division": "-77kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Q7X6Nq73zNqRv9Ix2rZi",
+            "name": "Elijah Dorsey",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-2438e807e9a481f7d000b125",
+          "division": "-77kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "N42q2fI1CY8f6WdHcezj",
+            "name": "PJ Barch",
+            "sourceUrl": "https://www.flograppling.com/people/6749124",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-43ab92bbe4daeb30f4236b05",
+          "division": "-66kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Ins08hFiCqu3fpHDpdxM",
+            "name": "Diogo Reis",
+            "sourceUrl": "https://www.flograppling.com/people/7215937",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "4G9DfpBZ4mCxhnoKjjvh",
+            "name": "Josh Cisneros",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d6a64fd4c62917f44d7392f7",
+          "division": "-66kgs, Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "rjafSCLHoqi1GyIqFSQF",
+            "name": "Owen Phillips-Jones",
+            "sourceUrl": "https://www.flograppling.com/people/5950734",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Y8jP9S9YDNb3nkIPXM2R",
+            "name": "Diego “Pato” Oliveira Batista",
+            "sourceUrl": "https://www.flograppling.com/people/6749273",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Straight Ankle Lock",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-b3f515450fe8edbdf4f7e5e9",
+          "division": "Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "C1NLpL3VNNgULaGUwujj",
+            "name": "Luke Griffith",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "r6IPEpuT0aZFgzDCXCdR",
+            "name": "Daniel Manasoiu",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-fb2bcff45ef969868f230fb8",
+          "division": "Male",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "GaEcuABpUXxuCzEk3OjK",
+            "name": "Felipe Pena",
+            "sourceUrl": "https://www.flograppling.com/people/5947288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "QqO1y4WeyGk91e2KLdmC",
+            "name": "Josh Saunders",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-4a9406df32bd6beb0ff78d97",
+          "division": "Absolute Division, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "sL2AVy5KTQndYyF6iBBB",
+            "name": "Dante Leon",
+            "sourceUrl": "https://www.flograppling.com/people/5950334",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-18bb394da0391aea8ca45ff3",
+          "division": "Absolute Division, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "xdAio12pnOBVHgntEH2l",
+            "name": "Declan Moody",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-b9b714265901c14750772f05",
+          "division": "Absolute Division, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "af7bfPfSLaYlc6E8w4Ct",
+            "name": "Izaak Michell",
+            "sourceUrl": "https://www.flograppling.com/people/7167876",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-00e35d2f70e6b2096852822e",
+          "division": "Absolute Division, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-10a3e441a47326bbb8a5a082",
+          "division": "-99kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "xdAio12pnOBVHgntEH2l",
+            "name": "Declan Moody",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-c3a4a5b7dc8f36c5aba0b85f",
+          "division": "-99kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7gqU324QHm4SIEJuarHS",
+            "name": "Javier Zarukski",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-ac0f7ae0416e4bb4d42d7484",
+          "division": "-99kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "JElp8no8wsOOKbIwLPa1",
+            "name": "Rafael Lovato Jr.",
+            "sourceUrl": "https://www.flograppling.com/people/5950194",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "djlMzafmR2HKVwzratMc",
+            "name": "Patrick Gaudio",
+            "sourceUrl": "https://www.flograppling.com/people/5951167",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-664330d7b2aae5e9885ff9b6",
+          "division": "-99kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "cY1ogLz5R9sedmfrwrep",
+            "name": "Nicholas Meregali",
+            "sourceUrl": "https://www.flograppling.com/people/5950129",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "mkVLvUTmG7MppdhPDwwg",
+            "name": "Michael Pixley",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-aeef8e9f17adf64da6094075",
+          "division": "-88kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "jHXuXFAVixzMW1U9ZfLO",
+            "name": "Gabriel Almeida",
+            "sourceUrl": "https://www.flograppling.com/people/5950732",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 8
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5bae94270f3536e68570729f",
+          "division": "-88kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "6PDnWM3IBhtMbVZsESQm",
+            "name": "Ryan Aitken",
+            "sourceUrl": "https://www.flograppling.com/people/6801719",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7qwXP6WKzv579Esa15vr",
+            "name": "Jacob Rodriguez",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 6
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-f32acea6d14993699482e310",
+          "division": "-88kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "v17uQR7LDHF4d7bdRBUi",
+            "name": "Elder Cruz",
+            "sourceUrl": "https://www.flograppling.com/people/6749300",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "oeN4SlbVvqB5Mop1Sn8V",
+            "name": "Felipe Costa",
+            "sourceUrl": "https://www.flograppling.com/people/5951191",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 2
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-9227c62f293f986a1590953d",
+          "division": "-88kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "njahVCpavPffCywGhRUL",
+            "name": "Chris Wojcik",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "bipGyOpKOwryVv0RIZbf",
+            "name": "Charles Negromonte",
+            "sourceUrl": "https://www.flograppling.com/people/6751677",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-79c55a59b04c8a4959f6ec6b",
+          "division": "-77kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "clurToYr1P1BGVEJnOMq",
+            "name": "Oliver Taza",
+            "sourceUrl": "https://www.flograppling.com/people/5952140",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "RNC",
+          "score": {
+            "left": {
+              "points": 8
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-97fb8b84780bfd6f62950b1e",
+          "division": "-77kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "NvGpsNhZ8WQENKntwkIJ",
+            "name": "Jonnatas Gracie",
+            "sourceUrl": "https://www.flograppling.com/people/6605757",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-ad0eb4a62b823fdbbd2e7ee1",
+          "division": "-77kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "N42q2fI1CY8f6WdHcezj",
+            "name": "PJ Barch",
+            "sourceUrl": "https://www.flograppling.com/people/6749124",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "TEKIIc381wehByp6MeQD",
+            "name": "Mateusz Szczecinski",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-9b2d5da699765e86d418c62c",
+          "division": "-77kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "UvKFvVcbtrXu9GyppQP3",
+            "name": "Jonathan “JT” Torres",
+            "sourceUrl": "https://www.flograppling.com/people/5950175",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7RFWJnZRPdBgUHEsk0z2",
+            "name": "Alexandre Jesus",
+            "sourceUrl": "https://www.flograppling.com/people/6808595",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-091c0dec141c45639b406557",
+          "division": "-77kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Q7X6Nq73zNqRv9Ix2rZi",
+            "name": "Elijah Dorsey",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "UvKFvVcbtrXu9GyppQP3",
+            "name": "Jonathan “JT” Torres",
+            "sourceUrl": "https://www.flograppling.com/people/5950175",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 4
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-76f9a332841f569c0b04488d",
+          "division": "-66kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "rjafSCLHoqi1GyIqFSQF",
+            "name": "Owen Phillips-Jones",
+            "sourceUrl": "https://www.flograppling.com/people/5950734",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "XdEY0nrVmPm6DMo7zFio",
+            "name": "Gairbeg Ibragimov",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Straight Ankle Lock",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-10bb8bab6a251e0e2c632632",
+          "division": "-66kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Ins08hFiCqu3fpHDpdxM",
+            "name": "Diogo Reis",
+            "sourceUrl": "https://www.flograppling.com/people/7215937",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "liWe0WepswE4LLTdbHF2",
+            "name": "Fabricio Andrey",
+            "sourceUrl": "https://www.flograppling.com/people/6811251",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-aef5be1b51393896d940e92f",
+          "division": "-66kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Y8jP9S9YDNb3nkIPXM2R",
+            "name": "Diego “Pato” Oliveira Batista",
+            "sourceUrl": "https://www.flograppling.com/people/6749273",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "iNSkFTfS8oNOX6jprba0",
+            "name": "Ethan Crelinsten",
+            "sourceUrl": "https://www.flograppling.com/people/6566375",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Knee Bar",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-754c9edcd382b94e20c67e07",
+          "division": "55kgs, Female",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "NVhzkVBSweenr4xOgS5d",
+            "name": "Bianca Basilio",
+            "sourceUrl": "https://www.flograppling.com/people/5950327",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "hodQF68Vip75ZDlFD2bB",
+            "name": "Adele Fornarino",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d86bf124ade07b3aa8ed8caa",
+          "division": "Female",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "P4VH27sI9pU0JxncSkIA",
+            "name": "Ana Carolina Vieira",
+            "sourceUrl": "https://www.flograppling.com/people/5950497",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "ChPVtQdrjGQC2YFECUUk",
+            "name": "Helena Crevar",
+            "sourceUrl": "https://www.flograppling.com/people/6808750",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 5
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-63f315e5eea14c1ec081bc23",
+          "division": "Female",
+          "round": "Final",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "tSCUqYCVGXcuzHyLHBOr",
+            "name": "Nathiely De Jesus",
+            "sourceUrl": "https://www.flograppling.com/people/5950495",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "wgp4AWrlIEi39vzTrOW9",
+            "name": "Rafaela Ribeiro Guedes",
+            "sourceUrl": "https://www.flograppling.com/people/6800512",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 2
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-3af195b55c0ee65e36236298",
+          "division": "55kgs, Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "hodQF68Vip75ZDlFD2bB",
+            "name": "Adele Fornarino",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "E3htuTj4XVF9BCUo68pg",
+            "name": "Jasmine Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/6808575",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-f1d8b2dbf97bb39163fc766a",
+          "division": "55kgs, Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "NVhzkVBSweenr4xOgS5d",
+            "name": "Bianca Basilio",
+            "sourceUrl": "https://www.flograppling.com/people/5950327",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "qhSFJ84TEIQK1eLalBsI",
+            "name": "Ana Rodrigues",
+            "sourceUrl": "https://www.flograppling.com/people/6674214",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-578066ce5d224cf3aeb7521b",
+          "division": "Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Q1WL02c8FuznShjQHVZv",
+            "name": "Brianna Ste-Marie",
+            "sourceUrl": "https://www.flograppling.com/people/7166209",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "ChPVtQdrjGQC2YFECUUk",
+            "name": "Helena Crevar",
+            "sourceUrl": "https://www.flograppling.com/people/6808750",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 3
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d90f95dbf673b87a76e28c77",
+          "division": "-66kgs, Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "4G9DfpBZ4mCxhnoKjjvh",
+            "name": "Josh Cisneros",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "idJlpPKyeOi5htyIlLBR",
+            "name": "Kennedy Maciel",
+            "sourceUrl": "https://www.flograppling.com/people/5950125",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-feebc639ae2814900c53220c",
+          "division": "Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "3Zk0TFG2YW6pXLQRW3Aq",
+            "name": "Rida Haisam",
+            "sourceUrl": "https://www.flograppling.com/people/6801763",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "r6IPEpuT0aZFgzDCXCdR",
+            "name": "Daniel Manasoiu",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5fa97862a607045d0231ebce",
+          "division": "Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "O03rpvHYPx0uV7qxKIYd",
+            "name": "Roosevelt Sousa",
+            "sourceUrl": "https://www.flograppling.com/people/6801746",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "C1NLpL3VNNgULaGUwujj",
+            "name": "Luke Griffith",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-65737229e30710c206dc64a6",
+          "division": "Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "GaEcuABpUXxuCzEk3OjK",
+            "name": "Felipe Pena",
+            "sourceUrl": "https://www.flograppling.com/people/5947288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "BlTGUaOp2Ar58VH6iNfP",
+            "name": "John Hansen",
+            "sourceUrl": "https://www.flograppling.com/people/6749112",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-a70e11f8d18c22c57ed043b3",
+          "division": "Male",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "GujlbQlPnkmwvXKE5BhC",
+            "name": "Damon Ramos",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "QqO1y4WeyGk91e2KLdmC",
+            "name": "Josh Saunders",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-0681681f1fd6e81d65d1740b",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "sL2AVy5KTQndYyF6iBBB",
+            "name": "Dante Leon",
+            "sourceUrl": "https://www.flograppling.com/people/5950334",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "kNgNHbTJqiLPpaL2k3tr",
+            "name": "Michael Perez",
+            "sourceUrl": "https://www.flograppling.com/people/5950391",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-068a8f37478570ec61f26558",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "liWe0WepswE4LLTdbHF2",
+            "name": "Fabricio Andrey",
+            "sourceUrl": "https://www.flograppling.com/people/6811251",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-7c83338a43a6195753ba7b5f",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "xdAio12pnOBVHgntEH2l",
+            "name": "Declan Moody",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Ins08hFiCqu3fpHDpdxM",
+            "name": "Diogo Reis",
+            "sourceUrl": "https://www.flograppling.com/people/7215937",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-33c65d5f8676440d0dcde011",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "6PDnWM3IBhtMbVZsESQm",
+            "name": "Ryan Aitken",
+            "sourceUrl": "https://www.flograppling.com/people/6801719",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "af7bfPfSLaYlc6E8w4Ct",
+            "name": "Izaak Michell",
+            "sourceUrl": "https://www.flograppling.com/people/7167876",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 7
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-c0c8ecf3318d0c4678c5a5da",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Y8jP9S9YDNb3nkIPXM2R",
+            "name": "Diego “Pato” Oliveira Batista",
+            "sourceUrl": "https://www.flograppling.com/people/6749273",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-9fda6ef5c7a770bd5a638a9a",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "i60IDz2owhNwTQC9ETWc",
+            "name": "Davi Ramos",
+            "sourceUrl": "https://www.flograppling.com/people/5950990",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-9efe0cdc81e92be17bcc4859",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "v17uQR7LDHF4d7bdRBUi",
+            "name": "Elder Cruz",
+            "sourceUrl": "https://www.flograppling.com/people/6749300",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-8783382ad9b7c45c236649f9",
+          "division": "Absolute Division, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "9lGUAn9BM93yEZIUqGx2",
+            "name": "Luiz Paulo Medeiros",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-7ec33241cabcf28e80cbee89",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "0ma3hqVFpSifsvnqNrAZ",
+            "name": "Paul Ardila-Ibarra",
+            "sourceUrl": "https://www.flograppling.com/people/6749116",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "xdAio12pnOBVHgntEH2l",
+            "name": "Declan Moody",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-a374bb32b1491dab7cfac05c",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "JElp8no8wsOOKbIwLPa1",
+            "name": "Rafael Lovato Jr.",
+            "sourceUrl": "https://www.flograppling.com/people/5950194",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "8A5HIifL33StEzFQBhRN",
+            "name": "Elioenai Braz",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-a340ac32592cc95a70f72736",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "sMm3Pmg1eXRVyNfYKBUy",
+            "name": "Henrique Ceconi",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7gqU324QHm4SIEJuarHS",
+            "name": "Javier Zarukski",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-6ab8aa2005f68a00299805cc",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "cY1ogLz5R9sedmfrwrep",
+            "name": "Nicholas Meregali",
+            "sourceUrl": "https://www.flograppling.com/people/5950129",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "P6GmOpbKbWPJsXyYoGMm",
+            "name": "Marcin Maciulewicz",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-7f6fc08956becb37d3f3f794",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "2tT84GblqI1qnWx3Qwka",
+            "name": "Roberto “Cyborg” Abreu",
+            "sourceUrl": "https://www.flograppling.com/people/5950081",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "fdBvgIau8Aj6NvFDUt6f",
+            "name": "Daishi Goto",
+            "sourceUrl": "https://www.flograppling.com/people/6809733",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 5
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-64eafabad8e1448d883e3278",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kkH7R8AEDHJe74U1rMl4",
+            "name": "Kaynan Duarte",
+            "sourceUrl": "https://www.flograppling.com/people/6451325",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "gx4FfvMztzRbO8haoteF",
+            "name": "Daniel Schuardt",
+            "sourceUrl": "https://www.flograppling.com/people/6810661",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-8fc796522906ee9cabda307f",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "K5FT0jYzTCFW6lF682kT",
+            "name": "Vinícius “Trator” Ferreira Gazola",
+            "sourceUrl": "https://www.flograppling.com/people/6708867",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "mkVLvUTmG7MppdhPDwwg",
+            "name": "Michael Pixley",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-dcc8ef232409e1c946a40f9f",
+          "division": "-99kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "djlMzafmR2HKVwzratMc",
+            "name": "Patrick Gaudio",
+            "sourceUrl": "https://www.flograppling.com/people/5951167",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "hAH5J0j4T11ieVVffO6R",
+            "name": "Alex Grandy",
+            "sourceUrl": "https://www.flograppling.com/people/6809708",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d1aa8046e06232b42c7d129a",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "pUmJmxw7BkT4zaNlQo2A",
+            "name": "Jacob Couch",
+            "sourceUrl": "https://www.flograppling.com/people/6808752",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "oeN4SlbVvqB5Mop1Sn8V",
+            "name": "Felipe Costa",
+            "sourceUrl": "https://www.flograppling.com/people/5951191",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-26664939e0dae2edbd39ec3d",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bf9DS7SXvibU7MUDvQbS",
+            "name": "Giancarlo Bodoni",
+            "sourceUrl": "https://www.flograppling.com/people/6800513",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "JiNGsh1UFzMOoQBMyPpk",
+            "name": "Andre Porfirio",
+            "sourceUrl": "https://www.flograppling.com/people/6774939",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-2c7c46ac938264de06c69b79",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "7qwXP6WKzv579Esa15vr",
+            "name": "Jacob Rodriguez",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "OZvyMj7jm7oD02RVt0bF",
+            "name": "Achilies Rocha",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-993e4550536b0b368d9507b7",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "ZlsdaJRRoQWvoiukOVZc",
+            "name": "Josh Hinger",
+            "sourceUrl": "https://www.flograppling.com/people/5950291",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "njahVCpavPffCywGhRUL",
+            "name": "Chris Wojcik",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-db9e068acf5ffc6d1f47fe1f",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "WLih1IPOD65pPff1lJBM",
+            "name": "Pedro Marinho",
+            "sourceUrl": "https://www.flograppling.com/people/6611011",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "6PDnWM3IBhtMbVZsESQm",
+            "name": "Ryan Aitken",
+            "sourceUrl": "https://www.flograppling.com/people/6801719",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-4ea3fb7481a57c2bc082dd8a",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "v17uQR7LDHF4d7bdRBUi",
+            "name": "Elder Cruz",
+            "sourceUrl": "https://www.flograppling.com/people/6749300",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "aYijh7s4eagI3sjMyJqJ",
+            "name": "Taylor Pearman",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d271e3b3db1e29e541ec4eae",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "jHXuXFAVixzMW1U9ZfLO",
+            "name": "Gabriel Almeida",
+            "sourceUrl": "https://www.flograppling.com/people/5950732",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "jKeEljjscsQ1hQ0BHVYd",
+            "name": "Santeri Lilius",
+            "sourceUrl": "https://www.flograppling.com/people/6801894",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-1a189d29a62e146aa6ca2648",
+          "division": "-88kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "af7bfPfSLaYlc6E8w4Ct",
+            "name": "Izaak Michell",
+            "sourceUrl": "https://www.flograppling.com/people/7167876",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "bipGyOpKOwryVv0RIZbf",
+            "name": "Charles Negromonte",
+            "sourceUrl": "https://www.flograppling.com/people/6751677",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-ee66b789517140b939b03563",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "sL2AVy5KTQndYyF6iBBB",
+            "name": "Dante Leon",
+            "sourceUrl": "https://www.flograppling.com/people/5950334",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Q7X6Nq73zNqRv9Ix2rZi",
+            "name": "Elijah Dorsey",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 2
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-413cd58c717b727d4bb80538",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "NvGpsNhZ8WQENKntwkIJ",
+            "name": "Jonnatas Gracie",
+            "sourceUrl": "https://www.flograppling.com/people/6605757",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "OpH9uhCKUWnK5nyAuG2p",
+            "name": "Max Hanson",
+            "sourceUrl": "https://www.flograppling.com/people/6809661",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 9
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5f6ba99728b46da2c32a6459",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "FDrkJtUzAucIobcTUcQw",
+            "name": "Mica Galvao",
+            "sourceUrl": "https://www.flograppling.com/people/6726767",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "9lGUAn9BM93yEZIUqGx2",
+            "name": "Luiz Paulo Medeiros",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-74e78e2a8c8b34dac3459376",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "N42q2fI1CY8f6WdHcezj",
+            "name": "PJ Barch",
+            "sourceUrl": "https://www.flograppling.com/people/6749124",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "F1b83Grv4klftNE6zh4t",
+            "name": "Fabio Caloi",
+            "sourceUrl": "https://www.flograppling.com/people/6801804",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-8c47d1e99106ea68536dd5c3",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "vrshL8xtr0AwKgToTCPL",
+            "name": "Vagner Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/5950392",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "rTE5J7FSP7Ay4M5srtTv",
+            "name": "Jeremy Skinner",
+            "sourceUrl": "https://www.flograppling.com/people/6810502",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-4430ffda9aa95a5fe5ab424b",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "NPP1ZZYaIQ2C0pGxXvZ5",
+            "name": "Garry Tonon",
+            "sourceUrl": "https://www.flograppling.com/people/5947291",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "TEKIIc381wehByp6MeQD",
+            "name": "Mateusz Szczecinski",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-57691393a9ad54ee8d49b28e",
+          "division": "-77kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "i60IDz2owhNwTQC9ETWc",
+            "name": "Davi Ramos",
+            "sourceUrl": "https://www.flograppling.com/people/5950990",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "clurToYr1P1BGVEJnOMq",
+            "name": "Oliver Taza",
+            "sourceUrl": "https://www.flograppling.com/people/5952140",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-43816e69c766ae77c7e2a2fc",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "rjafSCLHoqi1GyIqFSQF",
+            "name": "Owen Phillips-Jones",
+            "sourceUrl": "https://www.flograppling.com/people/5950734",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "vaglkYp0Cb5JVkND1f4J",
+            "name": "Gabriel Sousa",
+            "sourceUrl": "https://www.flograppling.com/people/5950734",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Armbar",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-a3818e028c01e7404b517c81",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Y8jP9S9YDNb3nkIPXM2R",
+            "name": "Diego “Pato” Oliveira Batista",
+            "sourceUrl": "https://www.flograppling.com/people/6749273",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "JaRX8kFbZBv6JTCJsqbw",
+            "name": "Ashley Williams",
+            "sourceUrl": "https://www.flograppling.com/people/6749169",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-154430985e36825cac34ec12",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "4G9DfpBZ4mCxhnoKjjvh",
+            "name": "Josh Cisneros",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "jofXxZdSGBqZ9klhn5ID",
+            "name": "Kaua Gabriel",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-716b89ee3a00d9ca218d3f6b",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "iNSkFTfS8oNOX6jprba0",
+            "name": "Ethan Crelinsten",
+            "sourceUrl": "https://www.flograppling.com/people/6566375",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "DBbQrRjhcYCxLsXUaPnT",
+            "name": "Ethan Thomas",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-0adeb7af16d9784054a0e189",
+          "division": "Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "wgp4AWrlIEi39vzTrOW9",
+            "name": "Rafaela Ribeiro Guedes",
+            "sourceUrl": "https://www.flograppling.com/people/6800512",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Avw3XvNjAcVZB3E9rpwr",
+            "name": "Kendall Marie Reusing",
+            "sourceUrl": "https://www.flograppling.com/people/6747573",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-9226d8e22635f128729e43ed",
+          "division": "Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bDF72FfrrIJyIuRMRNSK",
+            "name": "Bia Mesquita",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "P4VH27sI9pU0JxncSkIA",
+            "name": "Ana Carolina Vieira",
+            "sourceUrl": "https://www.flograppling.com/people/5950497",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-eb4159c42c954481b99a3c80",
+          "division": "Female",
+          "round": "Semi-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "lRpxez5CrjFSGl4pNr8m",
+            "name": "Amy Campo",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "tSCUqYCVGXcuzHyLHBOr",
+            "name": "Nathiely De Jesus",
+            "sourceUrl": "https://www.flograppling.com/people/5950495",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 2
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-b498ce0a912b61742d3cc795",
+          "division": "-66kgs, Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "bDF72FfrrIJyIuRMRNSK",
+            "name": "Bia Mesquita",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "CsBTcK8NMzpfirN8B92p",
+            "name": "Sula Mae-Loewenthal",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-70577ef38720399d0b81e074",
+          "division": "-66kgs, Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "CLGmknef2jIunV2hAsGi",
+            "name": "Amanda Leve",
+            "sourceUrl": "https://www.flograppling.com/people/6749179",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "P4VH27sI9pU0JxncSkIA",
+            "name": "Ana Carolina Vieira",
+            "sourceUrl": "https://www.flograppling.com/people/5950497",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-bbe5afa262a469f18bce5e57",
+          "division": "55kgs, Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "hh0CpCqGEvYAVHpn2TKH",
+            "name": "Mayssa Bastos",
+            "sourceUrl": "https://www.flograppling.com/people/5951131",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "hodQF68Vip75ZDlFD2bB",
+            "name": "Adele Fornarino",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-1abfff54d342ed188952f29f",
+          "division": "55kgs, Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "E3htuTj4XVF9BCUo68pg",
+            "name": "Jasmine Rocha",
+            "sourceUrl": "https://www.flograppling.com/people/6808575",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "wdUBb10bNyXlKhEq0koM",
+            "name": "Margot Ciccarelli",
+            "sourceUrl": "https://www.flograppling.com/people/7126189",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-4af046607e4b2c9e92affaea",
+          "division": "55kgs, Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "NVhzkVBSweenr4xOgS5d",
+            "name": "Bianca Basilio",
+            "sourceUrl": "https://www.flograppling.com/people/5950327",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "Q9thj0PF0tb7ww7Tu1UE",
+            "name": "Brenda Larissa",
+            "sourceUrl": "https://www.flograppling.com/people/6809288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-3fceb83ee97d700f5b261b81",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "tSCUqYCVGXcuzHyLHBOr",
+            "name": "Nathiely De Jesus",
+            "sourceUrl": "https://www.flograppling.com/people/5950495",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "AB4tFNS2GzAhxyH8IkP1",
+            "name": "Elizabeth Katherine Mitrović",
+            "sourceUrl": "https://www.flograppling.com/people/6801695",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-1f0f5455a9f85419aca79c7c",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Q1WL02c8FuznShjQHVZv",
+            "name": "Brianna Ste-Marie",
+            "sourceUrl": "https://www.flograppling.com/people/7166209",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "PxJHpnFlL0yjRLMRMBwe",
+            "name": "Morgan Black",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5221af13315dbbf1fd872970",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "lRpxez5CrjFSGl4pNr8m",
+            "name": "Amy Campo",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "8UH1bLCdNenbnDP6l5F9",
+            "name": "Nikki Lloyd -Griffiths",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-7dc94068584e4aced7c7c13f",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "wgp4AWrlIEi39vzTrOW9",
+            "name": "Rafaela Ribeiro Guedes",
+            "sourceUrl": "https://www.flograppling.com/people/6800512",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "bDG93h9Vvz2eMv1WgGe6",
+            "name": "Nia Blackman",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 2
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-bff0d8822daa070311ac2929",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Avw3XvNjAcVZB3E9rpwr",
+            "name": "Kendall Marie Reusing",
+            "sourceUrl": "https://www.flograppling.com/people/6747573",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "SRB0L5PvUSD7z5URnGev",
+            "name": "Maria Ruffato",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-ff406e776c69a71b4a18af47",
+          "division": "Female",
+          "round": "Quarter-Finals",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "ChPVtQdrjGQC2YFECUUk",
+            "name": "Helena Crevar",
+            "sourceUrl": "https://www.flograppling.com/people/6808750",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "N31qx00fDfS35fj45hiO",
+            "name": "Aurelie Vern",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d48199f60f706e38a7575da9",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "liWe0WepswE4LLTdbHF2",
+            "name": "Fabricio Andrey",
+            "sourceUrl": "https://www.flograppling.com/people/6811251",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "0v3lO1Pb9L29VAKSKYkr",
+            "name": "Deandre Corbe",
+            "sourceUrl": "https://www.flograppling.com/people/6809045",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-1d0d4c7ee5c1585392d0f8d9",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "idJlpPKyeOi5htyIlLBR",
+            "name": "Kennedy Maciel",
+            "sourceUrl": "https://www.flograppling.com/people/5950125",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "sG9n5PmzEjXOExF4DJ2A",
+            "name": "Keith Kirkorian",
+            "sourceUrl": "https://www.flograppling.com/people/6566444",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 3
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-10866493ceacff0cb09ea4a9",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "HurqeHZt8QilzK0TpsYv",
+            "name": "Dorian Olivarez",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "XdEY0nrVmPm6DMo7zFio",
+            "name": "Gairbeg Ibragimov",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 3
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-f0e25ba10b756c72adc6682e",
+          "division": "-66kgs, Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Ins08hFiCqu3fpHDpdxM",
+            "name": "Diogo Reis",
+            "sourceUrl": "https://www.flograppling.com/people/7215937",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "7EdqsgCaz8v4U1QNb1Xb",
+            "name": "Huaqiging Xu",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-3b387ac1ea4a2198c3209683",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "GaEcuABpUXxuCzEk3OjK",
+            "name": "Felipe Pena",
+            "sourceUrl": "https://www.flograppling.com/people/5947288",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "QP8gAXZA0hXqsCe8rsZ0",
+            "name": "Brandon Reed",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 13
+            },
+            "right": {
+              "points": 2
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-c3862cfbe301b01fcd650a51",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "kNgNHbTJqiLPpaL2k3tr",
+            "name": "Michael Perez",
+            "sourceUrl": "https://www.flograppling.com/people/5950391",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "QqO1y4WeyGk91e2KLdmC",
+            "name": "Josh Saunders",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 3
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-5e71699c59ca4fd0894b057a",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "0fNn1qb3PQj1TkZ82BuV",
+            "name": "Vinny Magalhaes",
+            "sourceUrl": "https://www.flograppling.com/people/5950917",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "GujlbQlPnkmwvXKE5BhC",
+            "name": "Damon Ramos",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 0
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-16586ad3fc1a4e8c795ec00e",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "BlTGUaOp2Ar58VH6iNfP",
+            "name": "John Hansen",
+            "sourceUrl": "https://www.flograppling.com/people/6749112",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "OFXh4FmbamziIz3aEnYD",
+            "name": "Heikki Jussila",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-6bbd30dcb7a0721b61063764",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "O03rpvHYPx0uV7qxKIYd",
+            "name": "Roosevelt Sousa",
+            "sourceUrl": "https://www.flograppling.com/people/6801746",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "KAbfRHNfITTLZ96iyVrP",
+            "name": "Vince Pezzuto",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-d0468e13f2aa9638604ce1e4",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "Fa7IpL8tDagx3uKO5HIb",
+            "name": "Victor Honorio",
+            "sourceUrl": "https://www.flograppling.com/people/5950174",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "3Zk0TFG2YW6pXLQRW3Aq",
+            "name": "Rida Haisam",
+            "sourceUrl": "https://www.flograppling.com/people/6801763",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "right",
+          "finish": "Decision",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-2c70a1ed5d5f6df8cb35c02b",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "C1NLpL3VNNgULaGUwujj",
+            "name": "Luke Griffith",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "H9ytCp5Evyre1qpJGGNe",
+            "name": "Mansur Makhmakhanov",
+            "sourceUrl": "https://www.flograppling.com/people/6808269",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Other",
+          "score": {
+            "left": {
+              "points": null
+            },
+            "right": {
+              "points": null
+            }
+          }
+        },
+        {
+          "sourceMatchId": "11302663-ee6ff2414da41d00c0d18cac",
+          "division": "Male",
+          "round": "Round of 16",
+          "status": "settled",
+          "sourceState": "published-result",
+          "sourceUrl": "https://www.flograppling.com/events/11302663/results",
+          "competitorA": {
+            "sourceId": "r6IPEpuT0aZFgzDCXCdR",
+            "name": "Daniel Manasoiu",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "competitorB": {
+            "sourceId": "43kIsEPaVSRUbb7THhZ6",
+            "name": "mark McQueen",
+            "record": "Flo result history",
+            "country": "—"
+          },
+          "winnerSide": "left",
+          "finish": "Points",
+          "score": {
+            "left": {
+              "points": 6
+            },
+            "right": {
+              "points": 0
+            }
+          }
+        }
+      ],
+      "warnings": [
+        "Published Flo results only. Live brackets, clocks and complete event coverage are not guaranteed."
+      ],
+      "pagesFetched": 7
+    }
+  ]
+}

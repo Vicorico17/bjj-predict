@@ -7,9 +7,14 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "sync:smoothcomp": "node scripts/smoothcomp-sync.mjs"
+    "sync:smoothcomp": "node scripts/smoothcomp-sync.mjs",
+    "sync:flo": "node scripts/flo-sync.mjs",
+    "test:flo": "node --test scripts/flo.test.mjs",
+    "sync:data": "node scripts/data-sync.mjs",
+    "test:data": "node --test scripts/data.test.mjs scripts/flo.test.mjs scripts/state.test.mjs"
   },
   "dependencies": {
+    "cheerio": "^1.2.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -20,5 +25,8 @@
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "^5.8.0",
     "vite": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

@@ -9,30 +9,33 @@ import {
   DatabaseZap,
   ExternalLink,
   Gauge,
-  Link,
   ListChecks,
   LockKeyhole,
   ReceiptText,
   RefreshCw,
   RotateCcw,
-  ShieldCheck,
   SlidersHorizontal,
   Swords,
   Trophy,
   TrendingUp,
-  UploadCloud,
   UsersRound,
   Wallet,
   X
 } from "lucide-react";
-import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { initialState } from "./data";
+import { LiquidityPlanner } from "./LiquidityPlanner";
+import { DataSourcesPanel, sourceLabels } from "./DataSourcesPanel";
+import discoverySnapshot from "./generated/data-discovery.json";
+import dataSnapshot from "./generated/data-snapshot.json";
+import floResultsSnapshot from "./generated/flo-results-snapshot.json";
 import smoothcompLiveSnapshot from "./generated/smoothcomp-live-snapshot.json";
 import {
   formatDateTime,
   formatPercent,
   getOwnedShares,
   getQuote,
+  isMatchTradable,
   lockMarket,
   markPositions,
   placeTrade,
@@ -43,15 +46,12 @@ import {
 } from "./market";
 import {
   applySmoothcompSnapshot,
-  importSmoothcompEvent,
-  parseSmoothcompEventId,
-  summarizeSmoothcompSnapshot,
   type SmoothcompSnapshot
 } from "./smoothcomp";
 import { loadState, resetState, saveState } from "./storage";
 import type { AppState, Competitor, Event as AppEvent, Market, Match, Position, TradeQuote, TradeSide } from "./types";
 
-type View = "markets" | "leaderboard" | "admin";
+type View = "competitions" | "matches" | "markets" | "leaderboard" | "admin";
 
 type Ticket = {
   marketId: string;
@@ -69,65 +69,168 @@ const communityLeaderboard = [
 
 const smoothcompSnapshot = smoothcompLiveSnapshot as SmoothcompSnapshot;
 
+type DiscoveryPayload = {
+  checkedAt: string;
+  events: Array<{
+    id: string; source: AppEvent["source"]; sourceEventId: string; name: string; sourceUrl: string;
+    startsAt: string; endsAt?: string; status: AppEvent["status"]; city?: string; country?: string;
+    coverage?: AppEvent["coverage"];
+  }>;
+};
+
+function applyDiscoveryEvents(state: AppState, discovery: DiscoveryPayload): AppState {
+  const byId = new Map(state.events.map(event => [event.id, event]));
+  for (const candidate of discovery.events) {
+    const previous = byId.get(candidate.id);
+    byId.set(candidate.id, {
+      ...previous,
+      id: candidate.id, sport: "bjj", name: candidate.name,
+      organizer: sourceLabels[candidate.source], city: [candidate.city, candidate.country].filter(Boolean).join(", "),
+      startsAt: candidate.startsAt, endsAt: candidate.endsAt || previous?.endsAt || "",
+      sourceUrl: candidate.sourceUrl, source: candidate.source, status: candidate.status,
+      lastSyncedAt: discovery.checkedAt,
+      ...(previous?.coverage && previous.coverage.level !== "discovered" ? { coverage: previous.coverage } : candidate.coverage ? { coverage: candidate.coverage } : {}),
+      ...(previous?.warnings ? { warnings: previous.warnings } : {})
+    });
+  }
+  return { ...state, events: [...byId.values()] };
+}
+
 function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnapshot) {
-  const hydrated = applySmoothcompSnapshot(baseState, snapshot);
-  return { ...hydrated, positions: markPositions(hydrated) };
+  const hydrated = applySmoothcompSnapshot(applySmoothcompSnapshot(applySmoothcompSnapshot(baseState, floResultsSnapshot as SmoothcompSnapshot), snapshot), dataSnapshot as SmoothcompSnapshot);
+  const publishedNames: Record<string, string> = {
+    "https://ajptour.com/en/event/1552": "AJP TOUR GERMANY NATIONAL JIU-JITSU CHAMPIONSHIP 2026 - GI & NO-GI",
+    "https://grapplingindustries.smoothcomp.com/en/event/26334": "Grappling Industries VANCOUVER"
+  };
+  const named = { ...hydrated, events: hydrated.events.map(event =>
+    publishedNames[event.sourceUrl] ? { ...event, name: publishedNames[event.sourceUrl] } : event) };
+  const discoveredEvents = discoverySnapshot.events
+    .filter(event => !named.events.some(existing => existing.id === event.id))
+    .map(event => ({
+      id: event.id, sport: "bjj" as const, name: event.name,
+      organizer: event.source, city: "", startsAt: event.startsAt,
+      endsAt: (event as typeof event & { endsAt?: string }).endsAt,
+      sourceUrl: event.sourceUrl, source: event.source as AppEvent["source"], status: event.status as AppEvent["status"],
+      lastSyncedAt: discoverySnapshot.checkedAt
+    }));
+  const discovered = { ...named, events: [...named.events, ...discoveredEvents] };
+  return { ...discovered, positions: markPositions(discovered) };
+}
+
+function currentEvents(events: AppEvent[]) {
+  const now = Date.now();
+  const staleCutoff = now - 24 * 60 * 60 * 1000;
+  return events.filter(event => {
+    if (event.source === "manual") return false;
+    const start = Date.parse(event.startsAt);
+    const end = Date.parse(event.endsAt || "");
+    if (event.status === "upcoming") return Number.isFinite(start) && start + 24 * 60 * 60 * 1000 > now;
+    if (event.status === "live") return Number.isFinite(end) ? end >= now : Number.isFinite(start) && start >= staleCutoff && start <= now + 24 * 60 * 60 * 1000;
+    return false;
+  }).sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || Date.parse(a.startsAt) - Date.parse(b.startsAt));
 }
 
 function App() {
+  const [, refreshClock] = useState(0);
+  useEffect(() => { const timer = setInterval(() => refreshClock(value => value + 1), 15000); return () => clearInterval(timer); }, []);
   const [state, setState] = useState<AppState>(() => hydrateStateFromSnapshot(loadState()));
-  const [latestSmoothcompSnapshot, setLatestSmoothcompSnapshot] = useState<SmoothcompSnapshot>(smoothcompSnapshot);
-  const [view, setView] = useState<View>("markets");
-  const [selectedEventId, setSelectedEventId] = useState(() => hydrateStateFromSnapshot(loadState()).events[0]?.id ?? "");
+  const [dataStatus, setDataStatus] = useState("Refreshing current matches…");
+  const [view, setView] = useState<View>("competitions");
+  const [showHistory, setShowHistory] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState(() => {
+    const initial = hydrateStateFromSnapshot(loadState());
+    const active = currentEvents(initial.events);
+    return active.find(event => initial.matches.some(match => match.eventId === event.id && match.status !== "settled"))?.id ?? active[0]?.id ?? "";
+  });
   const [tradeSide, setTradeSide] = useState<TradeSide>("buy");
   const [amount, setAmount] = useState(100);
   const [sellShares, setSellShares] = useState(1);
   const [ticket, setTicket] = useState<Ticket | null>(null);
-  const [smoothcompUrl, setSmoothcompUrl] = useState("https://smoothcomp.com/en/event/19240");
   const [settlementFinish, setSettlementFinish] = useState(finishOptions[0]);
-  const [syncNotice, setSyncNotice] = useState("");
-  const [syncNoticeType, setSyncNoticeType] = useState<"muted" | "warning" | "error">("muted");
-  const [isRefreshingSmoothcomp, setIsRefreshingSmoothcomp] = useState(false);
 
   useEffect(() => {
     saveState(state);
   }, [state]);
 
-  const selectedEvent = state.events.find((event) => event.id === selectedEventId) ?? state.events[0];
+  useEffect(() => {
+    const controller = new AbortController();
+    async function refreshCurrentMatches() {
+      try {
+        const discoveryResponse = await fetch("/api/data/discover", { signal: controller.signal });
+        const discovery = await discoveryResponse.json().catch(() => ({})) as DiscoveryPayload & { error?: string };
+        if (!discoveryResponse.ok || !Array.isArray(discovery.events)) throw new Error(discovery.error || "Event discovery unavailable.");
+        setState(current => applyDiscoveryEvents(current, discovery));
+        const now = Date.now();
+        const currentEvents = discovery.events.filter(event => {
+          const start = Date.parse(event.startsAt);
+          const end = Date.parse(event.endsAt || "");
+          if (Number.isFinite(end) && end < now) return false;
+          return event.status === "upcoming" && Number.isFinite(start) && start + 24 * 60 * 60 * 1000 > now ||
+            event.status === "live" && Number.isFinite(start) && now - start < 24 * 60 * 60 * 1000;
+        }).slice(0, 8);
+        let imported = 0;
+        let matches = 0;
+        for (const event of currentEvents) {
+          const response = await fetch("/api/data/import", {
+            method: "POST", signal: controller.signal,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ eventUrl: event.sourceUrl, bracketLimit: 100, matchLimit: 2000, liveScoreLimit: 200,
+              seed: { name: event.name, startsAt: event.startsAt, endsAt: event.endsAt, status: event.status, city: event.city } })
+          });
+          const snapshot = await response.json().catch(() => ({})) as SmoothcompSnapshot & { error?: string };
+          if (!response.ok || !Array.isArray(snapshot.events) || !snapshot.events.length) continue;
+          const firstEvent = snapshot.events[0];
+          firstEvent.name = event.name;
+          if (!firstEvent.startsAt) firstEvent.startsAt = event.startsAt;
+          if (!firstEvent.endsAt) firstEvent.endsAt = event.endsAt;
+          if (!firstEvent.status) firstEvent.status = event.status;
+          setState(current => {
+            const next = applySmoothcompSnapshot(current, snapshot);
+            return { ...next, positions: markPositions(next) };
+          });
+          if (firstEvent.matches.length) {
+            imported += 1;
+            matches += firstEvent.matches.length;
+            setSelectedEventId(firstEvent.id);
+            if (imported >= 3) break;
+          }
+        }
+        setDataStatus(matches ? `Loaded ${matches} matchups from ${imported} current events` : "Current events checked · no published matchups found yet");
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        setDataStatus(`Live data unavailable · ${error instanceof Error ? error.message : "try Admin → Discover"}`);
+      }
+    }
+    void refreshCurrentMatches();
+    return () => controller.abort();
+  }, []);
+
+  const visibleEvents = showHistory ? state.events : currentEvents(state.events);
+  const selectedEvent = visibleEvents.find((event) => event.id === selectedEventId) ??
+    visibleEvents.find(event => state.matches.some(match => match.eventId === event.id && match.status !== "settled")) ?? visibleEvents[0];
+  const visibleEventIds = new Set(visibleEvents.map(event => event.id));
+  const visibleMatches = state.matches.filter(match => visibleEventIds.has(match.eventId));
   const selectedMatches = selectedEvent
     ? state.matches.filter((match) => match.eventId === selectedEvent.id)
-    : state.matches;
+    : [];
   const selectedMatchIds = new Set(selectedMatches.map((match) => match.id));
-  const eventMarkets = state.markets.filter((market) => selectedMatchIds.has(market.matchId));
-  const openMarkets = state.markets.filter((market) => market.status === "open");
+  const eventMarkets = state.markets.filter((market) => selectedMatchIds.has(market.matchId) && (showHistory || market.status !== "settled")).sort((a, b) => {
+    const matchA = state.matches.find(match => match.id === a.matchId);
+    const matchB = state.matches.find(match => match.id === b.matchId);
+    const rank = (status?: Match["status"]) => status === "live" ? 0 : status === "open" ? 1 : status === "locked" ? 2 : 3;
+    return rank(matchA?.status) - rank(matchB?.status) || Date.parse(matchA?.scheduledAt || "") - Date.parse(matchB?.scheduledAt || "");
+  });
+  const openMarkets = state.markets.filter((market) => market.status === "open" && state.matches.some(match => match.id === market.matchId && isMatchTradable(match)));
   const totalVolume = state.markets.reduce((sum, market) => sum + market.volume, 0);
   const activePositions = state.positions.filter((position) => position.shares > 0 && !position.isResolved);
   const portfolioMarkValue = state.positions.reduce((sum, position) => sum + position.markValue, 0);
   const portfolioValue = roundMoney(state.balance + portfolioMarkValue);
-  const smoothcompSummary = useMemo(() => summarizeSmoothcompSnapshot(latestSmoothcompSnapshot), [latestSmoothcompSnapshot]);
-  const eventGroups = useMemo(() => {
-    const byDate = (left: AppEvent, right: AppEvent) =>
-      new Date(left.startsAt).getTime() - new Date(right.startsAt).getTime();
-    const byDateOnly = (events: AppEvent[]) => [...events].sort(byDate);
-
-    return [
-      {
-        id: "current",
-        label: "Current events",
-        events: byDateOnly(state.events.filter((event) => event.status === "live"))
-      },
-      {
-        id: "upcoming",
-        label: "Upcoming events",
-        events: byDateOnly(state.events.filter((event) => event.status === "upcoming"))
-      },
-      {
-        id: "complete",
-        label: "Completed events",
-        events: byDateOnly(state.events.filter((event) => event.status === "complete"))
-      }
-    ];
-  }, [state.events]);
+  const eventGroups = [
+    { id: "current", label: "Live / today", events: visibleEvents.filter(event => event.status === "live") },
+    { id: "upcoming", label: "Upcoming events", events: visibleEvents.filter(event => event.status === "upcoming") },
+    { id: "unknown", label: "Schedule not published", events: visibleEvents.filter(event => event.status === "unknown") },
+    { id: "complete", label: "History", events: visibleEvents.filter(event => event.status === "complete") }
+  ];
 
   const selectedTicketData = useMemo(() => {
     if (!ticket) {
@@ -183,133 +286,6 @@ function App() {
     );
   }
 
-  function handleImport(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const eventNumber = parseSmoothcompEventId(smoothcompUrl);
-    setState((current) => hydrateStateFromSnapshot(importSmoothcompEvent(current, smoothcompUrl, latestSmoothcompSnapshot), latestSmoothcompSnapshot));
-    if (eventNumber) {
-      setSelectedEventId(`e-smoothcomp-${eventNumber}`);
-    }
-  }
-
-  function applyLatestSmoothcompSnapshot(
-    options: { eventId?: string; sourceEventId?: string } = {},
-    snapshot = latestSmoothcompSnapshot
-  ) {
-    const targetEventId =
-      options.eventId || (options.sourceEventId ? `e-smoothcomp-${options.sourceEventId}` : snapshot.events[0]?.id);
-    const summary = summarizeSmoothcompSnapshot(snapshot);
-
-    setState((current) => {
-      const next = applySmoothcompSnapshot(current, snapshot, options);
-      return { ...next, positions: markPositions(next) };
-    });
-
-    if (targetEventId) {
-      setSelectedEventId(targetEventId);
-    }
-
-    setSyncNotice(
-      `Applied ${summary.eventCount} events and ${summary.matchCount} matches from the latest Smoothcomp snapshot.`
-    );
-    setSyncNoticeType("muted");
-  }
-
-  async function refreshSmoothcompSnapshot() {
-    setIsRefreshingSmoothcomp(true);
-    setSyncNotice("Refreshing all Smoothcomp games. This can take a while when many brackets are published.");
-    setSyncNoticeType("warning");
-
-    try {
-      let payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh", { method: "POST" }));
-
-      while (payload.status === "running") {
-        await delay(3000);
-        payload = await readSmoothcompRefreshResponse(await fetch("/api/smoothcomp/refresh"));
-        if (payload.startedAt) {
-          const elapsedSeconds = Math.max(1, Math.round((Date.now() - Date.parse(payload.startedAt)) / 1000));
-          setSyncNotice(`Refreshing all Smoothcomp games. Running for ${elapsedSeconds}s.`);
-        }
-      }
-
-      if (payload.status === "error" || !payload.snapshot) {
-        throw new Error(payload.error || "Smoothcomp refresh failed");
-      }
-
-      const freshSnapshot = payload.snapshot;
-      const summary = summarizeSmoothcompSnapshot(freshSnapshot);
-      setLatestSmoothcompSnapshot(freshSnapshot);
-      applyLatestSmoothcompSnapshot(
-        selectedEvent?.source === "smoothcomp" ? { eventId: selectedEvent.id } : {},
-        freshSnapshot
-      );
-      setSyncNotice(
-        `Refreshed from Smoothcomp and applied ${summary.eventCount} events, ${summary.matchCount} matches, ${summary.liveCount} live, and ${summary.settledCount} settled.`
-      );
-      setSyncNoticeType("muted");
-    } catch (error) {
-      setSyncNotice(error instanceof Error ? error.message : "Smoothcomp refresh failed");
-      setSyncNoticeType("error");
-    } finally {
-      setIsRefreshingSmoothcomp(false);
-    }
-  }
-
-  async function readSmoothcompRefreshResponse(response: Response) {
-    const responseText = await response.text();
-    let payload: Record<string, unknown> = {};
-
-    if (responseText) {
-      try {
-        payload = JSON.parse(responseText);
-      } catch {
-        const isHtml = responseText.trim().startsWith("<");
-        const preview = responseText.trim().replace(/\s+/g, " ").slice(0, 140);
-        const fallback = isHtml
-          ? "Smoothcomp refresh API is not available at this URL. Run npm run dev and open http://127.0.0.1:5173/."
-          : `Smoothcomp refresh returned a non-JSON server response: ${preview || "empty response"}`;
-        throw new Error(fallback);
-      }
-    }
-
-    if (!response.ok) {
-      const fallback =
-        response.status === 404
-          ? "Smoothcomp refresh is only available from the Vite dev server. Run npm run dev and open that local URL."
-          : "Smoothcomp refresh failed";
-      throw new Error(typeof payload.error === "string" ? payload.error : fallback);
-    }
-
-    return payload as {
-      status?: "idle" | "running" | "complete" | "error";
-      startedAt?: string | null;
-      snapshot?: SmoothcompSnapshot;
-      error?: string;
-    };
-  }
-
-  function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  function syncSelectedEvent() {
-    if (!selectedEvent) {
-      return;
-    }
-
-    if (selectedEvent.source === "smoothcomp") {
-      applyLatestSmoothcompSnapshot({ eventId: selectedEvent.id });
-      return;
-    }
-
-    setState((current) => ({
-      ...current,
-      events: current.events.map((event) =>
-        event.id === selectedEvent.id ? { ...event, lastSyncedAt: new Date().toISOString() } : event
-      )
-    }));
-  }
-
   function handleReset() {
     resetState();
     const nextState = hydrateStateFromSnapshot(initialState);
@@ -336,12 +312,28 @@ function App() {
         </div>
         <nav className="nav-stack">
           <button
+            className={view === "competitions" ? "nav-button active" : "nav-button"}
+            onClick={() => setView("competitions")}
+            type="button"
+          >
+            <Trophy size={18} aria-hidden="true" />
+            <span>Competitions</span>
+          </button>
+          <button
+            className={view === "matches" ? "nav-button active" : "nav-button"}
+            onClick={() => setView("matches")}
+            type="button"
+          >
+            <Swords size={18} aria-hidden="true" />
+            <span>Upcoming matches</span>
+          </button>
+          <button
             className={view === "markets" ? "nav-button active" : "nav-button"}
             onClick={() => setView("markets")}
             type="button"
           >
             <BarChart3 size={18} aria-hidden="true" />
-            <span>Markets</span>
+            <span>Predictions</span>
           </button>
           <button
             className={view === "leaderboard" ? "nav-button active" : "nav-button"}
@@ -372,19 +364,20 @@ function App() {
       <main className="main-content">
         <header className="topbar topbar-compact">
           <div className="source-summary">
-            <span className="status-pill live">
-              <RefreshCw size={12} aria-hidden="true" />
-              Smoothcomp sync
-            </span>
-            <span>{smoothcompSummary.eventCount} events</span>
-            <span>{smoothcompSummary.matchCount} matches</span>
-            <span>{smoothcompSummary.liveCount} live</span>
-            <span>{smoothcompSummary.settledCount} settled</span>
+            <span className="status-pill live"><RefreshCw size={12} aria-hidden="true" />Live data</span>
+            <span>{dataStatus}</span>
+            <span>{visibleEvents.length} events</span>
+            <span>{visibleMatches.filter(match => match.status !== "settled").length} live / upcoming matches</span>
+            <span>{visibleMatches.filter(match => match.status === "live").length} live</span>
+            <span>{visibleMatches.filter(match => match.status === "open").length} prediction-ready</span>
+            <span>{visibleMatches.filter(match => match.status === "settled").length} settled</span>
           </div>
           <div className="topbar-actions">
+            <label><input type="checkbox" checked={showHistory} onChange={event => setShowHistory(event.target.checked)} /> Show history / demo</label>
+            <button className="primary-button" onClick={() => setView("admin")}>Find / refresh live matches</button>
             <a className="icon-link" href={selectedEvent?.sourceUrl} target="_blank" rel="noreferrer">
               <ExternalLink size={17} aria-hidden="true" />
-              <span>Smoothcomp</span>
+              <span>{selectedEvent ? sourceLabels[selectedEvent.source] : "Source"}</span>
             </a>
             <button className="ghost-button" onClick={handleReset} type="button">
               <RotateCcw size={17} aria-hidden="true" />
@@ -393,7 +386,7 @@ function App() {
           </div>
         </header>
 
-        <section className="event-hero" aria-label="Selected event">
+        {view === "markets" && <section className="event-hero" aria-label="Selected event">
           <EventSwitcher
             groups={eventGroups}
             selectedEventId={selectedEvent?.id ?? ""}
@@ -401,16 +394,12 @@ function App() {
           />
           <div className="hero-copy">
             <div className="status-row">
-              <span className="status-pill live">
-                <CircleDot size={12} aria-hidden="true" />
-                Free-play
-              </span>
-              <span className="status-pill">
-                <ShieldCheck size={12} aria-hidden="true" />
-                LMSR AMM
+              <span className={`status-pill ${selectedEvent?.status === "live" ? "live" : ""}`}>
+                <CircleDot size={12} aria-hidden="true" />{selectedEvent?.status === "live" ? "Happening now" : selectedEvent?.status === "complete" ? "Completed" : "Competition"}
               </span>
             </div>
-            <h2>{selectedEvent?.name ?? "No event selected"}</h2>
+            <h2>{selectedEvent?.name ?? "No current events available"}</h2>
+            {selectedEvent && !selectedMatches.length && <p>This event is listed by the provider, but its matchups have not been imported yet. Use Find / refresh live matches to load the published brackets.</p>}
             <div className="event-meta">
               <span>
                 <CalendarDays size={16} aria-hidden="true" />
@@ -426,14 +415,37 @@ function App() {
               </span>
             </div>
           </div>
-        </section>
+        </section>}
 
-        <section className="metric-grid" aria-label="Market summary">
-          <Metric icon={<CircleDollarSign size={18} />} label="Market volume" value={`${totalVolume.toLocaleString()} pts`} />
-          <Metric icon={<Gauge size={18} />} label="Open markets" value={String(openMarkets.length)} />
+        {selectedEvent?.coverage && <div className="coverage-note">
+          <strong>{sourceLabels[selectedEvent.source]} · {selectedEvent.coverage.level} coverage</strong>
+          <span>{selectedMatches.length} stored matches · {selectedEvent.coverage.scoredMatches} scored in latest fetch{selectedEvent.coverage.totalBrackets != null ? ` · ${selectedEvent.coverage.importedBrackets}/${selectedEvent.coverage.totalBrackets} brackets fetched` : ""}</span>
+          {selectedEvent.warnings?.length ? <details><summary>Coverage notes ({selectedEvent.warnings.length})</summary>{selectedEvent.warnings.map((warning, index) => <p key={index}>{warning}</p>)}</details> : null}
+        </div>}
+
+        {view === "competitions" && <CompetitionsView
+          events={visibleEvents}
+          selectedEvent={selectedEvent}
+          matches={selectedMatches}
+          competitors={state.competitors}
+          onSelect={setSelectedEventId}
+          onMatches={() => setView("matches")}
+        />}
+
+        {view === "matches" && <UpcomingMatchesView
+          events={visibleEvents}
+          matches={visibleMatches.filter(match => match.status !== "settled")}
+          competitors={state.competitors}
+          onSelectEvent={setSelectedEventId}
+          onCompetitions={() => setView("competitions")}
+        />}
+
+        {view === "markets" && <section className="metric-grid" aria-label="Prediction summary">
+          <Metric icon={<CircleDollarSign size={18} />} label="Prediction volume" value={`${totalVolume.toLocaleString()} pts`} />
+          <Metric icon={<Gauge size={18} />} label="Open picks" value={String(openMarkets.length)} />
           <Metric icon={<ListChecks size={18} />} label="Open positions" value={String(activePositions.length)} />
-          <Metric icon={<CheckCircle2 size={18} />} label="Portfolio value" value={`${portfolioValue.toLocaleString()} pts`} />
-        </section>
+          <Metric icon={<CheckCircle2 size={18} />} label="Demo balance" value={`${state.balance.toLocaleString()} pts`} />
+        </section>}
 
         {view === "markets" && (
           <div className="content-layout">
@@ -485,6 +497,11 @@ function App() {
                   );
                 })}
               </div>
+              {!eventMarkets.length && <div className="panel empty-matchups">
+                <strong>{selectedEvent ? "No live or upcoming matchups loaded for this event" : "No live or upcoming events loaded"}</strong>
+                <span>Discover current tournaments and import their published brackets to see competitors and pick winners.</span>
+                <button className="primary-button" onClick={() => setView("admin")} type="button">Discover and load matches</button>
+              </div>}
             </section>
 
             <aside className="right-rail">
@@ -540,62 +557,17 @@ function App() {
 
         {view === "admin" && (
           <section className="admin-grid" aria-label="Admin tools">
-            <div className="panel">
-              <div className="section-heading">
-                <div>
-                  <span className="eyebrow">Data source</span>
-                  <h2>Smoothcomp import</h2>
-                </div>
-                <UploadCloud size={20} aria-hidden="true" />
-              </div>
-              <form className="import-form" onSubmit={handleImport}>
-                <label htmlFor="smoothcompUrl">Event URL</label>
-                <div className="url-row">
-                  <Link size={18} aria-hidden="true" />
-                  <input
-                    id="smoothcompUrl"
-                    placeholder="https://smoothcomp.com/en/event/..."
-                    type="url"
-                    value={smoothcompUrl}
-                    onChange={(event) => setSmoothcompUrl(event.target.value)}
-                  />
-                </div>
-                <button className="primary-button" type="submit">
-                  <UploadCloud size={17} aria-hidden="true" />
-                  <span>Import event</span>
-                </button>
-              </form>
-              <div className="admin-actions">
-                <button className="ghost-button" type="button" onClick={syncSelectedEvent}>
-                  <RefreshCw size={17} aria-hidden="true" />
-                  <span>Sync selected</span>
-                </button>
-                <button
-                  className="primary-button"
-                  type="button"
-                  disabled={isRefreshingSmoothcomp}
-                  onClick={refreshSmoothcompSnapshot}
-                >
-                  <RefreshCw className={isRefreshingSmoothcomp ? "spin-icon" : undefined} size={17} aria-hidden="true" />
-                  <span>{isRefreshingSmoothcomp ? "Refreshing..." : "Refresh all games"}</span>
-                </button>
-                <button className="primary-button" type="button" onClick={() => applyLatestSmoothcompSnapshot()}>
-                  <DatabaseZap size={17} aria-hidden="true" />
-                  <span>Apply snapshot</span>
-                </button>
-              </div>
-              <div className="snapshot-summary">
-                <div>
-                  <strong>Latest Smoothcomp snapshot</strong>
-                  <span>
-                    {smoothcompSummary.eventCount} events · {smoothcompSummary.matchCount} matches ·{" "}
-                    {smoothcompSummary.liveCount} live · {smoothcompSummary.settledCount} settled
-                  </span>
-                </div>
-                <span>{smoothcompSummary.syncedAt ? formatDateTime(smoothcompSummary.syncedAt) : "Not synced yet"}</span>
-              </div>
-              {syncNotice && <div className={`ticket-alert ${syncNoticeType}`}>{syncNotice}</div>}
-            </div>
+            <DataSourcesPanel events={state.events} onDiscover={discovery => {
+              setState(current => applyDiscoveryEvents(current, discovery));
+            }} onImport={snapshot => {
+              setState(current => {
+                const next = applySmoothcompSnapshot(current, snapshot);
+                return { ...next, positions: markPositions(next) };
+              });
+              setSelectedEventId(snapshot.events[0]?.id || "");
+            }} />
+
+            <LiquidityPlanner />
 
             <div className="panel">
               <div className="section-heading">
@@ -699,51 +671,93 @@ type EventSwitcherProps = {
 };
 
 function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps) {
+  const events = groups.flatMap(group => group.events);
+  const liveCount = groups.find(group => group.id === "current")?.events.length || 0;
+  const upcomingCount = groups.find(group => group.id === "upcoming")?.events.length || 0;
   return (
     <div className="event-switcher" aria-label="Event switcher">
       <div className="event-switcher-head">
         <div>
-          <span className="eyebrow">Events</span>
-          <strong>Current and upcoming</strong>
+          <span className="eyebrow">Competition slate</span>
+          <strong>Choose an event</strong>
         </div>
-        <span>{groups.reduce((count, group) => count + group.events.length, 0)} events</span>
+        <span>{liveCount} live · {upcomingCount} upcoming</span>
       </div>
-      <div className="event-group-grid">
-        {groups
-          .filter((group) => group.id !== "complete" || group.events.length > 0)
-          .map((group) => (
-            <div className="event-group" key={group.id}>
-              <div className="event-group-label">
-                <span>{group.label}</span>
-                <strong>{group.events.length}</strong>
-              </div>
-              <div className="event-button-list">
-                {group.events.length > 0 ? (
-                  group.events.map((event) => (
-                    <button
-                      className={event.id === selectedEventId ? "event-choice-button active" : "event-choice-button"}
-                      key={event.id}
-                      onClick={() => onSelect(event.id)}
-                      type="button"
-                    >
-                      <strong>{event.name}</strong>
-                      <span>
-                        {formatDateTime(event.startsAt)} · {event.city}
-                      </span>
-                    </button>
-                  ))
-                ) : (
-                  <button className="event-choice-button empty" disabled type="button">
-                    <strong>No {group.id} events</strong>
-                    <span>Nothing synced in this group</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-      </div>
+      <select aria-label="Choose competition" value={events.some(event => event.id === selectedEventId) ? selectedEventId : ""}
+        onChange={event => onSelect(event.target.value)}>
+        {!events.length && <option value="">No events loaded — discover competitions</option>}
+        {groups.filter(group => group.events.length).map(group => <optgroup label={group.label} key={group.id}>
+          {group.events.map(event => <option value={event.id} key={event.id}>{event.name} · {formatDateTime(event.startsAt)}</option>)}
+        </optgroup>)}
+      </select>
     </div>
   );
+}
+
+function CompetitionsView({ events, selectedEvent, matches, competitors, onSelect, onMatches }: {
+  events: AppEvent[]; selectedEvent?: AppEvent; matches: Match[]; competitors: Competitor[];
+  onSelect: (id: string) => void; onMatches: () => void;
+}) {
+  const divisions = [...new Set(matches.map(match => match.division || "Division not listed"))];
+  return <section className="competition-browser" aria-label="Competitions and brackets">
+    <aside className="competition-menu">
+      <div className="section-heading"><div><span className="eyebrow">Browse</span><h2>Competitions</h2></div><span className="menu-count">{events.length}</span></div>
+      <div className="competition-menu-list">
+        {events.map(event => {
+          const count = matches.filter(match => match.eventId === event.id).length;
+          return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => onSelect(event.id)}>
+            <span className={`event-marker ${event.status}`} />
+            <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><small>{count} {count === 1 ? "match" : "matches"} · {event.status}</small></span>
+            <span className="menu-chevron">›</span>
+          </button>;
+        })}
+        {!events.length && <div className="menu-empty">No current competitions found. Use Discover to search live event listings.</div>}
+      </div>
+    </aside>
+    <div className="competition-detail">
+      {selectedEvent ? <>
+        <div className="competition-detail-heading">
+          <div><span className="eyebrow">{sourceLabels[selectedEvent.source]} · {selectedEvent.status}</span><h2>{selectedEvent.name}</h2><p>{[selectedEvent.city, formatDateTime(selectedEvent.startsAt)].filter(Boolean).join(" · ")}</p></div>
+          <a className="icon-link" href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Official event</a>
+        </div>
+        <div className="competition-stats"><div><strong>{matches.length}</strong><span>Published matches</span></div><div><strong>{divisions.length}</strong><span>Divisions</span></div><div><strong>{matches.filter(match => match.status === "live").length}</strong><span>Live now</span></div><button className="primary-button" type="button" onClick={onMatches}>See upcoming matches</button></div>
+        <div className="bracket-heading"><div><span className="eyebrow">Draws & schedule</span><h3>Brackets by division</h3></div><span className="small-note">Showing provider-published matchups</span></div>
+        {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} division={division} matches={matches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : <div className="panel empty-matchups"><strong>Brackets are not published yet</strong><span>This competition is listed by its organizer. Published divisions and matchups will appear here as soon as they are available.</span><button className="primary-button" type="button" onClick={onMatches}>Browse all upcoming matches</button></div>}
+      </> : <div className="panel empty-matchups"><strong>No competition selected</strong><span>Choose an event from the competition menu.</span></div>}
+    </div>
+  </section>;
+}
+
+function BracketDivision({ division, matches, competitors }: { division: string; matches: Match[]; competitors: Competitor[] }) {
+  const rounds = [...new Set(matches.map(match => match.round || "Scheduled match"))];
+  const sorted = [...rounds].sort((a, b) => roundOrder(a) - roundOrder(b));
+  return <section className="bracket-division"><div className="bracket-division-title"><div><span className="eyebrow">Division</span><h4>{division}</h4></div><span>{matches.length} matches · {sorted.length} rounds</span></div><div className="bracket-rounds">{sorted.map(round => <div className="bracket-round" key={round}><span className="bracket-round-name">{round}</span>{matches.filter(match => (match.round || "Scheduled match") === round).map(match => {
+    const left = competitors.find(competitor => competitor.id === match.competitorAId);
+    const right = competitors.find(competitor => competitor.id === match.competitorBId);
+    return <article className="bracket-match" key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" ? "LIVE" : match.status}<span>{match.mat}</span><time>{formatDateTime(match.scheduledAt)}</time></div><div className="bracket-side"><strong>{left?.name ?? "Competitor TBA"}</strong>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className="bracket-side"><strong>{right?.name ?? "Competitor TBA"}</strong>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div></article>;
+  })}</div>)}</div></section>;
+}
+
+function roundOrder(round: string) {
+  const value = round.toLowerCase();
+  if (value.includes("final")) return value.includes("semi") ? 3 : 4;
+  if (value.includes("semi")) return 3;
+  if (value.includes("quarter")) return 2;
+  if (value.includes("16")) return 1;
+  if (value.includes("32")) return 0;
+  return 2;
+}
+
+function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCompetitions }: {
+  events: AppEvent[]; matches: Match[]; competitors: Competitor[]; onSelectEvent: (id: string) => void; onCompetitions: () => void;
+}) {
+  const [filter, setFilter] = useState<"all" | "live" | "scheduled">("all");
+  const [eventFilter, setEventFilter] = useState("");
+  const visible = matches.filter(match => (!eventFilter || match.eventId === eventFilter) && (filter === "all" || (filter === "live" ? match.status === "live" : match.status === "open")));
+  const ordered = [...visible].sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));
+  return <section className="upcoming-page" aria-label="Upcoming matches"><div className="section-heading"><div><span className="eyebrow">Live mat schedule</span><h2>Upcoming matches</h2><p>Published pairings across the current competition slate.</p></div><button type="button" className="ghost-button" onClick={onCompetitions}>Browse competitions</button></div><div className="match-filter-row"><button type="button" className={`match-filter ${filter === "all" ? "active" : ""}`} onClick={() => setFilter("all")}>All live & upcoming <b>{matches.length}</b></button><button type="button" className={`match-filter ${filter === "live" ? "active" : ""}`} onClick={() => setFilter("live")}>Live <b>{matches.filter(match => match.status === "live").length}</b></button><button type="button" className={`match-filter ${filter === "scheduled" ? "active" : ""}`} onClick={() => setFilter("scheduled")}>Scheduled <b>{matches.filter(match => match.status === "open").length}</b></button><label className="event-select-label">Competition<select aria-label="Filter by competition" onChange={event => { setEventFilter(event.target.value); if (event.target.value) onSelectEvent(event.target.value); }} value={eventFilter}><option value="">All competitions</option>{events.map(event => <option value={event.id} key={event.id}>{event.name}</option>)}</select></label></div>
+    {ordered.length ? <div className="upcoming-match-list">{ordered.map(match => { const event = events.find(item => item.id === match.eventId); const left = competitors.find(item => item.id === match.competitorAId); const right = competitors.find(item => item.id === match.competitorBId); return <article className="upcoming-match-card" key={match.id}><div className="upcoming-match-event"><span className={`event-marker ${event?.status || "unknown"}`} /><div><strong>{event?.name ?? "Competition"}</strong><span>{match.division}</span></div><span className={`market-status ${match.status === "live" ? "live" : ""}`}>{match.status === "live" ? "Live now" : "Upcoming"}</span></div><div className="upcoming-pairing"><span>{left?.name ?? "Competitor TBA"}<small>{left?.academy ?? "Academy TBA"}</small></span><b>VS</b><span>{right?.name ?? "Competitor TBA"}<small>{right?.academy ?? "Academy TBA"}</small></span></div><div className="upcoming-match-footer"><span>{match.round}</span><span>{match.mat}</span><span><CalendarDays size={14} />{formatDateTime(match.scheduledAt)}</span><button type="button" className="text-button" onClick={() => { if (event) onSelectEvent(event.id); onCompetitions(); }}>View bracket <ExternalLink size={14} /></button></div></article>; })}</div> : <div className="panel empty-matchups"><strong>No upcoming matchups are published yet</strong><span>Choose a competition to see its bracket, or refresh event data to check for newly published pairings.</span><button type="button" className="primary-button" onClick={onCompetitions}>Browse competitions</button></div>}
+  </section>;
 }
 
 type MetricProps = {
@@ -774,7 +788,7 @@ type MarketCardProps = {
 
 function MarketCard({ competitors, market, match, positions, onPick }: MarketCardProps) {
   const quote = getQuote(market, match);
-  const disabled = market.status !== "open";
+  const disabled = market.status !== "open" || !isMatchTradable(match);
   const matchScore = formatMatchScore(match.score);
 
   return (
@@ -784,9 +798,9 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
           <span className="eyebrow">{match.division}</span>
           <h3>{match.round}</h3>
         </div>
-        <div className={`market-status ${market.status}`}>
-          {market.status === "open" ? <CircleDot size={13} aria-hidden="true" /> : <LockKeyhole size={13} aria-hidden="true" />}
-          <span>{market.status}</span>
+        <div className={`market-status ${match.status === "live" ? "live" : market.status}`}>
+          {market.status === "open" && !disabled ? <CircleDot size={13} aria-hidden="true" /> : <LockKeyhole size={13} aria-hidden="true" />}
+          <span>{match.status === "live" ? "Live now · picks locked" : market.status === "open" && !disabled ? "Predictions open" : match.status === "settled" ? "Final" : "Upcoming · picks locked"}</span>
         </div>
       </div>
 
@@ -827,7 +841,7 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
       </div>
       <div className="market-footnote">
         <Activity size={15} aria-hidden="true" />
-        <span>Volume/risk {quote.volumeToRisk.toFixed(1)}x · liquidity parameter {market.liquidity}</span>
+        <span>{market.tradeCount ? `Crowd signal · volume/risk ${quote.volumeToRisk.toFixed(1)}x` : "No picks yet · starts at 50/50"}</span>
       </div>
     </article>
   );
@@ -868,7 +882,7 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
             {initialsFor(competitor.name)}
           </div>
         )}
-        <div className="seed-badge">#{competitor.seed}</div>
+        {competitor.seed > 0 && <div className="seed-badge">#{competitor.seed}</div>}
         <div>
           <strong>{competitor.name}</strong>
           <span className="fighter-academy">
@@ -878,7 +892,7 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
         </div>
       </div>
       <div className="fighter-stats">
-        <span>{competitor.belt} belt</span>
+        <span>{competitor.belt === "unknown" ? "Belt not listed" : `${competitor.belt} belt`}</span>
         <span>{competitor.record}</span>
         <span>{roundShares(ownedShares).toLocaleString()} shares</span>
       </div>
@@ -945,7 +959,7 @@ function TicketPanel({
   const highImpact = quote ? Math.abs(quote.priceImpact) >= 0.1 : false;
   const disabled =
     !quote ||
-    ticketData.market.status !== "open" ||
+    ticketData.market.status !== "open" || !isMatchTradable(ticketData.match) ||
     (side === "buy" && quote.amount > balance) ||
     (side === "sell" && (ticketData.ownedShares <= 0 || quote.shares > ticketData.ownedShares));
 
@@ -973,6 +987,8 @@ function TicketPanel({
           </button>
         ))}
       </div>
+
+      {ticketData.market.status === "open" && !isMatchTradable(ticketData.match) && <div className="ticket-alert">Trading paused: source data is stale or the scheduled start has passed. Refresh the event in Admin.</div>}
 
       <div className="amount-field">
         <label htmlFor="tradeValue">{side === "buy" ? "Spend" : "Shares to sell"}</label>

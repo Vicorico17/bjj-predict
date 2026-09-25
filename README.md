@@ -1,6 +1,6 @@
 # BJJ Predict
 
-A BJJ-first prediction-market MVP for Smoothcomp-style event data. The launch product is intentionally free-play and niche: users trade winner shares, watch LMSR probabilities move, and compete on predictor and academy leaderboards.
+A BJJ-first prediction-market MVP with Smoothcomp, AJP, IBJJF, FloArena and FloGrappling data adapters. The launch product is intentionally free-play and niche: users trade winner shares, watch LMSR probabilities move, and compete on predictor and academy leaderboards.
 
 ## What is included
 
@@ -15,6 +15,20 @@ A BJJ-first prediction-market MVP for Smoothcomp-style event data. The launch pr
 - Generated app snapshot at `src/generated/smoothcomp-live-snapshot.json`
 - Admin controls for syncing, locking, and settling winner markets
 - Generated BJJ mat visual asset at `public/bjj-mat-hero.png`
+
+## Expanded event coverage
+
+Admin → **Find and import competitions** discovers current events across Smoothcomp, AJP, IBJJF and FloArena. Paste event URLs to import any of those sources or FloGrappling. Coverage counts and warnings distinguish published brackets, limited imports and recent-result windows.
+
+```bash
+npm run sync:data -- --discover
+npm run sync:data -- https://ajptour.com/en/event/1552
+npm run test:data
+```
+
+Use Node.js 22 or later. See [data coverage and API details](docs/data-sources.md) for verified contracts, limitations and the usage-limited live validation status. The existing standalone Smoothcomp and Flo commands remain available.
+
+Admin also includes a **liquidity planner** that estimates subsidy, trade size and price movement without changing market funding. See [the proposed crypto liquidity design](docs/liquidity.md).
 
 ## Commands
 
