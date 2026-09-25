@@ -36,6 +36,8 @@ export type Event = {
   organizer: string;
   city: string;
   venue?: string;
+  imageUrl?: string;
+  categoryGroups?: string[];
   startsAt: string;
   endsAt?: string;
   sourceUrl: string;

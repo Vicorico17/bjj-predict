@@ -251,6 +251,8 @@ function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: str
     organizer: snapshotEvent.organizer || "Smoothcomp",
     city: [snapshotEvent.city, snapshotEvent.country].filter(Boolean).join(", ") || "Location not listed",
     venue: snapshotEvent.venue || "",
+    imageUrl: snapshotEvent.coverImage || "",
+    categoryGroups: snapshotEvent.categoryGroups || [],
     startsAt: snapshotEvent.startsAt || "",
     endsAt: snapshotEvent.endsAt || "",
     coverage: snapshotEvent.coverage,

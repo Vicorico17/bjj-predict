@@ -864,7 +864,15 @@ input[type="url"]:focus,
 .menu-empty { padding: 18px; color: var(--muted); font-size: .9rem; }
 .competition-detail { padding: clamp(18px, 3vw, 30px); }
 .competition-detail-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
-.competition-detail-heading h2 { max-width: 800px; margin: 0; font-size: clamp(1.7rem, 3vw, 2.8rem); line-height: 1.08; }
+.competition-title-block { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.event-artwork { flex: 0 0 92px; width: 92px; height: 112px; overflow: hidden; border: 1px solid #343a3b; border-radius: 10px; background: radial-gradient(circle at 50% 25%, #26372e, #111516 70%); }
+.event-artwork img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.event-artwork > span { display: grid; width: 100%; height: 100%; place-items: center; color: #fbbf24; }
+.competition-detail-heading h2 { max-width: 800px; margin: 2px 0 0; font-size: clamp(1.65rem, 2.7vw, 2.45rem); font-weight: 850; letter-spacing: -.035em; line-height: 1.08; text-wrap: pretty; }
+.competition-organizer-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 11px; color: var(--muted); font-size: .78rem; }
+.competition-organizer-line strong { color: #e4e4e7; }
+.competition-organizer-line i { color: var(--faint); font-style: normal; }
+.competition-organizer-line svg { color: #94a3b8; }
 .competition-detail-heading p, .upcoming-page .section-heading p { margin: 9px 0 0; color: var(--muted); }
 .competition-stats { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 22px 0 30px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #08090a; }
 .competition-stats > div { display: grid; min-width: 112px; padding: 6px 12px; border-right: 1px solid var(--line); }
@@ -996,7 +1004,10 @@ input[type="url"]:focus,
 }
 @media (max-width: 620px) {
   .competition-detail { padding: 15px; }
-  .competition-detail-heading { flex-direction: column; }
+.competition-detail-heading { flex-direction: column; }
+.competition-title-block { align-items: flex-start; gap: 13px; }
+.event-artwork { flex-basis: 68px; width: 68px; height: 82px; border-radius: 8px; }
+.competition-detail-heading h2 { font-size: clamp(1.35rem, 6vw, 1.9rem); }
   .competition-detail-heading .icon-link { width: 100%; }
   .competition-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .competition-stats > div { min-width: 0; border-right: 0; }

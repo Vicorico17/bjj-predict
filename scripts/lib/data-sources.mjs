@@ -51,7 +51,7 @@ export async function discoverData({ selectedProviders = ['smoothcomp', 'ajp', '
         const raw = await worker.discover();
         events = prioritizeEvents(raw.map(event => ({ ...event, id: `e-${source}-${event.id}`, source, sourceEventId: String(event.id), name: event.title,
           organizer: source === 'ajp' ? 'AJP Tour' : 'Smoothcomp', sourceUrl: event.url,
-          city: event.location_city || '', country: event.location_country_human || '',
+          city: event.location_city || '', country: event.location_country_human || '', coverImage: event.cover_image || '',
           startsAt: event.startdate ? `${event.startdate}T00:00:00Z` : '',
           endsAt: event.enddate ? `${event.enddate}T23:59:59Z` : '',
           enddate: event.enddate, matches: [], coverage: coverage([], { level: 'discovered' }) })));

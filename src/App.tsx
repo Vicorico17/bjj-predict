@@ -76,6 +76,7 @@ type DiscoveryPayload = {
   events: Array<{
     id: string; source: AppEvent["source"]; sourceEventId: string; name: string; sourceUrl: string;
     startsAt: string; endsAt?: string; status: AppEvent["status"]; city?: string; country?: string;
+    coverImage?: string;
     coverage?: AppEvent["coverage"];
   }>;
 };
@@ -88,6 +89,7 @@ function applyDiscoveryEvents(state: AppState, discovery: DiscoveryPayload): App
       ...previous,
       id: candidate.id, sport: "bjj", name: candidate.name,
       organizer: sourceLabels[candidate.source], city: [candidate.city, candidate.country].filter(Boolean).join(", "),
+      imageUrl: candidate.coverImage || previous?.imageUrl,
       startsAt: candidate.startsAt, endsAt: candidate.endsAt || previous?.endsAt || "",
       sourceUrl: candidate.sourceUrl, source: candidate.source, status: candidate.status,
       lastSyncedAt: discovery.checkedAt,
@@ -111,6 +113,7 @@ function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnap
     .map(event => ({
       id: event.id, sport: "bjj" as const, name: event.name,
       organizer: event.source, city: "", startsAt: event.startsAt,
+      imageUrl: (event as typeof event & { coverImage?: string }).coverImage,
       endsAt: (event as typeof event & { endsAt?: string }).endsAt,
       sourceUrl: event.sourceUrl, source: event.source as AppEvent["source"], status: event.status as AppEvent["status"],
       lastSyncedAt: discoverySnapshot.checkedAt
@@ -784,7 +787,7 @@ function CompetitionsView({ events, allEvents, selectedEvent, matches, competito
     <div className="competition-detail">
       {selectedEvent ? <>
         <div className="competition-detail-heading">
-          <div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name}</h2><div className="competition-heading-tags"><span className={`competition-status ${selectedEvent.status}`}>{selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "complete" ? "Completed" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div></div>
+          <div className="competition-title-block"><EventArtwork event={selectedEvent}/><div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name.trim()}</h2><div className="competition-heading-tags"><span className={`competition-status ${selectedEvent.status}`}>{selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "complete" ? "Completed" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div><div className="competition-organizer-line"><span>Organized by</span><strong>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</strong>{selectedEvent.city && <><i>·</i><MapPin size={13}/><span>{selectedEvent.city}</span></>}</div></div></div>
           <a className="icon-link" href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Official event page</a>
         </div>
         <div className="competition-info-grid">
@@ -799,6 +802,16 @@ function CompetitionsView({ events, allEvents, selectedEvent, matches, competito
       </> : <div className="panel empty-matchups"><strong>No competition selected</strong><span>Choose an event from the competition menu.</span></div>}
     </div>
   </section>;
+}
+
+function EventArtwork({ event }: { event: AppEvent }) {
+  const [failed, setFailed] = useState(false);
+  let imageUrl = event.imageUrl || "";
+  if (imageUrl.startsWith("/") && event.source === "smoothcomp") imageUrl = `https://smoothcomp.com${imageUrl}`;
+  const validImage = imageUrl.startsWith("https://") && !/fallback|placeholder|default/i.test(imageUrl) && !failed;
+  return <div className="event-artwork" aria-label="Competition artwork">
+    {validImage ? <img src={imageUrl} alt={`${event.name} official event artwork`} loading="lazy" decoding="async" onError={() => setFailed(true)}/> : <span><Trophy size={28} aria-hidden="true"/></span>}
+  </div>;
 }
 
 function formatCompetitionDate(start: string, end?: string) {
