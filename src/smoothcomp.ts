@@ -42,6 +42,7 @@ export type SmoothcompEventSnapshot = {
   name: string;
   organizer?: string;
   city?: string;
+  venue?: string;
   country?: string;
   startsAt?: string;
   endsAt?: string;
@@ -249,6 +250,7 @@ function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: str
     name: snapshotEvent.name,
     organizer: snapshotEvent.organizer || "Smoothcomp",
     city: [snapshotEvent.city, snapshotEvent.country].filter(Boolean).join(", ") || "Location not listed",
+    venue: snapshotEvent.venue || "",
     startsAt: snapshotEvent.startsAt || "",
     endsAt: snapshotEvent.endsAt || "",
     coverage: snapshotEvent.coverage,

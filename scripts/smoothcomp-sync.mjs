@@ -115,6 +115,7 @@ async function syncEvent(calendarEvent, stats) {
     name: sportsEvent?.name || calendarEvent.title || `Smoothcomp Event ${sourceEventId}`,
     organizer: sportsEvent?.organizer?.name || "Smoothcomp",
     city: locationCityFor(calendarEvent, sportsEvent),
+    venue: sportsEvent?.location?.name || "",
     country: calendarEvent.location_country_human || calendarEvent.location_country || "",
     startsAt,
     endsAt,

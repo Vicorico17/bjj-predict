@@ -699,6 +699,13 @@ function CompetitionsView({ events, selectedEvent, matches, competitors, onSelec
   onSelect: (id: string) => void; onMatches: () => void;
 }) {
   const divisions = [...new Set(matches.map(match => match.division || "Division not listed"))];
+  const liveCount = matches.filter(match => match.status === "live").length;
+  const scheduledCount = matches.filter(match => match.status === "open").length;
+  const city = selectedEvent?.city && !/location not listed|awaiting sync/i.test(selectedEvent.city) ? selectedEvent.city : "";
+  const venue = selectedEvent?.venue?.trim() || "";
+  const location = [...new Set([venue, city].filter(Boolean))].join(", ") || "Location not published";
+  const mapUrl = location === "Location not published" ? "" : `https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+  const dateLabel = selectedEvent ? formatCompetitionDate(selectedEvent.startsAt, selectedEvent.endsAt) : "Date not published";
   return <section className="competition-browser" aria-label="Competitions and brackets">
     <aside className="competition-menu">
       <div className="section-heading"><div><span className="eyebrow">Browse</span><h2>Competitions</h2></div><span className="menu-count">{events.length}</span></div>
@@ -717,24 +724,38 @@ function CompetitionsView({ events, selectedEvent, matches, competitors, onSelec
     <div className="competition-detail">
       {selectedEvent ? <>
         <div className="competition-detail-heading">
-          <div><span className="eyebrow">{sourceLabels[selectedEvent.source]} · {selectedEvent.status}</span><h2>{selectedEvent.name}</h2><p>{[selectedEvent.city, formatDateTime(selectedEvent.startsAt)].filter(Boolean).join(" · ")}</p></div>
-          <a className="icon-link" href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Official event</a>
+          <div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name}</h2><div className="competition-heading-tags"><span className={`competition-status ${selectedEvent.status}`}><span className="event-marker" />{selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "complete" ? "Completed" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span></div></div>
+          <a className="icon-link" href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Official event page</a>
         </div>
-        <div className="competition-stats"><div><strong>{matches.length}</strong><span>Published matches</span></div><div><strong>{divisions.length}</strong><span>Divisions</span></div><div><strong>{matches.filter(match => match.status === "live").length}</strong><span>Live now</span></div><button className="primary-button" type="button" onClick={onMatches}>See upcoming matches</button></div>
-        <div className="bracket-heading"><div><span className="eyebrow">Draws & schedule</span><h3>Brackets by division</h3></div><span className="small-note">Showing provider-published matchups</span></div>
+        <div className="competition-info-grid">
+          <section className="competition-facts" aria-label="Competition details"><div className="competition-facts-title"><CalendarDays size={18}/><h3>Event details</h3></div><dl><div><dt>Dates</dt><dd>{dateLabel}</dd></div><div><dt>Organizer</dt><dd>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</dd></div><div><dt>Location</dt><dd>{location}</dd></div><div><dt>Data source</dt><dd>{sourceLabels[selectedEvent.source]} · <a href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer">View event listing <ExternalLink size={12}/></a></dd></div></dl><div className="competition-facts-updated">Data last checked {formatDateTime(selectedEvent.lastSyncedAt)}</div></section>
+          <section className="competition-map-card" aria-label="Competition location"><div className="competition-map-heading"><div><span className="eyebrow">Where it happens</span><h3>{venue || city || "Location not published"}</h3><p>{venue && city && venue !== city ? city : "Organizer-published location"}</p></div><a href={location === "Location not published" ? selectedEvent.sourceUrl : `https://maps.google.com/?q=${encodeURIComponent(location)}`} target="_blank" rel="noreferrer">{location === "Location not published" ? "Check event page" : "Open map"}<ExternalLink size={13}/></a></div>{mapUrl ? <iframe title={`Map showing ${location}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /> : <div className="map-placeholder"><span>📍</span><strong>Venue location not listed</strong><p>The organizer has not published a location. Check the official event listing for updates.</p></div>}</section>
+        </div>
+        {selectedEvent.coverage && <div className="coverage-note competition-coverage"><strong>Match data coverage · {selectedEvent.coverage.level}</strong><span>{selectedEvent.coverage.importedBrackets ?? divisions.length} of {selectedEvent.coverage.totalBrackets ?? divisions.length} brackets loaded · {selectedEvent.coverage.scoredMatches} scored matches{selectedEvent.coverage.liveScores ? " · live scoring available" : ""}</span></div>}
+        <div className="competition-stats"><div><strong>{matches.length}</strong><span>Matches loaded</span></div><div><strong>{divisions.length}</strong><span>Divisions</span></div><div><strong>{liveCount}</strong><span>Live now</span></div><div><strong>{scheduledCount}</strong><span>Upcoming</span></div><button className="primary-button" type="button" onClick={onMatches}>See all upcoming matches</button></div>
+        <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>Brackets & matchups</h3></div><span className="small-note">{matches.length ? "Pairings grouped by division and round" : "Published pairings will appear here"}</span></div>
         {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} division={division} matches={matches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : <div className="panel empty-matchups"><strong>Brackets are not published yet</strong><span>This competition is listed by its organizer. Published divisions and matchups will appear here as soon as they are available.</span><button className="primary-button" type="button" onClick={onMatches}>Browse all upcoming matches</button></div>}
       </> : <div className="panel empty-matchups"><strong>No competition selected</strong><span>Choose an event from the competition menu.</span></div>}
     </div>
   </section>;
 }
 
+function formatCompetitionDate(start: string, end?: string) {
+  const format = (value: string) => Number.isFinite(Date.parse(value))
+    ? new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" }).format(new Date(value))
+    : "Date not published";
+  const startLabel = format(start);
+  if (!end || !Number.isFinite(Date.parse(end)) || startLabel === format(end)) return startLabel;
+  return `${startLabel} – ${format(end)}`;
+}
+
 function BracketDivision({ division, matches, competitors }: { division: string; matches: Match[]; competitors: Competitor[] }) {
   const rounds = [...new Set(matches.map(match => match.round || "Scheduled match"))];
   const sorted = [...rounds].sort((a, b) => roundOrder(a) - roundOrder(b));
-  return <section className="bracket-division"><div className="bracket-division-title"><div><span className="eyebrow">Division</span><h4>{division}</h4></div><span>{matches.length} matches · {sorted.length} rounds</span></div><div className="bracket-rounds">{sorted.map(round => <div className="bracket-round" key={round}><span className="bracket-round-name">{round}</span>{matches.filter(match => (match.round || "Scheduled match") === round).map(match => {
+  return <section className="bracket-division"><div className="bracket-division-title"><div><span className="eyebrow">Division</span><h4>{division}</h4></div><span>{matches.length} {matches.length === 1 ? "match" : "matches"} · {sorted.length} rounds</span></div><div className="bracket-rounds">{sorted.map(round => <div className="bracket-round" key={round}><span className="bracket-round-name">{round}</span>{matches.filter(match => (match.round || "Scheduled match") === round).map(match => {
     const left = competitors.find(competitor => competitor.id === match.competitorAId);
     const right = competitors.find(competitor => competitor.id === match.competitorBId);
-    return <article className="bracket-match" key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" ? "LIVE" : match.status}<span>{match.mat}</span><time>{formatDateTime(match.scheduledAt)}</time></div><div className="bracket-side"><strong>{left?.name ?? "Competitor TBA"}</strong>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className="bracket-side"><strong>{right?.name ?? "Competitor TBA"}</strong>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div></article>;
+    return <article className={`bracket-match ${match.status}`} key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" ? "Live now" : match.status === "settled" ? "Final result" : "Scheduled"}<time>{formatDateTime(match.scheduledAt)}</time></div><div className={`bracket-side ${match.winnerId === left?.id ? "winner" : ""}`}><div><strong>{left?.name ?? "Competitor TBA"}</strong><small>{left?.academy ?? "Academy not listed"}</small></div>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className={`bracket-side ${match.winnerId === right?.id ? "winner" : ""}`}><div><strong>{right?.name ?? "Competitor TBA"}</strong><small>{right?.academy ?? "Academy not listed"}</small></div>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div><div className="bracket-match-bottom"><span>{match.mat || "Mat not assigned"}</span>{match.winnerId && <span className="winner-label">Winner recorded</span>}</div></article>;
   })}</div>)}</div></section>;
 }
 
