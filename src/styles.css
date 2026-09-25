@@ -850,14 +850,16 @@ input[type="url"]:focus,
 .competition-menu-copy strong { font-size: .91rem; line-height: 1.35; }
 .competition-menu-copy span { color: var(--muted); font-size: .79rem; }
 .competition-menu-copy small { color: var(--faint); font-size: .72rem; text-transform: capitalize; }
+.competition-live-slot { display: flex; justify-content: flex-start; min-width: 0; }
 .competition-importance { display: flex; align-items: center; gap: 2px; color: #fbbf24; }
 .competition-importance small { margin-left: 5px; }
 .competition-importance.detail { gap: 7px; color: var(--muted); font-size: .72rem; text-transform: none; }
 .competition-importance.detail > span { display: inline-flex; gap: 2px; color: #fbbf24; }
 .competition-status-label { display: inline-flex; align-items: center; justify-content: center; min-height: 22px; padding: 0 6px; border: 1px solid #383a3d; border-radius: 999px; background: #131416; color: #c4c4c8; font-size: .58rem; font-weight: 850; letter-spacing: .04em; white-space: nowrap; }
-.competition-status-label.live { border-color: rgba(248,113,113,.34); background: rgba(248,113,113,.1); color: #fca5a5; }
-.competition-status-label.upcoming { border-color: rgba(56,189,248,.3); background: rgba(56,189,248,.08); color: #bae6fd; }
-.competition-status-label.complete { color: #a1a1aa; }
+.competition-status-label.live { border-color: rgba(248,113,113,.48); background: rgba(248,113,113,.13); color: #fca5a5; animation: live-flash 1.7s ease-in-out infinite, live-blur 2.8s ease-in-out infinite; }
+@keyframes live-flash { 0%, 100% { box-shadow: 0 0 0 0 rgba(248,113,113,.05); } 50% { box-shadow: 0 0 12px 3px rgba(248,113,113,.35); } }
+@keyframes live-blur { 0%, 72%, 100% { filter: blur(0); opacity: 1; } 82% { filter: blur(2.5px); opacity: .55; } 92% { filter: blur(0); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .competition-status-label.live { animation: none; } }
 .show-all-events { width: 100%; min-height: 42px; padding: 0 16px; border-top: 1px solid var(--line-soft); background: #0b0c0d; color: #a7f3d0; cursor: pointer; font-size: .8rem; font-weight: 750; text-align: left; }
 .show-all-events:hover { background: #111415; }
 .menu-chevron { color: var(--faint); font-size: 1.3rem; line-height: 1; }

@@ -775,7 +775,7 @@ function CompetitionsView({ events, allEvents, selectedEvent, matches, competito
           const count = matches.filter(match => match.eventId === event.id).length;
           const importance = competitionImportance(event);
           return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setShowOldMatches(false); onSelect(event.id); }}>
-            <span className={`competition-status-label ${event.status}`}>{event.status === "live" ? "LIVE" : event.status === "upcoming" ? "UP NEXT" : event.status === "complete" ? "PAST" : "TBA"}</span>
+            <span className="competition-live-slot">{event.status === "live" && <span className="competition-status-label live">LIVE</span>}</span>
             <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><span className="competition-importance" aria-label={`Estimated importance: ${importance} out of 5 stars`} title={`Estimated competition scale: ${importance} out of 5. Based on event name and organizer.`}>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} fill={index < importance ? "currentColor" : "none"} />)}<small>{count ? `${count} published ${count === 1 ? "match" : "matches"}` : event.coverage?.level === "discovered" ? "Bracket not imported yet" : "No matches published"}</small></span></span>
             <span className="menu-chevron">›</span>
           </button>;
