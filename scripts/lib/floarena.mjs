@@ -36,6 +36,7 @@ export function parseArenaBouts(payload, eventId) {
     if (!winnerSide) return [];
     const competitor = athlete => ({ sourceId: `${eventId}-${athlete.guid}`,
       name: [athlete.firstName, athlete.lastName].filter(Boolean).join(' '),
+      imageUrl: athletePhoto(athlete),
       // ADCC team labels in this feed are often countries, not academies.
       academy: 'Not listed', country: '—', belt: 'unknown', record: 'FloArena results' });
     return [{ sourceMatchId: `${eventId}-${bout.guid}`, division: bout.weightClass?.name || 'Unspecified division',
@@ -46,6 +47,19 @@ export function parseArenaBouts(payload, eventId) {
       finish: bout.result || bout.winType || 'FloArena result', sourceUrl: `${ORIGIN}/event/${eventId}?page=results`,
       relatedSourceUrl: bout.boutVideoUrl || undefined }];
   });
+}
+
+function athletePhoto(athlete) {
+  const values = [athlete.profileImageUrl, athlete.profile_image_url, athlete.profilePhoto, athlete.profile_photo,
+    athlete.imageUrl, athlete.image_url, athlete.photoUrl, athlete.photo_url, athlete.avatarUrl, athlete.avatar_url,
+    athlete.headshotUrl, athlete.headshot_url, athlete.headshot, athlete.image, athlete.photo];
+  for (const value of values) {
+    const raw = typeof value === 'string' ? value : value?.url || value?.src;
+    if (!raw || /placeholder|default-avatar|no-image/i.test(raw)) continue;
+    try { const url = new URL(raw, ORIGIN); return url.protocol === 'https:' ? url.href : undefined; }
+    catch { /* Ignore unsupported photo fields. */ }
+  }
+  return undefined;
 }
 export async function fetchArenaEvent(input, options = {}) {
   const id = arenaId(input), client = createSourceClient(options);

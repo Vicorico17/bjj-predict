@@ -40,6 +40,7 @@ export function resultCards(body, eventId) {
     const sourceMatchId = `${eventId}-${createHash('sha256').update(identity).digest('hex').slice(0, 24)}`;
     const competitor = value => ({ sourceId: value.id, name: value.name,
       sourceUrl: value.nameAction?.url ? new URL(value.nameAction.url, 'https://www.flograppling.com').href : undefined,
+      imageUrl: photoUrl(value),
       record: 'Flo result history', country: '—' });
     // A submission can carry placeholder points=0; only expose numbers when
     // Flo actually displays a numeric score, not W/L.
@@ -50,6 +51,19 @@ export function resultCards(body, eventId) {
       finish: winner.subtitle || 'Published result', score: { left: { points: points(a) }, right: { points: points(b) } } });
   }
   return matches;
+}
+
+function photoUrl(athlete) {
+  const values = [athlete.profileImageUrl, athlete.profile_image_url, athlete.profilePhoto, athlete.profile_photo,
+    athlete.imageUrl, athlete.image_url, athlete.photoUrl, athlete.photo_url, athlete.avatarUrl, athlete.avatar_url,
+    athlete.headshotUrl, athlete.headshot_url, athlete.headshot, athlete.image, athlete.photo];
+  for (const value of values) {
+    const raw = typeof value === 'string' ? value : value?.url || value?.src;
+    if (!raw || /placeholder|default-avatar|no-image/i.test(raw)) continue;
+    try { const url = new URL(raw, 'https://www.flograppling.com'); return url.protocol === 'https:' ? url.href : undefined; }
+    catch { /* Ignore unsupported photo fields. */ }
+  }
+  return undefined;
 }
 
 export async function fetchFloEvent(input, { fetchImpl = fetch, maxPages = 30 } = {}) {

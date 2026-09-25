@@ -840,7 +840,7 @@ input[type="url"]:focus,
 .competition-menu .section-heading h2 { font-size: 1.25rem; }
 .menu-count { display: grid; place-items: center; min-width: 28px; height: 28px; border-radius: 999px; background: #17191b; color: var(--muted); font-weight: 800; }
 .competition-menu-list { display: grid; max-height: 72vh; overflow: auto; }
-.competition-menu-item { display: grid; grid-template-columns: 10px minmax(0, 1fr) 12px; align-items: start; gap: 11px; width: 100%; padding: 15px 16px; border-bottom: 1px solid var(--line-soft); background: transparent; color: var(--text); cursor: pointer; text-align: left; }
+.competition-menu-item { display: grid; grid-template-columns: 48px minmax(0, 1fr) 12px; align-items: start; gap: 11px; width: 100%; padding: 15px 16px; border-bottom: 1px solid var(--line-soft); background: transparent; color: var(--text); cursor: pointer; text-align: left; }
 .competition-menu-item:hover, .competition-menu-item.selected { background: #111518; }
 .competition-menu-item.selected { box-shadow: inset 3px 0 var(--emerald); }
 .event-marker, .match-live-dot { display: inline-block; width: 8px; height: 8px; margin-top: 5px; border-radius: 50%; background: #71717a; }
@@ -850,6 +850,12 @@ input[type="url"]:focus,
 .competition-menu-copy strong { font-size: .91rem; line-height: 1.35; }
 .competition-menu-copy span { color: var(--muted); font-size: .79rem; }
 .competition-menu-copy small { color: var(--faint); font-size: .72rem; text-transform: capitalize; }
+.competition-status-label { display: inline-flex; align-items: center; justify-content: center; min-height: 22px; padding: 0 6px; border: 1px solid #383a3d; border-radius: 999px; background: #131416; color: #c4c4c8; font-size: .58rem; font-weight: 850; letter-spacing: .04em; white-space: nowrap; }
+.competition-status-label.live { border-color: rgba(248,113,113,.34); background: rgba(248,113,113,.1); color: #fca5a5; }
+.competition-status-label.upcoming { border-color: rgba(56,189,248,.3); background: rgba(56,189,248,.08); color: #bae6fd; }
+.competition-status-label.complete { color: #a1a1aa; }
+.show-all-events { width: 100%; min-height: 42px; padding: 0 16px; border-top: 1px solid var(--line-soft); background: #0b0c0d; color: #a7f3d0; cursor: pointer; font-size: .8rem; font-weight: 750; text-align: left; }
+.show-all-events:hover { background: #111415; }
 .menu-chevron { color: var(--faint); font-size: 1.3rem; line-height: 1; }
 .menu-empty { padding: 18px; color: var(--muted); font-size: .9rem; }
 .competition-detail { padding: clamp(18px, 3vw, 30px); }
@@ -896,6 +902,7 @@ input[type="url"]:focus,
 .upcoming-match-card { padding: 16px 18px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
 .upcoming-match-card.is-live { border-color: rgba(248,113,113,.36); box-shadow: inset 3px 0 rgba(248,113,113,.72); }
 .upcoming-match-event { display: flex; align-items: flex-start; gap: 10px; }
+.event-location-icon { flex: 0 0 auto; margin-top: 2px; color: #94a3b8; }
 .upcoming-match-event > div { display: grid; gap: 3px; min-width: 0; }
 .upcoming-match-event > div strong { font-size: .85rem; }
 .upcoming-match-event > div span { color: var(--muted); font-size: .76rem; }
@@ -911,6 +918,17 @@ input[type="url"]:focus,
 .match-result-score { color: var(--text); font-size: .9rem; }
 .text-button { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: #a7f3d0; cursor: pointer; font-size: .8rem; font-weight: 750; }
 .text-button:hover { color: white; }
+.competitor-portrait { display: block; flex: 0 0 auto; width: 54px; height: 54px; overflow: hidden; border: 1px solid #343a3b; border-radius: 50%; background: linear-gradient(145deg, #202624, #101212); object-fit: cover; }
+.competitor-portrait.fallback { display: grid; place-items: center; color: #b6f3d5; font-size: .78rem; font-weight: 850; letter-spacing: .04em; }
+.competitor-portrait.compact { width: 32px; height: 32px; font-size: .62rem; }
+.fighter-option .competitor-portrait { width: 38px; height: 38px; }
+.match-competitor { display: flex !important; align-items: center; gap: 12px; min-width: 0; text-align: left !important; }
+.match-competitor.right { flex-direction: row-reverse; text-align: right !important; }
+.match-competitor-copy { display: grid; gap: 4px; min-width: 0; }
+.match-competitor-copy strong { overflow-wrap: anywhere; font-size: 1rem; line-height: 1.25; }
+.match-competitor-copy small { color: var(--muted); font-size: .76rem; font-weight: 500; }
+.bracket-player { display: flex !important; align-items: center; gap: 8px; min-width: 0; }
+.bracket-player > span { display: grid; gap: 2px; min-width: 0; }
 .competition-detail { display: grid; gap: 22px; }
 .competition-detail-heading h2 { margin-top: 4px; }
 .competition-heading-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; color: var(--muted); font-size: .8rem; }

@@ -54,7 +54,7 @@ export function parseIbjjfBracket(html, eventId, categoryId) {
       return { sourceId: element.attr('id')?.replace(/^competitor-/, ''),
         name: text(element.find('.match-card__competitor-name')), academy: text(element.find('.match-card__club-name')) || 'Not listed',
         country: '—', belt: ['black', 'brown', 'purple', 'blue', 'white'].find(belt => division.toLowerCase().includes(belt)) || 'unknown',
-        record: 'IBJJF bracket', loser: element.find('.match-competitor--loser').length > 0 };
+        record: 'IBJJF bracket', imageUrl: competitorPhoto(element), loser: element.find('.match-competitor--loser').length > 0 };
     });
     // Byes and unresolved advancement placeholders are not two-sided markets.
     if (!id || players.length !== 2 || players.some(p => !p.sourceId || !p.name)) return;
@@ -73,6 +73,20 @@ export function parseIbjjfBracket(html, eventId, categoryId) {
       sourceUrl: `${ORIGIN}/tournaments/${eventId}/categories/${categoryId}` });
   });
   return matches;
+}
+
+function competitorPhoto(element) {
+  const image = element.find('img').first();
+  const srcset = image.attr('srcset')?.split(',')[0]?.trim().split(/\s+/)[0];
+  const style = image.attr('style') || element.attr('style') || '';
+  const backgroundImage = style.match(/background-image\s*:\s*url\(["']?([^"')]+)["']?\)/i)?.[1];
+  const raw = image.attr('data-profile-image') || element.attr('data-profile-image') || image.attr('data-src') ||
+    image.attr('data-original') || image.attr('src') || srcset || backgroundImage;
+  if (!raw || /placeholder|default-avatar|no-image/i.test(raw)) return undefined;
+  try {
+    const url = allowedSourceUrl(new URL(raw, ORIGIN).href);
+    return ['www.bjjcompsystem.com', 'bjjcompsystem.com'].includes(url.hostname) ? url.href : undefined;
+  } catch { return undefined; }
 }
 
 export async function fetchIbjjfEvent(input, { bracketLimit = 30, seed, ...options } = {}) {

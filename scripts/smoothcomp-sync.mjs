@@ -262,12 +262,24 @@ function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
     belt: beltFromDivision(division),
     seed: Number(detailSeat?.seed || seat?.seed || 0) || 0,
     record: liveSide?.wins !== undefined && liveSide?.wins !== null ? `Wins listed: ${liveSide.wins}` : "Record not listed",
-    imageUrl: absoluteAssetUrl(
-      liveSide?.profile_image || detailSeat?.player_profile_image || seat?.image || seat?.player_profile_image || null
-    ),
+    imageUrl: absoluteAssetUrl(firstPhotoUrl(liveSide, detailSeat, seat)),
     clubLogoUrl: absoluteAssetUrl(detailSeat?.player_club_logo || detailSeat?.player_competition_team_logo || null),
     sourceUrl: liveSide?.profile_link || seat?.profile_link || null
   };
+}
+
+function firstPhotoUrl(...records) {
+  const fields = ["profile_image", "player_profile_image", "profile_photo", "profilePhoto", "image", "player_image",
+    "photo", "photo_url", "headshot", "headshot_url", "avatar", "avatar_url", "imageUrl", "image_url"];
+  for (const record of records) {
+    if (!record || typeof record !== "object") continue;
+    for (const field of fields) {
+      const value = record[field];
+      const url = typeof value === "string" ? value : value?.url || value?.src;
+      if (url) return url;
+    }
+  }
+  return null;
 }
 
 function sourceIdForSeat(seat, liveSide) {
@@ -453,7 +465,13 @@ function absoluteAssetUrl(value) {
 
   const url = String(value);
   if (url.includes("placeholder-image-profile")) return null;
-  return url.startsWith("/") ? `https://smoothcomp.com${url}` : url;
+  const absolute = url.startsWith("//") ? `https:${url}` : url.startsWith("/") ? `https://smoothcomp.com${url}` : url;
+  try {
+    const parsed = new URL(absolute);
+    return parsed.protocol === "https:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
 }
 
 function beltFromDivision(division) {
