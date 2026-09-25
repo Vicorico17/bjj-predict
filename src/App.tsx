@@ -16,6 +16,7 @@ import {
   RefreshCw,
   RotateCcw,
   SlidersHorizontal,
+  Star,
   Swords,
   Trophy,
   TrendingUp,
@@ -769,9 +770,10 @@ function CompetitionsView({ events, allEvents, selectedEvent, matches, competito
       <div className="competition-menu-list">
         {menuEvents.map(event => {
           const count = matches.filter(match => match.eventId === event.id).length;
+          const importance = competitionImportance(event);
           return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setShowOldMatches(false); onSelect(event.id); }}>
             <span className={`competition-status-label ${event.status}`}>{event.status === "live" ? "LIVE" : event.status === "upcoming" ? "UP NEXT" : event.status === "complete" ? "PAST" : "TBA"}</span>
-            <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><small>{count ? `${count} published ${count === 1 ? "match" : "matches"}` : event.coverage?.level === "discovered" ? "Bracket not imported yet" : "No matches published"}</small></span>
+            <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><span className="competition-importance" aria-label={`Estimated importance: ${importance} out of 5 stars`} title={`Estimated competition scale: ${importance} out of 5. Based on event name and organizer.`}>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} fill={index < importance ? "currentColor" : "none"} />)}<small>{count ? `${count} published ${count === 1 ? "match" : "matches"}` : event.coverage?.level === "discovered" ? "Bracket not imported yet" : "No matches published"}</small></span></span>
             <span className="menu-chevron">›</span>
           </button>;
         })}
@@ -782,7 +784,7 @@ function CompetitionsView({ events, allEvents, selectedEvent, matches, competito
     <div className="competition-detail">
       {selectedEvent ? <>
         <div className="competition-detail-heading">
-          <div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name}</h2><div className="competition-heading-tags"><span className={`competition-status ${selectedEvent.status}`}>{selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "complete" ? "Completed" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span></div></div>
+          <div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name}</h2><div className="competition-heading-tags"><span className={`competition-status ${selectedEvent.status}`}>{selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "complete" ? "Completed" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div></div>
           <a className="icon-link" href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Official event page</a>
         </div>
         <div className="competition-info-grid">
@@ -806,6 +808,15 @@ function formatCompetitionDate(start: string, end?: string) {
   const startLabel = format(start);
   if (!end || !Number.isFinite(Date.parse(end)) || startLabel === format(end)) return startLabel;
   return `${startLabel} – ${format(end)}`;
+}
+
+function competitionImportance(event: AppEvent) {
+  const name = `${event.name} ${event.organizer}`.toLowerCase();
+  if (/world championship|worlds|world cup|adcc world|ibjjf worlds/.test(name)) return 5;
+  if (/european championship|pan.?american|continental championship|asian championship|african championship|adcc (europe|asia|south america)/.test(name)) return 4;
+  if (/national championship|national tournament|national pro|grand slam|continental open/.test(name)) return 3;
+  if (/regional|state championship|city championship|open/.test(name)) return 2;
+  return 1;
 }
 
 function BracketDivision({ division, matches, competitors }: { division: string; matches: Match[]; competitors: Competitor[] }) {

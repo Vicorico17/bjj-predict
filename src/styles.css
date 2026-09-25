@@ -850,6 +850,10 @@ input[type="url"]:focus,
 .competition-menu-copy strong { font-size: .91rem; line-height: 1.35; }
 .competition-menu-copy span { color: var(--muted); font-size: .79rem; }
 .competition-menu-copy small { color: var(--faint); font-size: .72rem; text-transform: capitalize; }
+.competition-importance { display: flex; align-items: center; gap: 2px; color: #fbbf24; }
+.competition-importance small { margin-left: 5px; }
+.competition-importance.detail { gap: 7px; color: var(--muted); font-size: .72rem; text-transform: none; }
+.competition-importance.detail > span { display: inline-flex; gap: 2px; color: #fbbf24; }
 .competition-status-label { display: inline-flex; align-items: center; justify-content: center; min-height: 22px; padding: 0 6px; border: 1px solid #383a3d; border-radius: 999px; background: #131416; color: #c4c4c8; font-size: .58rem; font-weight: 850; letter-spacing: .04em; white-space: nowrap; }
 .competition-status-label.live { border-color: rgba(248,113,113,.34); background: rgba(248,113,113,.1); color: #fca5a5; }
 .competition-status-label.upcoming { border-color: rgba(56,189,248,.3); background: rgba(56,189,248,.08); color: #bae6fd; }
