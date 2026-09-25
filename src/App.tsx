@@ -130,12 +130,22 @@ function currentEvents(events: AppEvent[]) {
   }).sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || Date.parse(a.startsAt) - Date.parse(b.startsAt));
 }
 
+function isCurrentMatch(match: Match, events: AppEvent[]) {
+  if (match.status === "live") return true;
+  if (match.status !== "open") return false;
+  const scheduled = Date.parse(match.scheduledAt);
+  if (Number.isFinite(scheduled)) return scheduled >= Date.now();
+  const event = events.find(item => item.id === match.eventId);
+  const eventStart = Date.parse(event?.startsAt || "");
+  return event?.status === "upcoming" && Number.isFinite(eventStart) && eventStart >= Date.now();
+}
+
 function App() {
   const [, refreshClock] = useState(0);
   useEffect(() => { const timer = setInterval(() => refreshClock(value => value + 1), 15000); return () => clearInterval(timer); }, []);
   const [state, setState] = useState<AppState>(() => hydrateStateFromSnapshot(loadState()));
   const [dataStatus, setDataStatus] = useState("Refreshing current matches…");
-  const [view, setView] = useState<View>("competitions");
+  const [view, setView] = useState<View>("matches");
   const [showHistory, setShowHistory] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(() => {
     const initial = hydrateStateFromSnapshot(loadState());
@@ -312,20 +322,20 @@ function App() {
         </div>
         <nav className="nav-stack">
           <button
+            className={view === "matches" ? "nav-button active" : "nav-button"}
+            onClick={() => setView("matches")}
+            type="button"
+          >
+            <Swords size={18} aria-hidden="true" />
+            <span>Live & upcoming</span>
+          </button>
+          <button
             className={view === "competitions" ? "nav-button active" : "nav-button"}
             onClick={() => setView("competitions")}
             type="button"
           >
             <Trophy size={18} aria-hidden="true" />
             <span>Competitions</span>
-          </button>
-          <button
-            className={view === "matches" ? "nav-button active" : "nav-button"}
-            onClick={() => setView("matches")}
-            type="button"
-          >
-            <Swords size={18} aria-hidden="true" />
-            <span>Upcoming matches</span>
           </button>
           <button
             className={view === "markets" ? "nav-button active" : "nav-button"}
@@ -367,13 +377,13 @@ function App() {
             <span className="status-pill live"><RefreshCw size={12} aria-hidden="true" />Live data</span>
             <span>{dataStatus}</span>
             <span>{visibleEvents.length} events</span>
-            <span>{visibleMatches.filter(match => match.status !== "settled").length} live / upcoming matches</span>
-            <span>{visibleMatches.filter(match => match.status === "live").length} live</span>
-            <span>{visibleMatches.filter(match => match.status === "open").length} prediction-ready</span>
-            <span>{visibleMatches.filter(match => match.status === "settled").length} settled</span>
+            <span>{state.matches.filter(match => isCurrentMatch(match, state.events)).length} live & upcoming matches</span>
+            <span>{state.matches.filter(match => match.status === "live").length} live</span>
+            <span>{state.matches.filter(match => match.status === "open" && isCurrentMatch(match, state.events)).length} scheduled next</span>
+            {view === "markets" && <span>{state.matches.filter(match => match.status === "settled").length} settled</span>}
           </div>
           <div className="topbar-actions">
-            <label><input type="checkbox" checked={showHistory} onChange={event => setShowHistory(event.target.checked)} /> Show history / demo</label>
+            {view === "markets" && <label><input type="checkbox" checked={showHistory} onChange={event => setShowHistory(event.target.checked)} /> Include settled markets</label>}
             <button className="primary-button" onClick={() => setView("admin")}>Find / refresh live matches</button>
             <a className="icon-link" href={selectedEvent?.sourceUrl} target="_blank" rel="noreferrer">
               <ExternalLink size={17} aria-hidden="true" />
@@ -417,7 +427,7 @@ function App() {
           </div>
         </section>}
 
-        {selectedEvent?.coverage && <div className="coverage-note">
+        {(view === "competitions" || view === "markets") && selectedEvent?.coverage && <div className="coverage-note">
           <strong>{sourceLabels[selectedEvent.source]} · {selectedEvent.coverage.level} coverage</strong>
           <span>{selectedMatches.length} stored matches · {selectedEvent.coverage.scoredMatches} scored in latest fetch{selectedEvent.coverage.totalBrackets != null ? ` · ${selectedEvent.coverage.importedBrackets}/${selectedEvent.coverage.totalBrackets} brackets fetched` : ""}</span>
           {selectedEvent.warnings?.length ? <details><summary>Coverage notes ({selectedEvent.warnings.length})</summary>{selectedEvent.warnings.map((warning, index) => <p key={index}>{warning}</p>)}</details> : null}
@@ -426,17 +436,18 @@ function App() {
         {view === "competitions" && <CompetitionsView
           events={visibleEvents}
           selectedEvent={selectedEvent}
-          matches={selectedMatches}
+          matches={state.matches.filter(match => match.eventId === selectedEvent?.id)}
           competitors={state.competitors}
           onSelect={setSelectedEventId}
           onMatches={() => setView("matches")}
         />}
 
         {view === "matches" && <UpcomingMatchesView
-          events={visibleEvents}
-          matches={visibleMatches.filter(match => match.status !== "settled")}
+          events={state.events}
+          matches={state.matches}
           competitors={state.competitors}
           onSelectEvent={setSelectedEventId}
+          onShowHistory={() => setShowHistory(true)}
           onCompetitions={() => setView("competitions")}
         />}
 
@@ -698,9 +709,13 @@ function CompetitionsView({ events, selectedEvent, matches, competitors, onSelec
   events: AppEvent[]; selectedEvent?: AppEvent; matches: Match[]; competitors: Competitor[];
   onSelect: (id: string) => void; onMatches: () => void;
 }) {
-  const divisions = [...new Set(matches.map(match => match.division || "Division not listed"))];
-  const liveCount = matches.filter(match => match.status === "live").length;
-  const scheduledCount = matches.filter(match => match.status === "open").length;
+  const [showOldMatches, setShowOldMatches] = useState(false);
+  const currentMatches = matches.filter(match => isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
+  const oldMatches = matches.filter(match => !isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
+  const displayedMatches = showOldMatches ? oldMatches : currentMatches;
+  const divisions = [...new Set(displayedMatches.map(match => match.division || "Division not listed"))];
+  const liveCount = currentMatches.filter(match => match.status === "live").length;
+  const scheduledCount = currentMatches.filter(match => match.status === "open").length;
   const city = selectedEvent?.city && !/location not listed|awaiting sync/i.test(selectedEvent.city) ? selectedEvent.city : "";
   const venue = selectedEvent?.venue?.trim() || "";
   const location = [...new Set([venue, city].filter(Boolean))].join(", ") || "Location not published";
@@ -712,7 +727,7 @@ function CompetitionsView({ events, selectedEvent, matches, competitors, onSelec
       <div className="competition-menu-list">
         {events.map(event => {
           const count = matches.filter(match => match.eventId === event.id).length;
-          return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => onSelect(event.id)}>
+          return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setShowOldMatches(false); onSelect(event.id); }}>
             <span className={`event-marker ${event.status}`} />
             <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><small>{count} {count === 1 ? "match" : "matches"} · {event.status}</small></span>
             <span className="menu-chevron">›</span>
@@ -732,9 +747,10 @@ function CompetitionsView({ events, selectedEvent, matches, competitors, onSelec
           <section className="competition-map-card" aria-label="Competition location"><div className="competition-map-heading"><div><span className="eyebrow">Where it happens</span><h3>{venue || city || "Location not published"}</h3><p>{venue && city && venue !== city ? city : "Organizer-published location"}</p></div><a href={location === "Location not published" ? selectedEvent.sourceUrl : `https://maps.google.com/?q=${encodeURIComponent(location)}`} target="_blank" rel="noreferrer">{location === "Location not published" ? "Check event page" : "Open map"}<ExternalLink size={13}/></a></div>{mapUrl ? <iframe title={`Map showing ${location}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /> : <div className="map-placeholder"><span>📍</span><strong>Venue location not listed</strong><p>The organizer has not published a location. Check the official event listing for updates.</p></div>}</section>
         </div>
         {selectedEvent.coverage && <div className="coverage-note competition-coverage"><strong>Match data coverage · {selectedEvent.coverage.level}</strong><span>{selectedEvent.coverage.importedBrackets ?? divisions.length} of {selectedEvent.coverage.totalBrackets ?? divisions.length} brackets loaded · {selectedEvent.coverage.scoredMatches} scored matches{selectedEvent.coverage.liveScores ? " · live scoring available" : ""}</span></div>}
-        <div className="competition-stats"><div><strong>{matches.length}</strong><span>Matches loaded</span></div><div><strong>{divisions.length}</strong><span>Divisions</span></div><div><strong>{liveCount}</strong><span>Live now</span></div><div><strong>{scheduledCount}</strong><span>Upcoming</span></div><button className="primary-button" type="button" onClick={onMatches}>See all upcoming matches</button></div>
-        <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>Brackets & matchups</h3></div><span className="small-note">{matches.length ? "Pairings grouped by division and round" : "Published pairings will appear here"}</span></div>
-        {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} division={division} matches={matches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : <div className="panel empty-matchups"><strong>Brackets are not published yet</strong><span>This competition is listed by its organizer. Published divisions and matchups will appear here as soon as they are available.</span><button className="primary-button" type="button" onClick={onMatches}>Browse all upcoming matches</button></div>}
+        <div className="competition-stats"><div><strong>{showOldMatches ? oldMatches.length : currentMatches.length}</strong><span>{showOldMatches ? "Old matches" : "Live & upcoming"}</span></div><div><strong>{divisions.length}</strong><span>Divisions shown</span></div><div><strong>{liveCount}</strong><span>Live now</span></div><div><strong>{scheduledCount}</strong><span>Coming next</span></div><button className="primary-button" type="button" onClick={onMatches}>Browse all upcoming matches</button></div>
+        <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>{showOldMatches ? "Old matches" : "Live & upcoming matches"}</h3></div><span className="small-note">{displayedMatches.length ? "Pairings grouped by division and round" : "No pairings to show in this section"}</span></div>
+        <div className="match-archive-toggle" role="group" aria-label="Choose matches to show"><button type="button" className={!showOldMatches ? "active" : ""} onClick={() => setShowOldMatches(false)}>Live & upcoming <b>{currentMatches.length}</b></button><button type="button" className={showOldMatches ? "active" : ""} onClick={() => setShowOldMatches(true)}>Old matches <b>{oldMatches.length}</b></button></div>
+        {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} division={division} matches={displayedMatches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : <div className="panel empty-matchups"><strong>{showOldMatches ? "No old matches listed for this competition" : matches.length ? "No upcoming matches right now" : "Brackets are not published yet"}</strong><span>{showOldMatches ? "Completed bouts and past scheduled bouts will be collected here." : matches.length ? "Older bouts are tucked away. Use Old matches to view the competition history." : "This competition is listed by its organizer. Published divisions and matchups will appear here as soon as they are available."}</span>{!showOldMatches && <button className="primary-button" type="button" onClick={onMatches}>Browse upcoming matches worldwide</button>}</div>}
       </> : <div className="panel empty-matchups"><strong>No competition selected</strong><span>Choose an event from the competition menu.</span></div>}
     </div>
   </section>;
@@ -769,16 +785,41 @@ function roundOrder(round: string) {
   return 2;
 }
 
-function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCompetitions }: {
-  events: AppEvent[]; matches: Match[]; competitors: Competitor[]; onSelectEvent: (id: string) => void; onCompetitions: () => void;
+function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onShowHistory, onCompetitions }: {
+  events: AppEvent[]; matches: Match[]; competitors: Competitor[]; onSelectEvent: (id: string) => void; onShowHistory: () => void; onCompetitions: () => void;
 }) {
-  const [filter, setFilter] = useState<"all" | "live" | "scheduled">("all");
+  const [showOldMatches, setShowOldMatches] = useState(false);
   const [eventFilter, setEventFilter] = useState("");
-  const visible = matches.filter(match => (!eventFilter || match.eventId === eventFilter) && (filter === "all" || (filter === "live" ? match.status === "live" : match.status === "open")));
-  const ordered = [...visible].sort((a, b) => Number(b.status === "live") - Number(a.status === "live") || Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));
-  return <section className="upcoming-page" aria-label="Upcoming matches"><div className="section-heading"><div><span className="eyebrow">Live mat schedule</span><h2>Upcoming matches</h2><p>Published pairings across the current competition slate.</p></div><button type="button" className="ghost-button" onClick={onCompetitions}>Browse competitions</button></div><div className="match-filter-row"><button type="button" className={`match-filter ${filter === "all" ? "active" : ""}`} onClick={() => setFilter("all")}>All live & upcoming <b>{matches.length}</b></button><button type="button" className={`match-filter ${filter === "live" ? "active" : ""}`} onClick={() => setFilter("live")}>Live <b>{matches.filter(match => match.status === "live").length}</b></button><button type="button" className={`match-filter ${filter === "scheduled" ? "active" : ""}`} onClick={() => setFilter("scheduled")}>Scheduled <b>{matches.filter(match => match.status === "open").length}</b></button><label className="event-select-label">Competition<select aria-label="Filter by competition" onChange={event => { setEventFilter(event.target.value); if (event.target.value) onSelectEvent(event.target.value); }} value={eventFilter}><option value="">All competitions</option>{events.map(event => <option value={event.id} key={event.id}>{event.name}</option>)}</select></label></div>
-    {ordered.length ? <div className="upcoming-match-list">{ordered.map(match => { const event = events.find(item => item.id === match.eventId); const left = competitors.find(item => item.id === match.competitorAId); const right = competitors.find(item => item.id === match.competitorBId); return <article className="upcoming-match-card" key={match.id}><div className="upcoming-match-event"><span className={`event-marker ${event?.status || "unknown"}`} /><div><strong>{event?.name ?? "Competition"}</strong><span>{match.division}</span></div><span className={`market-status ${match.status === "live" ? "live" : ""}`}>{match.status === "live" ? "Live now" : "Upcoming"}</span></div><div className="upcoming-pairing"><span>{left?.name ?? "Competitor TBA"}<small>{left?.academy ?? "Academy TBA"}</small></span><b>VS</b><span>{right?.name ?? "Competitor TBA"}<small>{right?.academy ?? "Academy TBA"}</small></span></div><div className="upcoming-match-footer"><span>{match.round}</span><span>{match.mat}</span><span><CalendarDays size={14} />{formatDateTime(match.scheduledAt)}</span><button type="button" className="text-button" onClick={() => { if (event) onSelectEvent(event.id); onCompetitions(); }}>View bracket <ExternalLink size={14} /></button></div></article>; })}</div> : <div className="panel empty-matchups"><strong>No upcoming matchups are published yet</strong><span>Choose a competition to see its bracket, or refresh event data to check for newly published pairings.</span><button type="button" className="primary-button" onClick={onCompetitions}>Browse competitions</button></div>}
+  const current = matches.filter(match => isCurrentMatch(match, events));
+  const old = matches.filter(match => !isCurrentMatch(match, events));
+  const source = showOldMatches ? old : current;
+  const visible = source.filter(match => !eventFilter || match.eventId === eventFilter);
+  const ordered = [...visible].sort((a, b) => {
+    if (!showOldMatches && a.status !== b.status && (a.status === "live" || b.status === "live")) return a.status === "live" ? -1 : 1;
+    const aTime = Date.parse(a.scheduledAt), bTime = Date.parse(b.scheduledAt);
+    const safeA = Number.isFinite(aTime) ? aTime : showOldMatches ? -Infinity : Infinity;
+    const safeB = Number.isFinite(bTime) ? bTime : showOldMatches ? -Infinity : Infinity;
+    if (safeA === safeB) return 0;
+    return showOldMatches ? safeB - safeA : safeA - safeB;
+  });
+  const competitionOptions = (showOldMatches ? events : currentEvents(events)).sort((a, b) => a.name.localeCompare(b.name));
+  return <section className="upcoming-page" aria-label="Live and upcoming matches"><div className="section-heading"><div><span className="eyebrow">Worldwide mat schedule</span><h2>{showOldMatches ? "Old matches" : "Live & upcoming"}</h2><p>{showOldMatches ? "Completed results and bouts whose scheduled time has passed." : "Live bouts first, then the next scheduled matches from competitions around the world."}</p></div><button type="button" className="ghost-button" onClick={onCompetitions}>Browse competitions</button></div><div className="match-filter-row"><div className="match-archive-toggle" role="group" aria-label="Choose matches to show"><button type="button" className={!showOldMatches ? "active" : ""} onClick={() => { setShowOldMatches(false); setEventFilter(""); }}>Live & upcoming <b>{current.length}</b></button><button type="button" className={showOldMatches ? "active" : ""} onClick={() => { setShowOldMatches(true); setEventFilter(""); }}>Old matches <b>{old.length}</b></button></div><label className="event-select-label">Competition<select aria-label="Filter by competition" onChange={event => { setEventFilter(event.target.value); if (event.target.value) onSelectEvent(event.target.value); }} value={eventFilter}><option value="">All competitions</option>{competitionOptions.map(event => <option value={event.id} key={event.id}>{event.name}</option>)}</select></label></div>
+    {ordered.length ? <div className="upcoming-match-list">{ordered.map(match => { const event = events.find(item => item.id === match.eventId); const left = competitors.find(item => item.id === match.competitorAId); const right = competitors.find(item => item.id === match.competitorBId); const stateLabel = match.status === "live" ? "Live now" : match.status === "settled" ? "Final result" : showOldMatches ? "Past schedule · result unavailable" : "Upcoming"; return <article className={`upcoming-match-card ${match.status === "live" ? "is-live" : ""}`} key={match.id}><div className="upcoming-match-event"><span className={`event-marker ${event?.status || "unknown"}`} /><div><strong>{event?.name ?? "Competition"}</strong><span>{[event?.city, match.division].filter(Boolean).join(" · ")}</span></div><span className={`market-status ${match.status === "live" ? "live" : match.status === "settled" ? "settled" : ""}`}>{stateLabel}</span></div><div className="upcoming-pairing"><span>{left?.name ?? "Competitor TBA"}<small>{left?.academy ?? "Academy not listed"}</small></span><b>VS</b><span>{right?.name ?? "Competitor TBA"}<small>{right?.academy ?? "Academy not listed"}</small></span></div><div className="upcoming-match-footer"><span>{match.round || "Round not listed"}</span><span>{match.mat || "Mat TBA"}</span><span><CalendarDays size={14} />{formatRelativeMatchTime(match.scheduledAt, match.status)}</span>{match.score?.left?.points != null && match.score?.right?.points != null && <strong className="match-result-score">{match.score.left.points} – {match.score.right.points}</strong>}<button type="button" className="text-button" onClick={() => { if (event) { onSelectEvent(event.id); if (showOldMatches) onShowHistory(); } onCompetitions(); }}>View competition <ExternalLink size={14} /></button></div></article>; })}</div> : <div className="panel empty-matchups"><strong>{showOldMatches ? "No old matches found" : "No live or upcoming matches found right now"}</strong><span>{showOldMatches ? "Older competition bouts will appear here when published results are available." : "Past matches are tucked away. Use Old matches to browse results and earlier bouts."}</span>{!showOldMatches && <button type="button" className="primary-button" onClick={onCompetitions}>Browse competitions worldwide</button>}</div>}
   </section>;
+}
+
+function formatRelativeMatchTime(value: string, status: Match["status"]) {
+  if (status === "live") return "Happening now";
+  const time = Date.parse(value);
+  if (!Number.isFinite(time)) return "Start time TBA";
+  const date = new Date(time);
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const isSameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  const label = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(date);
+  if (isSameDay(date, today)) return `Today · ${label}`;
+  if (isSameDay(date, tomorrow)) return `Tomorrow · ${label}`;
+  return new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(date);
 }
 
 type MetricProps = {
