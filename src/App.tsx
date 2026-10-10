@@ -1,3 +1,4 @@
+import { CompetitorPortrait } from "./CompetitorPortrait";
 import { WinnerBadge } from './WinnerBadge';
 import {
   Activity,
@@ -109,7 +110,7 @@ function applyDiscoveryEvents(state: AppState, discovery: DiscoveryPayload): App
 function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnapshot) {
   // Superseded bundled entry used a curated ID before directory discovery existed.
   const migrated = { ...baseState, events: baseState.events.filter(event => event.id !== "e-curated-grappling-grand-prix-88") };
-  const withFeatured = applySmoothcompSnapshot(migrated, featuredSnapshot as SmoothcompSnapshot);
+  const withFeatured = applySmoothcompSnapshot(migrated, featuredSnapshot as SmoothcompSnapshot, { supplement: true });
   const hydrated = applySmoothcompSnapshot(applySmoothcompSnapshot(applySmoothcompSnapshot(withFeatured, floResultsSnapshot as SmoothcompSnapshot), snapshot), dataSnapshot as SmoothcompSnapshot);
   const publishedNames: Record<string, string> = {
     "https://ajptour.com/en/event/1552": "AJP TOUR GERMANY NATIONAL JIU-JITSU CHAMPIONSHIP 2026 - GI & NO-GI",
@@ -294,10 +295,10 @@ function App() {
   const selectedEvent = selectedEventPool.find((event) => event.id === selectedEventId) ??
     selectedEventPool.find(event => state.matches.some(match => match.eventId === event.id)) ?? selectedEventPool[0];
   const visibleEventIds = new Set(visibleEvents.map(event => event.id));
-  const visibleMatches = state.matches.filter(match => visibleEventIds.has(match.eventId));
+  const visibleMatches = state.matches.filter(match => visibleEventIds.has(match.eventId) && match.sourceState !== "withdrawn");
   const currentMatchCount = scopedMatches.filter(match => isCurrentMatch(match, scopedEvents)).length;
   const selectedMatches = selectedEvent
-    ? state.matches.filter((match) => match.eventId === selectedEvent.id)
+    ? state.matches.filter((match) => match.eventId === selectedEvent.id && match.sourceState !== "withdrawn")
     : [];
   const selectedMatchIds = new Set(selectedMatches.map((match) => match.id));
   const eventMarkets = state.markets.filter((market) => selectedMatchIds.has(market.matchId) && (showHistory || market.status !== "settled")).sort((a, b) => {
@@ -742,7 +743,7 @@ function App() {
                     <div className="settlement-row" key={market.id}>
                       <div>
                         <strong>{match.round}</strong>
-                        <span>{competitorA.name} vs {competitorB.name}</span>
+                        <span className="portrait-name"><CompetitorPortrait competitor={competitorA} compact/>{competitorA.name} vs <CompetitorPortrait competitor={competitorB} compact/>{competitorB.name}</span>
                         <span>
                           {market.tradeCount} trades · {market.volume.toLocaleString()} pts ·{" "}
                           {market.status === "settled" ? `${match.finish} winner settled` : market.status}
@@ -839,7 +840,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
   const [matchView, setMatchView] = useState<"all" | "current" | "old">(showingOldEvents ? "all" : "current");
   useEffect(() => { setMatchView(showingOldEvents ? "all" : "current"); }, [showingOldEvents]);
   const menuEvents = events;
-  const selectedMatches = matches.filter(match => match.eventId === selectedEvent?.id);
+  const selectedMatches = matches.filter(match => match.eventId === selectedEvent?.id && match.sourceState !== "withdrawn");
   const currentMatches = selectedMatches.filter(match => isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
   const oldMatches = selectedMatches.filter(match => !isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
   const displayedMatches = matchView === "current" ? currentMatches : matchView === "old" ? oldMatches : selectedMatches;
@@ -865,7 +866,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
       </div>
       <div className="competition-menu-list">
         {menuEvents.map(event => {
-          const count = matches.filter(match => match.eventId === event.id).length;
+          const count = matches.filter(match => match.eventId === event.id && match.sourceState !== "withdrawn").length;
           const importance = competitionImportance(event);
           return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setMatchView(showingOldEvents ? "all" : "current"); onSelect(event.id); }}>
             <span className="competition-live-slot"><EventArtwork event={event} compact/>{event.status === "live" && !isPastCompetition(event) && <span className="competition-status-label live">LIVE</span>}</span>
@@ -882,7 +883,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
           <div className="competition-title-block"><EventArtwork event={selectedEvent}/><div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name.trim()}</h2><div className="competition-heading-tags"><span className={`competition-status ${isPastCompetition(selectedEvent) ? "past" : selectedEvent.status}`}>{selectedEvent.status === "complete" ? "Completed" : isPastCompetition(selectedEvent) ? "Past event" : selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div><div className="competition-organizer-line"><span>Organized by</span><strong>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</strong>{selectedEvent.city && <><i>·</i><MapPin size={13}/><span>{selectedEvent.city}</span></>}</div></div></div>
           <a className="icon-link" href={selectedEvent.officialUrl || selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Event listing</a>
         </div>
-        {(selectedEvent.source === "smoothcomp" || selectedEvent.source === "ajp") ? <CompetitionData key={selectedEvent.id} event={selectedEvent} matches={selectedMatches} competitors={competitors} busy={Boolean(importingEventId)} notice={selectedEvent.id === noticeEventId ? importNotice : ""} onLoad={(offset, all) => onImport(selectedEvent, offset, all)}/> : <>
+        {(selectedEvent.source === "smoothcomp" || selectedEvent.source === "ajp" || Boolean(selectedEvent.brackets?.length)) ? <CompetitionData key={selectedEvent.id} event={selectedEvent} matches={selectedMatches} competitors={competitors} busy={Boolean(importingEventId)} notice={selectedEvent.id === noticeEventId ? importNotice : ""} onLoad={(offset, all) => onImport(selectedEvent, offset, all)}/> : <>
         {!noUpcomingGames && <div className="competition-stats"><div><strong>{currentMatches.length}</strong><span>Live & upcoming</span></div><div><strong>{divisions.length}</strong><span>Divisions shown</span></div><div><strong>{liveCount}</strong><span>Live now</span></div><div><strong>{scheduledCount}</strong><span>Coming next</span></div><button className="primary-button" type="button" onClick={onToggleOldEvents}>{showingOldEvents ? "See upcoming events" : "See old events"}</button></div>}
         <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>{showingOldEvents ? "Past games & brackets" : "Live & upcoming games"}</h3></div>{displayedMatches.length > 0 && <span className="small-note">Pairings grouped by division and round</span>}</div>
         {canLoadMoreBrackets && <div className="bracket-import-action"><span>{selectedEvent.coverage?.importedBrackets} of {selectedEvent.coverage?.totalBrackets} published brackets loaded</span><button className="ghost-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Loading brackets…" : "Load more brackets"}</button>{importNotice && selectedEvent.id === noticeEventId && <span role="status">{importNotice}</span>}</div>}
@@ -939,15 +940,6 @@ function roundOrder(round: string) {
   return 2;
 }
 
-function CompetitorPortrait({ competitor, compact = false }: { competitor?: Competitor; compact?: boolean }) {
-  const [failed, setFailed] = useState(false);
-  const imageUrl = competitor?.imageUrl;
-  const imageIsHttps = imageUrl?.startsWith("https://") === true;
-  const className = compact ? "competitor-portrait compact" : "competitor-portrait fighter-avatar";
-  if (imageIsHttps && !failed) return <img className={className} src={imageUrl} alt={competitor?.name ? `${competitor.name} profile` : "Competitor profile"} loading="lazy" decoding="async" onError={() => setFailed(true)} />;
-  return <span className={`${className} fallback`} aria-hidden="true">{competitor ? initialsFor(competitor.name) : "?"}</span>;
-}
-
 function MatchCompetitor({ competitor, align = "left", won = false }: { competitor?: Competitor; align?: "left" | "right"; won?: boolean }) {
   return <span className={`match-competitor ${align}`}><CompetitorPortrait competitor={competitor}/><span className="match-competitor-copy"><strong>{competitor?.name ?? "Competitor TBA"}{won && <WinnerBadge/>}</strong><small>{competitor?.academy ?? "Academy not listed"}</small></span></span>;
 }
@@ -960,7 +952,7 @@ function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCo
   const current = matches.filter(match => isCurrentMatch(match, events));
   const old = matches.filter(match => !isCurrentMatch(match, events));
   const source = showOldMatches ? old : current;
-  const visible = source.filter(match => !eventFilter || match.eventId === eventFilter);
+  const visible = source.filter(match => match.sourceState !== "withdrawn" && (!eventFilter || match.eventId === eventFilter));
   const ordered = [...visible].sort((a, b) => {
     if (!showOldMatches && a.status !== b.status && (a.status === "live" || b.status === "live")) return a.status === "live" ? -1 : 1;
     const aTime = Date.parse(a.scheduledAt), bTime = Date.parse(b.scheduledAt);
@@ -1218,7 +1210,7 @@ function TicketPanel({
       <div className="ticket-header">
         <div>
           <span className="eyebrow">Trade ticket</span>
-          <h2>{ticketData.competitor.name}</h2>
+          <h2 className="portrait-name"><CompetitorPortrait competitor={ticketData.competitor} compact/>{ticketData.competitor.name}</h2>
         </div>
         <button className="icon-only" onClick={onCancel} type="button" aria-label="Clear ticket">
           <X size={18} aria-hidden="true" />
@@ -1356,7 +1348,7 @@ function PortfolioPanel({ competitors, matches, positions }: PortfolioPanelProps
           return (
             <div className="position-row" key={position.id}>
               <div>
-                <strong>{competitor?.name ?? "Unknown competitor"}</strong>
+                <strong className="portrait-name"><CompetitorPortrait competitor={competitor} compact/>{competitor?.name ?? "Unknown competitor"}</strong>
                 <span>{match?.round ?? "Match"} · {roundShares(position.shares).toLocaleString()} shares</span>
               </div>
               <div>
@@ -1394,7 +1386,7 @@ function RecentTrades({ competitors, trades }: RecentTradesProps) {
           const competitor = competitors.find((item) => item.id === trade.competitorId);
           return (
             <div className="trade-row" key={trade.id}>
-              <span>{trade.side === "sell" ? "Sold" : "Bought"} · {competitor?.name ?? "Outcome"}</span>
+              <span className="portrait-name"><CompetitorPortrait competitor={competitor} compact/>{trade.side === "sell" ? "Sold" : "Bought"} · {competitor?.name ?? "Outcome"}</span>
               <strong>{trade.amount.toLocaleString()} pts</strong>
             </div>
           );

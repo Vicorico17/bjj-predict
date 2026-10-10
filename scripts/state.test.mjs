@@ -151,12 +151,12 @@ test('Competition search matches names, cities, countries, venues, and either at
   assert.deepEqual(searchCompetitions(events, matches, competitors, '  '), events);
 });
 
-test('Sofia featured snapshot immediately hydrates three sourced matchups with locked markets', async () => {
+test('Sofia featured snapshot immediately hydrates the tournament and sourced superfights with locked markets', async () => {
   const featured = JSON.parse(await readFile('src/generated/featured-events.json', 'utf8'));
   const state = applyDataSnapshot(empty(), featured);
   const now = Date.parse('2026-10-10T19:00:00Z');
   assert.equal(currentEvents(state.events, now).length, 1);
-  assert.equal(state.matches.filter(match => isCurrentMatch(match, state.events, now)).length, 3);
+  assert.equal(state.matches.filter(match => isCurrentMatch(match, state.events, now)).length, 8);
   assert(state.markets.every(market => market.status === 'locked'));
   assert.equal(searchCompetitions(state.events, state.matches, state.competitors, 'sofia kolev').length, 1);
 });
@@ -180,4 +180,41 @@ test('Full draw hydration keeps athletes without matchups and merges separately 
   assert.equal(updated.events[0].participants.length, 1);
   assert.equal(updated.events[0].brackets.filter(bracket => bracket.loaded).length, 2);
   assert.equal(updated.events[0].coverage.importedBrackets, 2);
+});
+
+test('reviewed draw supplements a newer cached card without overwriting results or balances', async () => {
+  const featured = JSON.parse(await readFile('src/generated/featured-events.json', 'utf8'));
+  const snapshot = structuredClone(featured);
+  const event = snapshot.events[0];
+  event.observedAt = '2090-01-01T00:00:00Z';
+  event.matches = [event.matches[4]];
+  event.brackets = []; event.participants = [];
+  let cached = applyDataSnapshot(empty(), snapshot);
+  cached.balance = 1234;
+  cached.matches[0].status = 'settled';
+  cached.matches[0].winnerId = cached.matches[0].competitorAId;
+  const patched = applyDataSnapshot(cached, featured, { supplement: true });
+  assert.equal(patched.matches.length, 8);
+  assert.equal(patched.events[0].brackets[0].bouts.length, 7);
+  assert.equal(patched.events[0].lastSyncedAt, '2090-01-01T00:00:00Z');
+  assert.equal(patched.matches.find(match => match.id === cached.matches[0].id).winnerId, cached.matches[0].winnerId);
+  assert.equal(patched.balance, 1234);
+  assert(patched.competitors.every(player => player.imageUrl && player.imageFocus));
+});
+
+test('withdrawn pairing is archived and cannot return after a stale refresh', async () => {
+  const featured = JSON.parse(await readFile('src/generated/featured-events.json', 'utf8'));
+  const old = structuredClone(featured);
+  const event = old.events[0];
+  event.matches = [{ ...event.matches[6], sourceMatchId: event.withdrawnMatchIds[0], competitorA: { sourceId: 'petko-petkov', name: 'Petko Petkov' } }];
+  event.withdrawnMatchIds = []; event.brackets = []; event.participants = [];
+  const cached = applyDataSnapshot(empty(), old);
+  const patched = applyDataSnapshot(cached, featured);
+  const withdrawn = patched.matches.find(match => match.id === cached.matches[0].id);
+  assert.equal(withdrawn.sourceState, 'withdrawn');
+  assert.equal(isCurrentMatch(withdrawn, patched.events, Date.parse('2026-10-10T19:00:00Z')), false);
+  old.events[0].observedAt = '2090-01-01T00:00:00Z';
+  const refreshed = applyDataSnapshot(patched, old);
+  assert.equal(refreshed.matches.find(match => match.id === withdrawn.id).sourceState, 'withdrawn');
+  assert.equal(refreshed.matches.filter(match => match.sourceState !== 'withdrawn').length, 8);
 });

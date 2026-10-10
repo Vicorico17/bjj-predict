@@ -33,7 +33,7 @@ export function currentEvents(events: Event[], now = Date.now()) {
 // A published start is an estimate. Keep unresolved bouts visible until the
 // event ends, including cards without individual bout times or an end time.
 export function isCurrentMatch(match: Match, events: Event[], now = Date.now()) {
-  if (match.status === "settled" || match.winnerId) return false;
+  if (match.sourceState === "withdrawn" || match.status === "settled" || match.winnerId) return false;
   const event = events.find(item => item.id === match.eventId);
   if (event) {
     if (event.source === "manual" || /\b(cancelled|canceled)\b/i.test(event.name) || isPastCompetition(event, now)) return false;

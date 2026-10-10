@@ -108,6 +108,7 @@ export async function importData(input, { bracketLimit = 30, matchLimit = 1000, 
     const supplement = featuredEventFor(input);
     if (supplement) {
       event.matches = structuredClone(supplement.matches);
+      for (const field of ['brackets', 'participants', 'participantsStatus', 'withdrawnMatchIds']) event[field] = structuredClone(supplement[field]);
       event.coverage = { ...supplement.coverage };
       event.warnings = [...(supplement.warnings || []), `Reported card last reviewed ${supplement.observedAt}.`];
     }

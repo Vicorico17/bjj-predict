@@ -10,6 +10,7 @@ type SmoothcompCompetitorSnapshot = {
   seed?: number;
   record?: string;
   imageUrl?: string;
+  imageFocus?: Competitor["imageFocus"];
   clubLogoUrl?: string;
   sourceUrl?: string;
 };
@@ -53,6 +54,7 @@ export type SmoothcompEventSnapshot = {
   participants?: EventParticipant[];
   participantsStatus?: "published" | "unavailable";
   brackets?: CompetitionBracket[];
+  withdrawnMatchIds?: string[];
   coverImage?: string;
   matches: SmoothcompMatchSnapshot[];
   warnings?: string[];
@@ -78,6 +80,7 @@ export type SmoothcompSnapshot = {
 };
 
 type ApplySnapshotOptions = {
+  supplement?: boolean;
   eventId?: string;
   sourceEventId?: string;
 };
@@ -178,11 +181,28 @@ export function applySmoothcompSnapshot(
     if (source === "mixed") continue;
     const observedAt = snapshotEvent.observedAt || snapshot.syncedAt;
     const existingEvent = events.find(event => event.id === snapshotEvent.id);
-    if (existingEvent && Date.parse(existingEvent.lastSyncedAt) > Date.parse(observedAt)) continue;
+    const older = Boolean(existingEvent && Date.parse(existingEvent.lastSyncedAt) > Date.parse(observedAt));
+    if (older && !options.supplement) continue;
     const event = eventFromSnapshot(snapshotEvent, observedAt, source, existingEvent);
+    if (older && existingEvent) {
+      event.lastSyncedAt = existingEvent.lastSyncedAt;
+      event.status = existingEvent.status;
+      event.brackets = (event.brackets || []).map(bracket => {
+        const previous = existingEvent.brackets?.find(item => item.sourceId === bracket.sourceId);
+        if (!previous?.bouts?.length) return bracket;
+        const bouts = new Map((bracket.bouts || []).map(bout => [bout.sourceId, bout]));
+        for (const bout of previous.bouts) bouts.set(bout.sourceId, bout);
+        return { ...bracket, bouts: [...bouts.values()] };
+      });
+    }
+    event.withdrawnMatchIds = [...new Set([...(existingEvent?.withdrawnMatchIds || []), ...(snapshotEvent.withdrawnMatchIds || [])])];
+    const withdrawn = new Set(event.withdrawnMatchIds.map(id => `m-${source}-${id}`));
+    matches = matches.map(match => withdrawn.has(match.id) ? { ...match, status: 'locked', sourceState: 'withdrawn' } : match);
+    markets = markets.map(market => withdrawn.has(market.matchId) && market.status !== 'settled' ? { ...market, status: 'locked' } : market);
     events = upsertById(events, event);
 
     for (const snapshotMatch of snapshotEvent.matches) {
+      if (event.withdrawnMatchIds?.includes(snapshotMatch.sourceMatchId)) continue;
       const competitorA = competitorFromSnapshot(
         snapshotMatch.competitorA,
         snapshotEvent.sourceEventId,
@@ -200,12 +220,20 @@ export function applySmoothcompSnapshot(
         source
       );
 
+      for (const player of [competitorA, competitorB]) {
+        const previous = competitors.find(item => item.id === player.id);
+        if (!player.imageUrl && previous?.imageUrl) { player.imageUrl = previous.imageUrl; player.imageFocus = previous.imageFocus; }
+      }
       competitors = upsertById(competitors, competitorA);
       competitors = upsertById(competitors, competitorB);
 
       const winnerId = winnerIdFor(snapshotMatch, competitorA.id, competitorB.id, source);
       const localMatch = matchFromSnapshot(snapshotEvent, snapshotMatch, competitorA.id, competitorB.id, winnerId, source, observedAt);
       const existingMatch = matches.find((match) => match.id === localMatch.id);
+      if (older && existingMatch) {
+        matches = upsertById(matches, { ...existingMatch, sourceBracketId: existingMatch.sourceBracketId || localMatch.sourceBracketId });
+        continue;
+      }
       if (existingMatch && (existingMatch.competitorAId !== localMatch.competitorAId || existingMatch.competitorBId !== localMatch.competitorBId ||
           existingMatch.winnerId && winnerId && existingMatch.winnerId !== winnerId)) {
         const warning = `Match ${snapshotMatch.sourceMatchId} changed participants or winner; review required.`;
@@ -301,6 +329,7 @@ function competitorFromSnapshot(
     seed: snapshotCompetitor.seed && snapshotCompetitor.seed > 0 ? snapshotCompetitor.seed : 0,
     record: snapshotCompetitor.record || "Record not listed",
     imageUrl: snapshotCompetitor.imageUrl,
+    imageFocus: snapshotCompetitor.imageFocus,
     clubLogoUrl: snapshotCompetitor.clubLogoUrl,
     sourceId,
     sourceUrl: snapshotCompetitor.sourceUrl

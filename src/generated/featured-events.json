@@ -1,13 +1,13 @@
 {
   "source": "gosofia",
-  "syncedAt": "2026-10-10T19:00:00Z",
+  "syncedAt": "2026-10-10T20:31:07.914Z",
   "calendarUrl": "",
   "events": [
     {
       "id": "e-gosofia-2387",
       "source": "gosofia",
       "sourceEventId": "2387",
-      "observedAt": "2026-10-10T19:00:00Z",
+      "observedAt": "2026-10-10T20:31:07.914Z",
       "name": "Grappling Grand Prix 88",
       "organizer": "New Eventic Aventura Ltd.",
       "city": "Sofia",
@@ -18,20 +18,172 @@
       "status": "upcoming",
       "coverage": {
         "level": "partial",
-        "matchCount": 3,
+        "matchCount": 8,
         "scoredMatches": 0,
-        "liveScores": false
+        "liveScores": false,
+        "totalBrackets": 2,
+        "importedBrackets": 2
       },
       "warnings": [
-        "Three announced superfights are included. The eight-person 88 kg tournament draw is not verified.",
-        "The time shown is the event start in Sofia (19:00); individual bout times and live scores are not published.",
-        "Card report: https://sportal.bg/news-2026092110342831660"
+        "The complete eight-person tournament draw is included: four quarterfinals, two semifinals and the final. Advancement opponents await results.",
+        "Four superfights are verified. Reports mention five; the remaining pairing has not been verified.",
+        "Georgi Angelov replaces the injured Petko Petkov against Kiril Antonov (organizer announcement).",
+        "19:00 Sofia is the event start. Individual bout times and live results have not been published."
       ],
       "matches": [
         {
+          "sourceMatchId": "ggp88-qf1",
+          "sourceBracketId": "ggp88-main",
+          "division": "Main tournament / -88 kg",
+          "round": "Quarterfinal",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026100310330051191",
+          "competitorA": {
+            "sourceId": "kalin-zhelezov",
+            "name": "Kalin Zhelezov",
+            "academy": "Desant / BJJ Varna",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DcQRTfcOmVF.jpg",
+            "imageFocus": {
+              "x": 0.395,
+              "y": 0.285,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DcQRTfcOmVF/"
+          },
+          "competitorB": {
+            "sourceId": "sebastian-curelaru",
+            "name": "Sebastian Curelaru",
+            "academy": "Los Banditos",
+            "country": "RO",
+            "imageUrl": "/competitors/ggp88/Dclog-RtfJD.jpg",
+            "imageFocus": {
+              "x": 0.444,
+              "y": 0.35,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dclog-RtfJD/"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-qf2",
+          "sourceBracketId": "ggp88-main",
+          "division": "Main tournament / -88 kg",
+          "round": "Quarterfinal",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026100310330051191",
+          "competitorA": {
+            "sourceId": "konstantin-stoichkov",
+            "name": "Konstantin Stoichkov",
+            "academy": "Pitbulls MatSide",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Db04oVsNDbp.jpg",
+            "imageFocus": {
+              "x": 0.498,
+              "y": 0.325,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Db04oVsNDbp/"
+          },
+          "competitorB": {
+            "sourceId": "cristian-tugulea",
+            "name": "Cristian Tugulea",
+            "academy": "OnTop BJJ",
+            "country": "MD",
+            "imageUrl": "/competitors/ggp88/DdT-NIFNJJ8.jpg",
+            "imageFocus": {
+              "x": 0.5,
+              "y": 0.26,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DdT-NIFNJJ8/"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-qf3",
+          "sourceBracketId": "ggp88-main",
+          "division": "Main tournament / -88 kg",
+          "round": "Quarterfinal",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026100310330051191",
+          "competitorA": {
+            "sourceId": "adam-muskhadziev",
+            "name": "Adam Muskhadziev",
+            "academy": "Twisted Jiu-Jitsu",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DcF4CVBNm7W.jpg",
+            "imageFocus": {
+              "x": 0.455,
+              "y": 0.305,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DcF4CVBNm7W/"
+          },
+          "competitorB": {
+            "sourceId": "nemanja-ristic",
+            "name": "Nemanja Ristic",
+            "academy": "Vin BJJ",
+            "country": "RS",
+            "imageUrl": "/competitors/ggp88/Dc0QrhiO6aF.jpg",
+            "imageFocus": {
+              "x": 0.354,
+              "y": 0.31,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dc0QrhiO6aF/"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-qf4",
+          "sourceBracketId": "ggp88-main",
+          "division": "Main tournament / -88 kg",
+          "round": "Quarterfinal",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026100310330051191",
+          "competitorA": {
+            "sourceId": "viktor-grigorov",
+            "name": "Viktor Grigorov",
+            "academy": "Fight Club Ruse",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Dcbdr3dtFWx.jpg",
+            "imageFocus": {
+              "x": 0.38,
+              "y": 0.35,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dcbdr3dtFWx/"
+          },
+          "competitorB": {
+            "sourceId": "vladislav-kanchev",
+            "name": "Vladislav Kanchev",
+            "academy": "C-4 Team",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DbyBEMZN_PW.jpg",
+            "imageFocus": {
+              "x": 0.5,
+              "y": 0.36,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DbyBEMZN_PW/"
+          }
+        },
+        {
           "sourceMatchId": "ggp88-kaloyan-kolev-dimitar-shtarbanov",
-          "division": "Submission grappling / Superfight / -100 kg",
-          "round": "Announced superfight",
+          "sourceBracketId": "ggp88-superfights",
+          "division": "Superfights / -100 kg",
+          "round": "Superfight",
           "mat": "Mat TBA",
           "scheduledAt": "2026-10-11T19:00:00+03:00",
           "status": "locked",
@@ -40,18 +192,35 @@
           "competitorA": {
             "sourceId": "kaloyan-kolev",
             "name": "Kaloyan Kolev",
-            "country": "BG"
+            "academy": "",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+            "imageFocus": {
+              "x": 0.266,
+              "y": 0.205,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/"
           },
           "competitorB": {
             "sourceId": "dimitar-shtarbanov",
             "name": "Dimitar Shtarbanov",
-            "country": "BG"
+            "academy": "",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+            "imageFocus": {
+              "x": 0.756,
+              "y": 0.21,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/"
           }
         },
         {
           "sourceMatchId": "ggp88-delyan-georgiev-kristiyan-nedkov",
-          "division": "Submission grappling / Superfight",
-          "round": "Announced superfight",
+          "sourceBracketId": "ggp88-superfights",
+          "division": "Superfights / -75 kg",
+          "round": "Superfight",
           "mat": "Mat TBA",
           "scheduledAt": "2026-10-11T19:00:00+03:00",
           "status": "locked",
@@ -60,36 +229,821 @@
           "competitorA": {
             "sourceId": "delyan-georgiev",
             "name": "Delyan Georgiev",
-            "country": "BG"
+            "academy": "Vikings",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+            "imageFocus": {
+              "x": 0.23,
+              "y": 0.326,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/"
           },
           "competitorB": {
             "sourceId": "kristiyan-nedkov",
             "name": "Kristiyan Nedkov",
-            "country": "BG"
+            "academy": "Levski Fight Club",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+            "imageFocus": {
+              "x": 0.775,
+              "y": 0.327,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/"
           }
         },
         {
-          "sourceMatchId": "ggp88-petko-petkov-kiril-antonov",
-          "division": "Submission grappling / Superfight",
-          "round": "Announced superfight",
+          "sourceMatchId": "ggp88-georgi-angelov-kiril-antonov",
+          "sourceBracketId": "ggp88-superfights",
+          "division": "Superfights",
+          "round": "Superfight",
           "mat": "Mat TBA",
           "scheduledAt": "2026-10-11T19:00:00+03:00",
           "status": "locked",
           "sourceState": "card-announced",
-          "sourceUrl": "https://sportal.bg/news-2026092110342831660",
+          "sourceUrl": "https://www.instagram.com/p/DeSM9jGx1Cm/",
           "competitorA": {
-            "sourceId": "petko-petkov",
-            "name": "Petko Petkov",
-            "country": "BG"
+            "sourceId": "georgi-angelov",
+            "name": "Georgi Angelov",
+            "academy": "Z Team Jiu-Jitsu",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DeSM9jGx1Cm.jpg",
+            "imageFocus": {
+              "x": 0.77,
+              "y": 0.29,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DeSM9jGx1Cm/"
           },
           "competitorB": {
             "sourceId": "kiril-antonov",
             "name": "Kiril Antonov",
-            "country": "BG"
+            "academy": "",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/DdGJUNQuwmD.jpg",
+            "imageFocus": {
+              "x": 0.244,
+              "y": 0.27,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/DdGJUNQuwmD/"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-vladislav-genov-radoslav-bukorov",
+          "sourceBracketId": "ggp88-superfights",
+          "division": "Superfights",
+          "round": "Superfight",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026092906422426106",
+          "competitorA": {
+            "sourceId": "vladislav-genov",
+            "name": "Vladislav Genov",
+            "academy": "Vladislav Genov Fight Team",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+            "imageFocus": {
+              "x": 0.26,
+              "y": 0.235,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/"
+          },
+          "competitorB": {
+            "sourceId": "radoslav-bukorov",
+            "name": "Radoslav Bukorov",
+            "academy": "BJJ Varna / Bruno Bastos",
+            "country": "BG",
+            "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+            "imageFocus": {
+              "x": 0.735,
+              "y": 0.25,
+              "zoom": 3.6
+            },
+            "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/"
           }
         }
       ],
-      "officialUrl": "https://www.kupibileti.bg/en/about-event/2748"
+      "officialUrl": "https://www.kupibileti.bg/en/about-event/2748",
+      "withdrawnMatchIds": [
+        "ggp88-petko-petkov-kiril-antonov"
+      ],
+      "brackets": [
+        {
+          "sourceId": "ggp88-main",
+          "name": "Main tournament / -88 kg",
+          "registrations": 8,
+          "mat": "",
+          "startsAt": "2026-10-11T19:00:00+03:00",
+          "sourceUrl": "https://sportal.bg/news-2026100310330051191",
+          "loaded": true,
+          "bouts": [
+            {
+              "sourceId": "ggp88-qf1",
+              "number": "QF1",
+              "round": "Quarterfinal",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Kalin Zhelezov",
+                  "participant": {
+                    "sourceId": "kalin-zhelezov",
+                    "name": "Kalin Zhelezov",
+                    "academy": "Desant / BJJ Varna",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DcQRTfcOmVF.jpg",
+                    "imageFocus": {
+                      "x": 0.395,
+                      "y": 0.285,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DcQRTfcOmVF/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Sebastian Curelaru",
+                  "participant": {
+                    "sourceId": "sebastian-curelaru",
+                    "name": "Sebastian Curelaru",
+                    "academy": "Los Banditos",
+                    "country": "RO",
+                    "imageUrl": "/competitors/ggp88/Dclog-RtfJD.jpg",
+                    "imageFocus": {
+                      "x": 0.444,
+                      "y": 0.35,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dclog-RtfJD/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-qf2",
+              "number": "QF2",
+              "round": "Quarterfinal",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Konstantin Stoichkov",
+                  "participant": {
+                    "sourceId": "konstantin-stoichkov",
+                    "name": "Konstantin Stoichkov",
+                    "academy": "Pitbulls MatSide",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Db04oVsNDbp.jpg",
+                    "imageFocus": {
+                      "x": 0.498,
+                      "y": 0.325,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Db04oVsNDbp/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Cristian Tugulea",
+                  "participant": {
+                    "sourceId": "cristian-tugulea",
+                    "name": "Cristian Tugulea",
+                    "academy": "OnTop BJJ",
+                    "country": "MD",
+                    "imageUrl": "/competitors/ggp88/DdT-NIFNJJ8.jpg",
+                    "imageFocus": {
+                      "x": 0.5,
+                      "y": 0.26,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DdT-NIFNJJ8/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-qf3",
+              "number": "QF3",
+              "round": "Quarterfinal",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Adam Muskhadziev",
+                  "participant": {
+                    "sourceId": "adam-muskhadziev",
+                    "name": "Adam Muskhadziev",
+                    "academy": "Twisted Jiu-Jitsu",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DcF4CVBNm7W.jpg",
+                    "imageFocus": {
+                      "x": 0.455,
+                      "y": 0.305,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DcF4CVBNm7W/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Nemanja Ristic",
+                  "participant": {
+                    "sourceId": "nemanja-ristic",
+                    "name": "Nemanja Ristic",
+                    "academy": "Vin BJJ",
+                    "country": "RS",
+                    "imageUrl": "/competitors/ggp88/Dc0QrhiO6aF.jpg",
+                    "imageFocus": {
+                      "x": 0.354,
+                      "y": 0.31,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dc0QrhiO6aF/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-qf4",
+              "number": "QF4",
+              "round": "Quarterfinal",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Viktor Grigorov",
+                  "participant": {
+                    "sourceId": "viktor-grigorov",
+                    "name": "Viktor Grigorov",
+                    "academy": "Fight Club Ruse",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Dcbdr3dtFWx.jpg",
+                    "imageFocus": {
+                      "x": 0.38,
+                      "y": 0.35,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dcbdr3dtFWx/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Vladislav Kanchev",
+                  "participant": {
+                    "sourceId": "vladislav-kanchev",
+                    "name": "Vladislav Kanchev",
+                    "academy": "C-4 Team",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DbyBEMZN_PW.jpg",
+                    "imageFocus": {
+                      "x": 0.5,
+                      "y": 0.36,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DbyBEMZN_PW/",
+                    "division": "Main tournament / -88 kg"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-sf1",
+              "number": "SF1",
+              "round": "Semifinal",
+              "roundOrder": 2,
+              "state": "awaiting-opponents",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Winner of QF1",
+                  "participant": null,
+                  "winner": false
+                },
+                {
+                  "label": "Winner of QF2",
+                  "participant": null,
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-sf2",
+              "number": "SF2",
+              "round": "Semifinal",
+              "roundOrder": 2,
+              "state": "awaiting-opponents",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Winner of QF3",
+                  "participant": null,
+                  "winner": false
+                },
+                {
+                  "label": "Winner of QF4",
+                  "participant": null,
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-final",
+              "number": "FINAL",
+              "round": "Final",
+              "roundOrder": 3,
+              "state": "awaiting-opponents",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Winner of SF1",
+                  "participant": null,
+                  "winner": false
+                },
+                {
+                  "label": "Winner of SF2",
+                  "participant": null,
+                  "winner": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sourceId": "ggp88-superfights",
+          "name": "Superfights",
+          "registrations": 8,
+          "mat": "",
+          "startsAt": "2026-10-11T19:00:00+03:00",
+          "sourceUrl": "https://www.instagram.com/grapplinggrandprix/",
+          "loaded": true,
+          "bouts": [
+            {
+              "sourceId": "ggp88-kaloyan-kolev-dimitar-shtarbanov",
+              "number": "",
+              "round": "Superfight",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Kaloyan Kolev",
+                  "participant": {
+                    "sourceId": "kaloyan-kolev",
+                    "name": "Kaloyan Kolev",
+                    "academy": "",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+                    "imageFocus": {
+                      "x": 0.266,
+                      "y": 0.205,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Dimitar Shtarbanov",
+                  "participant": {
+                    "sourceId": "dimitar-shtarbanov",
+                    "name": "Dimitar Shtarbanov",
+                    "academy": "",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+                    "imageFocus": {
+                      "x": 0.756,
+                      "y": 0.21,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-delyan-georgiev-kristiyan-nedkov",
+              "number": "",
+              "round": "Superfight",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Delyan Georgiev",
+                  "participant": {
+                    "sourceId": "delyan-georgiev",
+                    "name": "Delyan Georgiev",
+                    "academy": "Vikings",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+                    "imageFocus": {
+                      "x": 0.23,
+                      "y": 0.326,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Kristiyan Nedkov",
+                  "participant": {
+                    "sourceId": "kristiyan-nedkov",
+                    "name": "Kristiyan Nedkov",
+                    "academy": "Levski Fight Club",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+                    "imageFocus": {
+                      "x": 0.775,
+                      "y": 0.327,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-georgi-angelov-kiril-antonov",
+              "number": "",
+              "round": "Superfight",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Georgi Angelov",
+                  "participant": {
+                    "sourceId": "georgi-angelov",
+                    "name": "Georgi Angelov",
+                    "academy": "Z Team Jiu-Jitsu",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DeSM9jGx1Cm.jpg",
+                    "imageFocus": {
+                      "x": 0.77,
+                      "y": 0.29,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DeSM9jGx1Cm/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Kiril Antonov",
+                  "participant": {
+                    "sourceId": "kiril-antonov",
+                    "name": "Kiril Antonov",
+                    "academy": "",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/DdGJUNQuwmD.jpg",
+                    "imageFocus": {
+                      "x": 0.244,
+                      "y": 0.27,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/DdGJUNQuwmD/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                }
+              ]
+            },
+            {
+              "sourceId": "ggp88-vladislav-genov-radoslav-bukorov",
+              "number": "",
+              "round": "Superfight",
+              "roundOrder": 1,
+              "state": "card-announced",
+              "mat": "",
+              "startsAt": "",
+              "finish": "",
+              "clock": "",
+              "seats": [
+                {
+                  "label": "Vladislav Genov",
+                  "participant": {
+                    "sourceId": "vladislav-genov",
+                    "name": "Vladislav Genov",
+                    "academy": "Vladislav Genov Fight Team",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+                    "imageFocus": {
+                      "x": 0.26,
+                      "y": 0.235,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                },
+                {
+                  "label": "Radoslav Bukorov",
+                  "participant": {
+                    "sourceId": "radoslav-bukorov",
+                    "name": "Radoslav Bukorov",
+                    "academy": "BJJ Varna / Bruno Bastos",
+                    "country": "BG",
+                    "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+                    "imageFocus": {
+                      "x": 0.735,
+                      "y": 0.25,
+                      "zoom": 3.6
+                    },
+                    "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/",
+                    "division": "Superfights"
+                  },
+                  "winner": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "participants": [
+        {
+          "sourceId": "kalin-zhelezov",
+          "name": "Kalin Zhelezov",
+          "academy": "Desant / BJJ Varna",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DcQRTfcOmVF.jpg",
+          "imageFocus": {
+            "x": 0.395,
+            "y": 0.285,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DcQRTfcOmVF/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "sebastian-curelaru",
+          "name": "Sebastian Curelaru",
+          "academy": "Los Banditos",
+          "country": "RO",
+          "imageUrl": "/competitors/ggp88/Dclog-RtfJD.jpg",
+          "imageFocus": {
+            "x": 0.444,
+            "y": 0.35,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dclog-RtfJD/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "konstantin-stoichkov",
+          "name": "Konstantin Stoichkov",
+          "academy": "Pitbulls MatSide",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Db04oVsNDbp.jpg",
+          "imageFocus": {
+            "x": 0.498,
+            "y": 0.325,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Db04oVsNDbp/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "cristian-tugulea",
+          "name": "Cristian Tugulea",
+          "academy": "OnTop BJJ",
+          "country": "MD",
+          "imageUrl": "/competitors/ggp88/DdT-NIFNJJ8.jpg",
+          "imageFocus": {
+            "x": 0.5,
+            "y": 0.26,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DdT-NIFNJJ8/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "adam-muskhadziev",
+          "name": "Adam Muskhadziev",
+          "academy": "Twisted Jiu-Jitsu",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DcF4CVBNm7W.jpg",
+          "imageFocus": {
+            "x": 0.455,
+            "y": 0.305,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DcF4CVBNm7W/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "nemanja-ristic",
+          "name": "Nemanja Ristic",
+          "academy": "Vin BJJ",
+          "country": "RS",
+          "imageUrl": "/competitors/ggp88/Dc0QrhiO6aF.jpg",
+          "imageFocus": {
+            "x": 0.354,
+            "y": 0.31,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dc0QrhiO6aF/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "viktor-grigorov",
+          "name": "Viktor Grigorov",
+          "academy": "Fight Club Ruse",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Dcbdr3dtFWx.jpg",
+          "imageFocus": {
+            "x": 0.38,
+            "y": 0.35,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dcbdr3dtFWx/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "vladislav-kanchev",
+          "name": "Vladislav Kanchev",
+          "academy": "C-4 Team",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DbyBEMZN_PW.jpg",
+          "imageFocus": {
+            "x": 0.5,
+            "y": 0.36,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DbyBEMZN_PW/",
+          "division": "Main tournament / -88 kg"
+        },
+        {
+          "sourceId": "kaloyan-kolev",
+          "name": "Kaloyan Kolev",
+          "academy": "",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+          "imageFocus": {
+            "x": 0.266,
+            "y": 0.205,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "dimitar-shtarbanov",
+          "name": "Dimitar Shtarbanov",
+          "academy": "",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DdhBhbetZi4.jpg",
+          "imageFocus": {
+            "x": 0.756,
+            "y": 0.21,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DdhBhbetZi4/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "delyan-georgiev",
+          "name": "Delyan Georgiev",
+          "academy": "Vikings",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+          "imageFocus": {
+            "x": 0.23,
+            "y": 0.326,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "kristiyan-nedkov",
+          "name": "Kristiyan Nedkov",
+          "academy": "Levski Fight Club",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Dc-6jjsOQ1O.jpg",
+          "imageFocus": {
+            "x": 0.775,
+            "y": 0.327,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dc-6jjsOQ1O/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "georgi-angelov",
+          "name": "Georgi Angelov",
+          "academy": "Z Team Jiu-Jitsu",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DeSM9jGx1Cm.jpg",
+          "imageFocus": {
+            "x": 0.77,
+            "y": 0.29,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DeSM9jGx1Cm/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "kiril-antonov",
+          "name": "Kiril Antonov",
+          "academy": "",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/DdGJUNQuwmD.jpg",
+          "imageFocus": {
+            "x": 0.244,
+            "y": 0.27,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/DdGJUNQuwmD/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "vladislav-genov",
+          "name": "Vladislav Genov",
+          "academy": "Vladislav Genov Fight Team",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+          "imageFocus": {
+            "x": 0.26,
+            "y": 0.235,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/",
+          "division": "Superfights"
+        },
+        {
+          "sourceId": "radoslav-bukorov",
+          "name": "Radoslav Bukorov",
+          "academy": "BJJ Varna / Bruno Bastos",
+          "country": "BG",
+          "imageUrl": "/competitors/ggp88/Dd1pLc9OUZJ.jpg",
+          "imageFocus": {
+            "x": 0.735,
+            "y": 0.25,
+            "zoom": 3.6
+          },
+          "sourceUrl": "https://www.instagram.com/p/Dd1pLc9OUZJ/",
+          "division": "Superfights"
+        }
+      ],
+      "participantsStatus": "published"
     }
   ]
 }

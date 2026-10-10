@@ -15,6 +15,8 @@ export type TradeSide = "buy" | "sell";
 
 export type BeltRank = "unknown" | "white" | "grey" | "yellow" | "orange" | "green" | "blue" | "purple" | "brown" | "black";
 
+export type ImageFocus = { x: number; y: number; zoom: number };
+
 export type Competitor = {
   id: string;
   name: string;
@@ -24,6 +26,7 @@ export type Competitor = {
   seed: number;
   record: string;
   imageUrl?: string;
+  imageFocus?: ImageFocus;
   clubLogoUrl?: string;
   sourceId?: string;
   sourceUrl?: string;
@@ -31,7 +34,8 @@ export type Competitor = {
 
 export type EventParticipant = {
   sourceId: string; name: string; academy: string; country: string; division: string;
-  imageUrl?: string; sourceUrl?: string;
+  imageUrl?: string;
+  imageFocus?: ImageFocus; sourceUrl?: string;
 };
 export type PublishedBout = {
   sourceId: string; number: string; round: string; roundOrder: number; state: string;
@@ -51,10 +55,12 @@ export type Event = {
   city: string;
   venue?: string;
   imageUrl?: string;
+  imageFocus?: ImageFocus;
   categoryGroups?: string[];
   participants?: EventParticipant[];
   participantsStatus?: "published" | "unavailable";
   brackets?: CompetitionBracket[];
+  withdrawnMatchIds?: string[];
   startsAt: string;
   endsAt?: string;
   sourceUrl: string;

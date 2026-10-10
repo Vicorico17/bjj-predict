@@ -42,3 +42,16 @@ test('partial catalogs retain saved matchups and byes stay in brackets', () => {
   const bye = { ...bout, seats: [bout.seats[0], { label: 'Bye', participant: null, winner: false }] };
   assert.match(render({ event: { ...event, brackets: [{ ...event.brackets[0], bouts: [bye] }] } }), /No games with both athletes loaded yet/);
 });
+
+test('reviewed tournament shows all rounds and portraits without platform-only actions', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const featured = JSON.parse(await readFile('src/generated/featured-events.json', 'utf8')).events[0];
+  const html = render({ event: featured });
+  assert.equal((html.match(/class="competition-game"/g) || []).length, 11);
+  assert.equal((html.match(/alt="[^"]+ portrait"/g) || []).length, 16);
+  assert.match(html, /Winner of QF1/);
+  assert.match(html, /Winner of SF2/);
+  assert.match(html, /Georgi Angelov/);
+  assert.doesNotMatch(html, /Load all divisions|Refresh all divisions|View on Smoothcomp/);
+  assert.doesNotMatch(html, /aria-label="Winner"/);
+});

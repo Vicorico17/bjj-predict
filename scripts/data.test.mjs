@@ -198,7 +198,9 @@ test('Reviewed bouts supplement a freshly fetched independent event listing', as
   assert.equal(providerFor(url), 'gosofia');
   assert.equal(providerFor('https://www.go-sofia.com/Events/Details/9999'), 'gosofia');
   const imported = await importData(url, { fetchImpl: async () => new Response(await fixture('directory-sofia-event.html')), pauseMs: 0 });
-  assert.equal(imported.events[0].matches.length, 3);
+  assert.equal(imported.events[0].matches.length, 8);
+  assert.equal(imported.events[0].brackets[0].bouts.length, 7);
+  assert.equal(imported.events[0].participants.length, 16);
   assert.equal(imported.events[0].city, 'Sofia');
-  assert(imported.events[0].matches.every(match => match.status === 'locked' && match.sourceUrl.includes('sportal.bg')));
+  assert(imported.events[0].matches.every(match => match.status === 'locked' && ['sportal.bg', 'www.instagram.com'].includes(new URL(match.sourceUrl).hostname)));
 });

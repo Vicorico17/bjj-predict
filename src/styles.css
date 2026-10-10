@@ -1770,3 +1770,27 @@ input[type="url"]:focus,
   .competition-data-filters label { min-width: 100%; }
   .game-status-filters { padding: 14px 12px 0; }
 }
+
+/* Shared competitor photographs, including focus crops of official event artwork. */
+.competitor-portrait { position: relative; }
+.competitor-portrait > img { position: absolute; width: 100%; height: 100%; max-width: none; left: 0; top: 0; object-fit: cover; border-radius: 0; }
+.competition-athlete .competitor-portrait { width: 54px; height: 54px; }
+.portrait-name { display: flex; align-items: center; gap: 8px; }
+.published-seat .competitor-portrait.compact { width: 42px; height: 42px; }
+
+/* Keep competition data readable within the application's dark theme. */
+.competition-data { background: #101413; border-color: #2b3430; color: #edf3ef; }
+.competition-data-filters, .published-bout header, .published-bout footer { background: #171e1a; color: #a8b8ae; }
+.competition-data-filters select, .competition-search-input, .published-bout, .game-status-filters button { background: #101413; color: #edf3ef; border-color: #35423b; }
+.competition-search-input input { color: #edf3ef; }
+.competition-data-tabs, .competition-athlete, .published-bout, .published-seat, .competition-game { border-color: #2b3430; }
+.competition-data-heading p, .competition-data-notice, .competition-data .small-note, .competition-data-filters label,
+.competition-athlete span, .competition-athlete small, .published-draw-heading span, .published-round h5, .published-seat small,
+.competition-game-heading > span, .competition-data-empty, .competition-data-tabs button { color: #a8b8ae; }
+.competition-data a, .competition-data-tabs button[aria-selected="true"], .game-state.finished { color: #72e6ae; }
+.competition-data-tabs button[aria-selected="true"] { border-bottom-color: #36cc8b; }
+.published-seat.winner { background: #123724; color: #acffd3; }
+.published-seat.pending { color: #afc0b5; }
+.game-status-filters button[aria-pressed="true"] { background: #215e41; border-color: #42b57d; }
+.game-state.live { color: #ff9494; }
+.competition-data-heading .empty-actions { display: flex; gap: 8px; flex-wrap: wrap; }
