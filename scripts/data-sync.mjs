@@ -17,7 +17,7 @@ if (args.includes('--discover')) {
   });
   await writeFile(`${output}.tmp`, JSON.stringify(snapshot, null, 2) + '\n');
   await rename(`${output}.tmp`, output);
-  console.log(discovery.providers.map(p => `${p.source}: ${p.status === 'ok' ? p.discovered + ' discovered' : p.error}`).join('\n'));
+  console.log(discovery.providers.map(p => `${p.source}: ${p.status === 'error' ? p.error : p.discovered + ' discovered' + (p.status === 'partial' ? ' (partial: ' + p.warnings.join('; ') + ')' : '')}`).join('\n'));
   if (args.includes('--import-current')) urls.push(...discovery.events.filter(event => ['live', 'upcoming'].includes(event.status)).slice(0, 8).map(event => event.sourceUrl));
 }
 for (const url of new Set(urls)) {

@@ -31,7 +31,13 @@ export function loadState(): AppState {
 }
 
 export function saveState(state: AppState) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
+  } catch {
+    // Large tournament draws can exceed browser storage. Keep the live session usable.
+    return false;
+  }
 }
 
 export function resetState() {

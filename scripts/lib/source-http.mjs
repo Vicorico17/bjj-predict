@@ -4,7 +4,9 @@ export function allowedSourceUrl(input) {
   if (url.protocol !== 'https:' || url.port || url.username || url.password ||
       !(host === 'smoothcomp.com' || host.endsWith('.smoothcomp.com') ||
         ['ajptour.com', 'www.ajptour.com', 'www.bjjcompsystem.com', 'bjjcompsystem.com',
-          'arena.flograppling.com', 'www.flograppling.com', 'flograppling.com', 'api.flograppling.com'].includes(host))) {
+          'arena.flograppling.com', 'www.flograppling.com', 'flograppling.com', 'api.flograppling.com',
+          'www.bjj-championships.com', 'grapplersnews.jp', 'www.go-sofia.com',
+          'www.onefc.com', 'www.ufc.com.br', 'ufc.com.br', 'ge.globo.com'].includes(host))) {
     throw new Error('Unsupported data-source URL.');
   }
   return url;

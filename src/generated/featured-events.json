@@ -1,0 +1,95 @@
+{
+  "source": "gosofia",
+  "syncedAt": "2026-10-10T19:00:00Z",
+  "calendarUrl": "",
+  "events": [
+    {
+      "id": "e-gosofia-2387",
+      "source": "gosofia",
+      "sourceEventId": "2387",
+      "observedAt": "2026-10-10T19:00:00Z",
+      "name": "Grappling Grand Prix 88",
+      "organizer": "New Eventic Aventura Ltd.",
+      "city": "Sofia",
+      "country": "Bulgaria",
+      "venue": "Club Mixtape 5, 1 Bulgaria Boulevard, Gallery Underpass (NDK)",
+      "startsAt": "2026-10-11T19:00:00+03:00",
+      "sourceUrl": "https://www.go-sofia.com/Events/Details/2387",
+      "status": "upcoming",
+      "coverage": {
+        "level": "partial",
+        "matchCount": 3,
+        "scoredMatches": 0,
+        "liveScores": false
+      },
+      "warnings": [
+        "Three announced superfights are included. The eight-person 88 kg tournament draw is not verified.",
+        "The time shown is the event start in Sofia (19:00); individual bout times and live scores are not published.",
+        "Card report: https://sportal.bg/news-2026092110342831660"
+      ],
+      "matches": [
+        {
+          "sourceMatchId": "ggp88-kaloyan-kolev-dimitar-shtarbanov",
+          "division": "Submission grappling / Superfight / -100 kg",
+          "round": "Announced superfight",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026092110342831660",
+          "competitorA": {
+            "sourceId": "kaloyan-kolev",
+            "name": "Kaloyan Kolev",
+            "country": "BG"
+          },
+          "competitorB": {
+            "sourceId": "dimitar-shtarbanov",
+            "name": "Dimitar Shtarbanov",
+            "country": "BG"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-delyan-georgiev-kristiyan-nedkov",
+          "division": "Submission grappling / Superfight",
+          "round": "Announced superfight",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026092110342831660",
+          "competitorA": {
+            "sourceId": "delyan-georgiev",
+            "name": "Delyan Georgiev",
+            "country": "BG"
+          },
+          "competitorB": {
+            "sourceId": "kristiyan-nedkov",
+            "name": "Kristiyan Nedkov",
+            "country": "BG"
+          }
+        },
+        {
+          "sourceMatchId": "ggp88-petko-petkov-kiril-antonov",
+          "division": "Submission grappling / Superfight",
+          "round": "Announced superfight",
+          "mat": "Mat TBA",
+          "scheduledAt": "2026-10-11T19:00:00+03:00",
+          "status": "locked",
+          "sourceState": "card-announced",
+          "sourceUrl": "https://sportal.bg/news-2026092110342831660",
+          "competitorA": {
+            "sourceId": "petko-petkov",
+            "name": "Petko Petkov",
+            "country": "BG"
+          },
+          "competitorB": {
+            "sourceId": "kiril-antonov",
+            "name": "Kiril Antonov",
+            "country": "BG"
+          }
+        }
+      ],
+      "officialUrl": "https://www.kupibileti.bg/en/about-event/2748"
+    }
+  ]
+}

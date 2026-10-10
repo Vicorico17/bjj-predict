@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import discoverHandler from "./api/data/discover.mjs";
 import importHandler from "./api/data/import.mjs";
+import probeHandler from "./api/data/probe.mjs";
 import floHandler from "./api/flo/refresh.mjs";
 import react from "@vitejs/plugin-react";
 import { spawn } from "node:child_process";
@@ -113,7 +114,7 @@ function smoothcompRefreshPlugin() {
   return {
     name: "smoothcomp-refresh-api",
     configureServer(server) {
-      for (const [route, handler] of [["/api/data/discover", discoverHandler], ["/api/data/import", importHandler], ["/api/flo/refresh", floHandler]]) server.middlewares.use(route, async (req, res) => {
+      for (const [route, handler] of [["/api/data/discover", discoverHandler], ["/api/data/import", importHandler], ["/api/data/probe", probeHandler], ["/api/flo/refresh", floHandler]]) server.middlewares.use(route, async (req, res) => {
         let body = "";
         for await (const chunk of req) {
           body += chunk;

@@ -5,10 +5,10 @@ import type { DataSnapshot } from './smoothcomp';
 import type { DataProvider, Event } from './types';
 
 export const sourceLabels: Record<DataProvider | 'manual', string> = {
-  smoothcomp: 'Smoothcomp', ajp: 'AJP Tour', ibjjf: 'IBJJF', floarena: 'FloArena', flo: 'FloGrappling', manual: 'Manual'
+  smoothcomp: 'Smoothcomp', ajp: 'AJP Tour', ibjjf: 'IBJJF', floarena: 'FloArena', flo: 'FloGrappling', one: 'ONE Championship', ufcbjj: 'UFC BJJ', bjjcalendar: 'BJJ Championships', grapplingnews: 'GrapplersNews', gosofia: 'Go Sofia', curated: 'Reviewed card', manual: 'Manual'
 };
 type Candidate = { id: string; source: DataProvider; sourceEventId: string; name: string; sourceUrl: string; startsAt: string; endsAt?: string; city?: string; country?: string; coverage?: Event['coverage']; status: Event['status'] };
-type Discovery = { checkedAt: string; events: Candidate[]; providers: Array<{ source: string; status: string; discovered?: number; error?: string }> };
+type Discovery = { checkedAt: string; events: Candidate[]; providers: Array<{ source: string; status: string; discovered?: number; error?: string; warnings?: string[] }> };
 
 export function DataSourcesPanel({ events, onImport, onDiscover }: { events: Event[]; onImport: (snapshot: DataSnapshot) => void; onDiscover: (discovery: Discovery) => void }) {
   const [discovery, setDiscovery] = useState(initialDiscovery as Discovery);
@@ -102,7 +102,7 @@ export function DataSourcesPanel({ events, onImport, onDiscover }: { events: Eve
 
   return <div className="panel data-sources-panel">
     <div className="section-heading"><div><span className="eyebrow">Event coverage</span><h2>Find and import competitions</h2></div></div>
-    <p>Smoothcomp · AJP Tour · IBJJF · FloArena · FloGrappling</p>
+    <p>Tournament platforms · Worldwide calendars · Independent shows · Local event listings</p>
     <div className="admin-actions">
       <button className="primary-button" disabled={!!busy} onClick={() => void discover()}>Discover current events</button>
       <button className="primary-button" disabled={!!busy || !importable.length} onClick={() => void importCurrentEvents()}>
@@ -111,16 +111,17 @@ export function DataSourcesPanel({ events, onImport, onDiscover }: { events: Eve
       <button className="ghost-button" disabled={!!busy} onClick={refreshImported}>Refresh current events</button>
     </div>
     <p className="source-checked">Discovery checked: {formatDateTime(discovery.checkedAt)}</p>
-    <div className="provider-statuses">{discovery.providers.map(provider => <span key={provider.source} className={`status-pill ${provider.status === 'error' ? 'warning' : ''}`} title={provider.error}>
-      {sourceLabels[provider.source as DataProvider]}: {provider.status === 'ok' ? `${provider.discovered} found` : 'unavailable'}
+    <div className="provider-statuses">{discovery.providers.map(provider => <span key={provider.source} className={`status-pill ${provider.status !== 'ok' ? 'warning' : ''}`} title={provider.error}>
+      {sourceLabels[provider.source as DataProvider]}: {provider.status === 'error' ? 'unavailable' : `${provider.discovered} found${provider.status === 'partial' ? ' · partial' : ''}`}
     </span>)}</div>
     {discovery.providers.filter(provider => provider.error).map(provider => <p className="source-checked" key={provider.source}>{sourceLabels[provider.source as DataProvider]}: {provider.error}</p>)}
+    {discovery.providers.flatMap(provider => (provider.warnings || []).map((warning, index) => <p className="source-checked" key={`${provider.source}-${index}`}>{sourceLabels[provider.source as DataProvider]}: {warning}</p>))}
     <form className="import-form" onSubmit={event => { event.preventDefault(); void importEvent(url); }}>
       <label htmlFor="source-event-url">Event URL from any supported provider</label>
       <input id="source-event-url" type="url" required value={url} onChange={event => setUrl(event.target.value)} placeholder="Paste a Smoothcomp, AJP, IBJJF, FloArena or Flo event URL" />
       <label htmlFor="bracket-limit">Brackets per event</label>
       <select id="bracket-limit" value={limit} onChange={event => setLimit(Number(event.target.value))}>
-        <option value={30}>30 — quicker import</option><option value={100}>100 — maximum coverage</option>
+        <option value={30}>30 — quicker import</option><option value={100}>100 brackets</option><option value={200}>200 — maximum coverage</option>
       </select>
       <button className="primary-button" disabled={!!busy} type="submit">Import / refresh event</button>
     </form>

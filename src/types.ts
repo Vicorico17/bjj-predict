@@ -1,8 +1,8 @@
-export type DataProvider = "smoothcomp" | "ajp" | "ibjjf" | "floarena" | "flo";
+export type DataProvider = "smoothcomp" | "ajp" | "ibjjf" | "floarena" | "flo" | "one" | "ufcbjj" | "curated" | "bjjcalendar" | "grapplingnews" | "gosofia";
 
 export type DataCoverage = {
   level: "discovered" | "partial" | "limited" | "published";
-  matchCount: number; scoredMatches: number; totalBrackets?: number; importedBrackets?: number; liveScores?: boolean;
+  matchCount: number; scoredMatches: number; totalBrackets?: number; importedBrackets?: number; nextBracketOffset?: number; liveScores?: boolean;
 };
 
 export type SportKind = "bjj" | "mma" | "boxing" | "wrestling" | "judo";
@@ -29,6 +29,20 @@ export type Competitor = {
   sourceUrl?: string;
 };
 
+export type EventParticipant = {
+  sourceId: string; name: string; academy: string; country: string; division: string;
+  imageUrl?: string; sourceUrl?: string;
+};
+export type PublishedBout = {
+  sourceId: string; number: string; round: string; roundOrder: number; state: string;
+  mat: string; startsAt: string; finish: string; clock: string; score?: MatchScore;
+  seats: Array<{ label: string; participant: EventParticipant | null; winner: boolean }>;
+};
+export type CompetitionBracket = {
+  sourceId: string; name: string; registrations: number; mat: string; startsAt: string;
+  sourceUrl: string; loaded?: boolean; bouts?: PublishedBout[];
+};
+
 export type Event = {
   id: string;
   sport: SportKind;
@@ -38,9 +52,13 @@ export type Event = {
   venue?: string;
   imageUrl?: string;
   categoryGroups?: string[];
+  participants?: EventParticipant[];
+  participantsStatus?: "published" | "unavailable";
+  brackets?: CompetitionBracket[];
   startsAt: string;
   endsAt?: string;
   sourceUrl: string;
+  officialUrl?: string;
   source: DataProvider | "manual";
   coverage?: DataCoverage;
   warnings?: string[];

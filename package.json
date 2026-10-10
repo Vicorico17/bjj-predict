@@ -11,7 +11,7 @@
     "sync:flo": "node scripts/flo-sync.mjs",
     "test:flo": "node --test scripts/flo.test.mjs",
     "sync:data": "node scripts/data-sync.mjs",
-    "test:data": "node --test scripts/data.test.mjs scripts/flo.test.mjs scripts/state.test.mjs"
+    "test:data": "node --test scripts/data.test.mjs scripts/competition.test.mjs scripts/directories.test.mjs scripts/flo.test.mjs scripts/state.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

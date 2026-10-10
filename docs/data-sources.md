@@ -1,11 +1,14 @@
 # Data coverage implementation
 
-Updated 2026-09-12. The adapters use public website responses; none is represented as a contracted API with complete coverage or uptime guarantees.
+Updated 2026-10-10. The adapters use public website responses; none is represented as a contracted API with complete coverage or uptime guarantees.
 
 ## Available providers
 
 | Provider | Discovery | Imported data | Verified limitations |
 | --- | --- | --- | --- |
+| BJJ Championships | Full published calendar payload | Event dates, location, federation, organizer links | Mirrors supported bracket providers using their IDs; other listings have no match feed |
+| GrapplersNews | Published professional-show calendar | Event dates and locations; structured event metadata | Listed events only, no verified match feed |
+| Go Sofia | Paginated sports listings filtered for grappling, then event metadata | Independent shows, date/time/venue and ticket link | 20-page request budget is explicit; page/detail failures produce partial coverage |
 | Smoothcomp | Public grappling calendar | Published brackets, athletes, status, winners, scores, clocks when available | Bounded bracket and scoreboard requests; unpublished or failed brackets reported |
 | AJP Tour | Public AJP calendar | Same bracket schema, with AJP-hosted match and scoreboard requests | Separate ID namespace from Smoothcomp; limited imports show actual bracket counts |
 | IBJJF / BJJCompsystem | Current tournament selector | Published matchups, clubs and bracket results | No verified numeric scores or reliable live state; pending fixtures remain locked; byes excluded |
@@ -18,13 +21,13 @@ Open Admin → Find and import competitions. Discover current events, search or 
 
 Refresh imported events processes every locally stored imported event, including ones absent from the original bundled Smoothcomp snapshot. Each event failure preserves the existing data. This replaces the previous UI behavior that only refreshed fixed Smoothcomp event URLs.
 
-Event pages show provider, observation time, imported match count, numeric-score coverage, bracket counts and source warnings. FloArena and FloGrappling can represent the same tournament separately: cross-provider deduplication is NOT implemented, and their match counts must not be added as unique fights. Names alone are not identity keys.
+Event pages show provider, observation time, imported match count, numeric-score coverage, bracket counts and source warnings. FloArena and FloGrappling can represent the same tournament separately: directory mirrors of Smoothcomp/AJP use canonical provider event IDs and merge metadata, while unrelated provider IDs are not merged by name alone, and their match counts must not be added as unique fights. Names alone are not identity keys.
 
 Discovered events do not open markets. Imported completed results cannot be traded retrospectively. An unresolved source match only opens if its scheduled start is in the future and its observation is at most two minutes old. The trade function rechecks freshness and start time, including after the UI has been idle. This is a conservative play-money safeguard, not a production oracle. IBJJF pending fixtures have no verified exact start/live status and remain locked.
 
 ## Endpoints and scripts
 
-- `GET /api/data/discover`: discovery across Smoothcomp, AJP, IBJJF and FloArena; errors are isolated per provider; 60-second process-local cache.
+- `GET /api/data/discover`: discovery across all registered tournament and directory providers, with no default per-provider event cap; errors and partial coverage are isolated and visible; 60-second process-local cache. The app refreshes on load and every five minutes after the previous refresh finishes.
 - `POST /api/data/import`: JSON body with `eventUrl` and optional `bracketLimit` (1–100), `matchLimit` (1–2000), `liveScoreLimit` (1–200). Detects provider from a validated host. Concurrent identical requests share work; three imports per process; 15-second result cache.
 - `npm run sync:data -- --discover`: update the bundled discovery list.
 - `npm run sync:data -- --discover --import-current`: discover and import up to eight currently live events in source order.
@@ -75,3 +78,19 @@ Failed providers retain existing results. Unknown scores stay null. Ambiguous wi
 ## Later coverage
 
 [ADCC official results](https://adcombat.com/2024-adcc-world-championship-day-2-full-results/), [BJJ Heroes](https://www.bjjheroes.com/) and [UWW result documents](https://cms.uww.org/arena/weight-category/1f0a0df0-6d53-61b2-ba6a-85ba4a8e95d1/results.pdf) remain useful verification/history sources. They have no implemented adapters here. Prioritize reliable shared storage, scheduled refresh and cross-provider identity review before broadening to more article/PDF sources.
+
+## Discovery scope
+
+Discovery runs independently of the major-event display filter. Events without brackets are still listed and searchable. Undated listings appear with schedule pending. Directory URLs are validated by host and event path before import. Reviewed match supplements do not supply discovery results.
+
+The automated regression suite covers newly invented event IDs (absent from all bundles), second-page discovery, failure retention, explicit truncation, escaped event timezones, non-grappling rejection, and catalogs larger than 100 events. Live validation found Grappling Grand Prix 88 via Go Sofia and loaded the full published BJJ Championships payload.
+
+This is coverage of registered public sources, not a guarantee that every event worldwide is indexed. Social-only announcements, listings absent from these directories, and unavailable sites remain gaps. There is no claim of a universal event feed or unrestricted web search.
+
+## Smoothcomp competition views
+
+The importer retains a full bracket catalog and independently stores published draw slots and event participants. This includes single-entrant divisions, byes, and pending advancement slots; only two named competitors qualify for a prediction match. Existing match imports render as a fallback until the full draw is available.
+
+`POST /api/data/import` accepts `bracketOffset` (0–1,000,000), `participants` (boolean), and `details` (boolean), in addition to per-request limits. The Competition page loads one selected division or walks every division in 12-division batches. Partial imports merge athletes and previously loaded bracket pages in both browser state and CLI snapshots. A public roster can succeed even when bracket requests fail. Athlete tables are followed through explicit same-event next links; failed later pages retain earlier registrations. Unsupported or JavaScript-only roster layouts are reported instead of guessed. The app collects sporting fields, not birth dates or payment details.
+
+Validation covers actual saved AJP bracket data, byes, pending slots, offsets beyond 200 divisions, roster pagination failure, blocked brackets with a valid roster, state hydration, and rendering the competition panel. Live Smoothcomp checks for event 25366 returned HTTP 403 for both the participants page and bracket catalog; no claim is made that those live pages loaded successfully.

@@ -1,5 +1,5 @@
 import { liquidityRiskFor, quantitiesFromProbabilities, settleMarket } from "./market";
-import type { AppState, DataProvider, DataCoverage, BeltRank, Competitor, Event, Market, Match, MatchScore, MatchStatus } from "./types";
+import type { AppState, EventParticipant, CompetitionBracket, DataProvider, DataCoverage, BeltRank, Competitor, Event, Market, Match, MatchScore, MatchStatus } from "./types";
 
 type SmoothcompCompetitorSnapshot = {
   sourceId?: string;
@@ -47,8 +47,12 @@ export type SmoothcompEventSnapshot = {
   startsAt?: string;
   endsAt?: string;
   sourceUrl: string;
+  officialUrl?: string;
   status: Event["status"];
   categoryGroups?: string[];
+  participants?: EventParticipant[];
+  participantsStatus?: "published" | "unavailable";
+  brackets?: CompetitionBracket[];
   coverImage?: string;
   matches: SmoothcompMatchSnapshot[];
   warnings?: string[];
@@ -175,7 +179,7 @@ export function applySmoothcompSnapshot(
     const observedAt = snapshotEvent.observedAt || snapshot.syncedAt;
     const existingEvent = events.find(event => event.id === snapshotEvent.id);
     if (existingEvent && Date.parse(existingEvent.lastSyncedAt) > Date.parse(observedAt)) continue;
-    const event = eventFromSnapshot(snapshotEvent, observedAt, source);
+    const event = eventFromSnapshot(snapshotEvent, observedAt, source, existingEvent);
     events = upsertById(events, event);
 
     for (const snapshotMatch of snapshotEvent.matches) {
@@ -243,7 +247,16 @@ export function applySmoothcompSnapshot(
   return nextState;
 }
 
-function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: string, source: DataProvider): Event {
+function mergeBrackets(previous: CompetitionBracket[] = [], incoming: CompetitionBracket[] = []) {
+  const merged = new Map(previous.map(bracket => [bracket.sourceId, bracket]));
+  for (const bracket of incoming) merged.set(bracket.sourceId, { ...merged.get(bracket.sourceId), ...bracket });
+  return [...merged.values()];
+}
+
+function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: string, source: DataProvider, previous?: Event): Event {
+  const brackets = mergeBrackets(previous?.brackets, snapshotEvent.brackets);
+  const participants = new Map((previous?.participants || []).map(player => [`${player.sourceId}:${player.division}`, player]));
+  for (const player of snapshotEvent.participants || []) participants.set(`${player.sourceId}:${player.division}`, player);
   return {
     id: snapshotEvent.id,
     sport: "bjj",
@@ -251,13 +264,16 @@ function eventFromSnapshot(snapshotEvent: SmoothcompEventSnapshot, syncedAt: str
     organizer: snapshotEvent.organizer || "Smoothcomp",
     city: [snapshotEvent.city, snapshotEvent.country].filter(Boolean).join(", ") || "Location not listed",
     venue: snapshotEvent.venue || "",
-    imageUrl: snapshotEvent.coverImage || "",
+    imageUrl: snapshotEvent.coverImage || previous?.imageUrl || "",
     categoryGroups: snapshotEvent.categoryGroups || [],
+    brackets, participants: [...participants.values()],
+    participantsStatus: snapshotEvent.participantsStatus || previous?.participantsStatus,
     startsAt: snapshotEvent.startsAt || "",
     endsAt: snapshotEvent.endsAt || "",
-    coverage: snapshotEvent.coverage,
+    coverage: snapshotEvent.coverage ? { ...snapshotEvent.coverage, ...(brackets.length ? { importedBrackets: brackets.filter(bracket => bracket.loaded).length } : {}) } : previous?.coverage,
     warnings: snapshotEvent.warnings,
     sourceUrl: snapshotEvent.sourceUrl,
+    officialUrl: snapshotEvent.officialUrl || previous?.officialUrl,
     source,
     status: snapshotEvent.status,
     lastSyncedAt: syncedAt

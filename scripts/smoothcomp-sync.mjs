@@ -1,7 +1,10 @@
+import { load } from "cheerio";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { allowedSourceUrl, createSourceClient, finiteScore, coverage } from "./lib/source-http.mjs";
+
+import { bracketSummary, publishedDraw, parsePublicParticipants } from "./lib/smoothcomp-competition.mjs";
 
 const CALENDAR_URL = "https://smoothcomp.com/en/events/upcoming";
 const GRAPPLING_CATEGORY_GROUPS = new Set(["1", "3", "4", "7", "24"]);
@@ -76,7 +79,7 @@ async function discoverEvents() {
   const html = await fetchText(options.calendarUrl);
   const events = parseCalendarEvents(html)
     .filter((event) => !event.eventEnded)
-    .filter((event) => hasGrapplingCategory(event.categoryGroups))
+    .filter((event) => hasGrapplingCategory(event.categoryGroups) || /\bbjj\b|jiu[ -]?jitsu|grappling|\badcc\b/i.test(event.title || ""))
     .sort((left, right) => Number(left.days_to_start ?? 0) - Number(right.days_to_start ?? 0));
 
   return events;
@@ -124,15 +127,27 @@ async function syncEvent(calendarEvent, stats) {
     categoryGroups: calendarEvent.categoryGroups || [],
     coverImage: calendarEvent.cover_image || sportsEvent?.image || "",
     matches: [],
+    participants: [],
+    brackets: [],
     warnings: eventWarnings
   };
 
   const brackets = await fetchEventBrackets(eventBase, eventSnapshot, stats);
+  eventSnapshot.brackets = brackets.map(bracket => bracketSummary(bracket, eventBase));
+  if (options.participants) {
+    try {
+      const result = await fetchPublicParticipants(eventBase);
+      eventSnapshot.participants = result.participants;
+      eventSnapshot.participantsStatus = result.warning ? 'unavailable' : 'published';
+      if (result.warning) eventWarnings.push(result.warning);
+    } catch (error) { eventSnapshot.participantsStatus = 'unavailable'; eventWarnings.push(`Athlete list unavailable: ${messageFor(error)}`); }
+  }
   let liveScoreRequests = 0;
 
-  let importedBrackets = 0;
-  for (const bracket of limitItems(brackets, options.bracketLimit)) {
+  let importedBrackets = 0, attemptedBrackets = 0;
+  for (const bracket of limitItems(brackets.slice(options.bracketOffset), options.bracketLimit)) {
     if (eventSnapshot.matches.length >= options.matchLimit) break;
+    attemptedBrackets += 1;
     const bracketId = String(bracket.bracket_id || bracket.id || "");
 
     if (!bracketId) {
@@ -145,6 +160,11 @@ async function syncEvent(calendarEvent, stats) {
       if (!Array.isArray(bracketData.matches)) throw new Error("Invalid bracket matches response");
       importedBrackets += 1;
       const rawMatches = bracketData.matches;
+      const draw = publishedDraw(bracket, rawMatches, eventBase);
+      eventSnapshot.brackets = eventSnapshot.brackets.map(item => item.sourceId === draw.sourceId ? draw : item);
+      for (const bout of draw.bouts) for (const seat of bout.seats) {
+        if (seat.participant && !eventSnapshot.participants.some(player => player.sourceId === seat.participant.sourceId && player.division === seat.participant.division)) eventSnapshot.participants.push(seat.participant);
+      }
 
       for (const rawMatch of rawMatches) {
         if (Number.isFinite(options.matchLimit) && eventSnapshot.matches.length >= options.matchLimit) {
@@ -177,6 +197,14 @@ async function syncEvent(calendarEvent, stats) {
 
         if (normalized) {
           eventSnapshot.matches.push(normalized);
+          const bout = draw.bouts.find(item => item.sourceId === normalized.sourceMatchId);
+          if (bout) {
+            bout.score = normalized.score;
+            bout.clock = normalized.liveClock || bout.clock;
+            bout.finish = normalized.finish || bout.finish;
+            bout.state = normalized.sourceState;
+            if (normalized.winnerSide) bout.seats.forEach((seat, index) => { seat.winner = index === (normalized.winnerSide === 'left' ? 0 : 1); });
+          }
         }
       }
     } catch (error) {
@@ -187,6 +215,7 @@ async function syncEvent(calendarEvent, stats) {
 
   eventSnapshot.coverage = coverage(eventSnapshot.matches, {
     totalBrackets: brackets.length, importedBrackets,
+    nextBracketOffset: Math.min(options.bracketOffset + attemptedBrackets, brackets.length),
     level: eventWarnings.length ? "partial" : importedBrackets < brackets.length || eventSnapshot.matches.length >= options.matchLimit ? "limited" : "published",
     liveScores: true
   });
@@ -194,12 +223,34 @@ async function syncEvent(calendarEvent, stats) {
   return eventSnapshot;
 }
 
+async function fetchPublicParticipants(eventBase) {
+  const athletes = new Map(), visited = new Set();
+  let page = `${eventBase}/participants`, warning = '';
+  while (page && !visited.has(page)) {
+    visited.add(page);
+    try {
+      const html = await fetchText(page);
+      for (const athlete of parsePublicParticipants(html, eventBase)) athletes.set(`${athlete.sourceId}:${athlete.division}`, athlete);
+      const $ = load(html);
+      const next = $('a[rel="next"]').attr('href');
+      page = next ? new URL(next, page).href : '';
+      if (page && !page.startsWith(`${eventBase}/participants?`)) throw new Error('Unexpected participant pagination URL.');
+    } catch (error) {
+      if (!athletes.size) throw error;
+      warning = `Athlete list partially loaded: ${messageFor(error)}`;
+      break;
+    }
+  }
+  if (page && visited.has(page) && !warning) warning = 'Athlete list pagination repeated a page; earlier registrations retained.';
+  return { participants: [...athletes.values()], warning };
+}
+
 async function fetchEventBrackets(eventBase, eventSnapshot, stats) {
   try {
     await pause();
     const bracketResponse = await fetchJson(`${eventBase}/schedule/brackets.json`);
     const brackets = Array.isArray(bracketResponse.brackets) ? bracketResponse.brackets : [];
-    return brackets.filter((bracket) => Number(bracket.registrations_count ?? 0) >= 2);
+    return brackets.filter((bracket) => bracket.bracket_id || bracket.id);
   } catch (error) {
     stats.failedBrackets += 1;
     eventSnapshot.warnings.push(`Published brackets unavailable: ${messageFor(error)}`);
@@ -250,7 +301,7 @@ function normalizeMatch(rawMatch, liveData, detailData, bracket, eventSnapshot, 
 }
 
 function isBracketPlaceholder(name) {
-  return /^(?:(?:winner|loser)(?:\s+from\b|\s*$)|tbd\b|to be determined\b|bye\b|unknown competitor\b)/i.test(String(name).trim());
+  return /^(?:(?:winner|loser)(?:\s+(?:from|of)\b|\s*$)|tbd\b|to be determined\b|bye\b|unknown competitor\b)/i.test(String(name).trim());
 }
 
 function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
@@ -502,6 +553,8 @@ function parseArgs(args) {
     bracketLimit: toLimit(process.env.SMOOTHCOMP_BRACKET_LIMIT, 12),
     matchLimit: toLimit(process.env.SMOOTHCOMP_MATCH_LIMIT, 240),
     liveScoreLimit: toLimit(process.env.SMOOTHCOMP_LIVE_SCORE_LIMIT, 120),
+    bracketOffset: 0,
+    participants: args.includes("--participants"),
     details: !args.includes("--no-details"),
     eventUrls: []
   };
@@ -528,6 +581,9 @@ function parseArgs(args) {
       index += 1;
     } else if (["--limit", "--event-limit"].includes(key)) {
       parsed.eventLimit = toLimit(nextValue, parsed.eventLimit);
+      if (!inlineValue) index += 1;
+    } else if (key === "--bracket-offset") {
+      parsed.bracketOffset = Math.max(0, Number(nextValue) || 0);
       if (!inlineValue) index += 1;
     } else if (key === "--bracket-limit") {
       parsed.bracketLimit = toLimit(nextValue, parsed.bracketLimit);
