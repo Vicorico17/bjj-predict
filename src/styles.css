@@ -1794,3 +1794,19 @@ input[type="url"]:focus,
 .game-status-filters button[aria-pressed="true"] { background: #215e41; border-color: #42b57d; }
 .game-state.live { color: #ff9494; }
 .competition-data-heading .empty-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.tournament-scroll { overflow-x: auto; padding: 8px 20px 24px; scrollbar-color: #4c8c6b #171e1a; }
+.tournament-scroll:focus-visible { outline: 2px solid #72e6ae; outline-offset: -3px; }
+.tournament-tree { position: relative; }
+.bracket-connectors { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.bracket-connectors path { fill: none; stroke: #619879; stroke-width: 2; stroke-linejoin: round; }
+.tournament-round > h5 { position: absolute; top: 0; margin: 0; color: #a8b8ae; text-transform: uppercase; letter-spacing: .1em; font-size: 11px; }
+.tournament-node { position: absolute; }
+.tournament-node .published-bout { height: 100%; display: grid; grid-template-rows: 32px 1fr 1fr 30px; box-shadow: 0 4px 14px #0003; }
+.tournament-node .published-seat { padding: 8px 10px; min-height: 0; }
+.tournament-node .published-seat .athlete-name { font-size: 13px; line-height: 1.25; }
+.tournament-node .published-seat small { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.tournament-node .published-seat .competitor-portrait { width: 34px; height: 34px; }
+.tournament-node .published-bout header, .tournament-node .published-bout footer { align-items: center; padding: 6px 10px; font-size: 10px; }
+.tournament-node.championship .published-bout { border-color: #c9a45e; }
+.tournament-node.championship .published-bout header { color: #edcf94; background: #30291b; }

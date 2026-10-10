@@ -1,3 +1,4 @@
+import { TournamentBracket } from "./TournamentBracket";
 import { CompetitorPortrait } from "./CompetitorPortrait";
 import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink, Search, Trophy, UsersRound, GitBranch, CalendarDays, RefreshCw } from 'lucide-react';
@@ -12,7 +13,7 @@ const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u0
 export function CompetitionData({ event, matches, competitors, busy, notice, onLoad }: Props) {
   const platform = event.source === 'smoothcomp' || event.source === 'ajp';
   const sourceName = event.source === 'ajp' ? 'AJP Tour' : platform ? 'Smoothcomp' : 'Published card';
-  const [tab, setTab] = useState<'athletes' | 'brackets' | 'games' | 'results'>('games');
+  const [tab, setTab] = useState<'athletes' | 'brackets' | 'games' | 'results'>(() => typeof window !== 'undefined' && window.location.hash === '#/app/brackets' ? 'brackets' : 'games');
   const [status, setStatus] = useState('all');
   const [query, setQuery] = useState('');
   const [division, setDivision] = useState('');
@@ -68,8 +69,6 @@ export function CompetitionData({ event, matches, competitors, busy, notice, onL
     terms.every(term => normalize(`${player.name} ${player.academy} ${player.country} ${player.division}`).includes(term)));
   const selectedBracket = brackets.find(bracket => bracket.name === division) || brackets[0];
   const currentDraw = selectedBracket?.bouts || [];
-  const rounds = [...new Set(currentDraw.map(bout => bout.round))].sort((a, b) =>
-    (currentDraw.find(bout => bout.round === a)?.roundOrder || 0) - (currentDraw.find(bout => bout.round === b)?.roundOrder || 0));
   const allBouts = brackets.flatMap(bracket => (bracket.bouts || []).map(bout => ({ ...bout, division: bracket.name, sourceUrl: bracket.sourceUrl })));
   const games = allBouts.filter(bout => bout.seats.filter(seat => seat.participant).length === 2 || bout.state === "awaiting-opponents");
   const matchingGames = games.filter(bout => (!division || bout.division === division) &&
@@ -100,7 +99,7 @@ export function CompetitionData({ event, matches, competitors, busy, notice, onL
         <div><strong>{player.name}</strong><span>{[player.academy, player.country].filter(Boolean).join(' · ') || 'Academy not listed'}</span><small>{player.division || 'Division not listed'}</small>{player.sourceUrl && <a href={player.sourceUrl} target="_blank" rel="noreferrer">Athlete profile <ExternalLink size={12}/></a>}</div></article>)}</div>
       {!filteredAthletes.length && <p className="competition-data-empty">{query ? 'No athletes match this search.' : busy ? 'Loading published athletes…' : 'No athletes loaded yet. Refresh data or open the source athlete list.'}</p>}</>}
     {tab === 'brackets' && (selectedBracket ? <><div className="published-draw-heading"><div><h4>{selectedBracket.name}</h4><span>{selectedBracket.registrations} registrations · {selectedBracket.mat || 'Mat TBA'} · {formatDateTime(selectedBracket.startsAt)}</span></div><a href={selectedBracket.sourceUrl} target="_blank" rel="noreferrer">Source bracket <ExternalLink size={13}/></a><button className="ghost-button" disabled={busy} onClick={() => void onLoad(event.brackets?.length ? brackets.indexOf(selectedBracket) : 0)}>{selectedBracket.loaded ? 'Refresh this division' : 'Load this division'}</button></div>
-      {selectedBracket.loaded ? <div className="published-draw" aria-label={`Bracket for ${selectedBracket.name}`}>{rounds.map(round => <section className="published-round" key={round}><h5>{round}</h5>{currentDraw.filter(bout => bout.round === round).map(bout => <DrawBout key={bout.sourceId} bout={bout}/>)}</section>)}</div> : <p className="competition-data-empty">This division is published. Load it to see the full draw, including byes and advancement slots.</p>}
+      {selectedBracket.loaded ? <TournamentBracket bracket={selectedBracket} renderBout={bout => <DrawBout bout={bout}/>}/> : <p className="competition-data-empty">This division is published. Load it to see the full draw, including byes and advancement slots.</p>}
       {selectedBracket.loaded && !currentDraw.length && <p className="competition-data-empty">No bouts published in this division yet.</p>}</> : <p className="competition-data-empty">{busy ? 'Loading the bracket catalog…' : 'No bracket catalog loaded. Refresh data to check published draws.'}</p>)}
     {tab === 'games' && <div className="game-status-filters" role="group" aria-label="Filter games by status">{([
       ['all', 'All games'], ['live', 'Live'], ['upcoming', 'Upcoming'], ['finished', 'Finished'], ['unreported', 'Result pending']

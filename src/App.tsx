@@ -149,7 +149,7 @@ function App() {
   const [importingCompetitionId, setImportingCompetitionId] = useState("");
   const [competitionImportNotice, setCompetitionImportNotice] = useState("");
   const [competitionNoticeEventId, setCompetitionNoticeEventId] = useState("");
-  const [view, setView] = useState<View>("matches");
+  const [view, setView] = useState<View>(() => window.location.hash === "#/app/brackets" ? "competitions" : "matches");
   const [showAllCompetitions, setShowAllCompetitions] = useState(false);
   const [competitionSearch, setCompetitionSearch] = useState("");
   const [refreshGeneration, setRefreshGeneration] = useState(0);
@@ -163,6 +163,7 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [showOldCompetitions, setShowOldCompetitions] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(() => {
+    if (window.location.hash === "#/app/brackets") return "e-gosofia-2387";
     const initial = hydrateStateFromSnapshot(loadState());
     const active = currentEvents(initial.events);
     return active.find(event => initial.matches.some(match => match.eventId === event.id && match.status !== "settled"))?.id ??

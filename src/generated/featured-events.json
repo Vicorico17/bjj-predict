@@ -559,6 +559,10 @@
                   "participant": null,
                   "winner": false
                 }
+              ],
+              "advancesFrom": [
+                "ggp88-qf1",
+                "ggp88-qf2"
               ]
             },
             {
@@ -582,6 +586,10 @@
                   "participant": null,
                   "winner": false
                 }
+              ],
+              "advancesFrom": [
+                "ggp88-qf3",
+                "ggp88-qf4"
               ]
             },
             {
@@ -605,6 +613,10 @@
                   "participant": null,
                   "winner": false
                 }
+              ],
+              "advancesFrom": [
+                "ggp88-sf1",
+                "ggp88-sf2"
               ]
             }
           ]

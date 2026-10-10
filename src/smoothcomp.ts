@@ -191,7 +191,7 @@ export function applySmoothcompSnapshot(
         const previous = existingEvent.brackets?.find(item => item.sourceId === bracket.sourceId);
         if (!previous?.bouts?.length) return bracket;
         const bouts = new Map((bracket.bouts || []).map(bout => [bout.sourceId, bout]));
-        for (const bout of previous.bouts) bouts.set(bout.sourceId, bout);
+        for (const bout of previous.bouts) bouts.set(bout.sourceId, { ...bouts.get(bout.sourceId), ...bout });
         return { ...bracket, bouts: [...bouts.values()] };
       });
     }
