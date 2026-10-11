@@ -11,6 +11,7 @@ A BJJ-first prediction-market MVP with Smoothcomp, AJP, IBJJF, FloArena and FloG
 - Play-money buy/sell trade ticket with shares, average price, and price impact
 - Portfolio positions with mark value, realized PnL, unrealized PnL, and recent trades
 - LocalStorage persistence for balance, trades, positions, imported events, and settlements
+- Optional Open Wallet Standard (OWS) Solana wallet link, verified by a locally signed message
 - Smoothcomp sync worker that imports public grappling events, published brackets, athlete photos, club logos, match status, score fields, and winners
 - Generated app snapshot at `src/generated/smoothcomp-live-snapshot.json`
 - Admin controls for syncing, locking, and settling winner markets
@@ -92,3 +93,11 @@ The first production data path should be:
 6. Settle from Smoothcomp winners, paying 1 point per winning share.
 
 Real-money markets should not be added until there is a licensed/compliant path. This MVP keeps settlement in points only.
+
+## Link an OWS Solana wallet
+
+Install the [Open Wallet Standard CLI](https://openwallet.sh/) on your own computer (`npm install -g @open-wallet-standard/core`). The CLI is also available in this project's development dependencies; `npm run ows:wallets` lists local wallets. Create a wallet with `ows wallet create --name bjj-predict` if you do not already have one. Keep the wallet password and recovery phrase outside the app.
+
+Open the BJJ Predict app and select **Link OWS** next to the demo balance. Run `ows wallet list` locally, enter the Solana address and OWS wallet name, then run the one-time signing command shown in the app. Paste only the resulting signature into the app. The browser verifies the Ed25519 signature and remembers the public address locally. Unlinking removes that association from browser storage.
+
+This links a public Solana address to the browser's existing points account. Predictions, balances, and settlements still use demo points in browser storage; linking does not send Solana transactions or create an on-chain market.

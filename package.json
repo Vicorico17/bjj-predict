@@ -7,6 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc && vite build",
     "preview": "vite preview --host 127.0.0.1",
+    "ows:wallets": "ows wallet list",
     "sync:smoothcomp": "node scripts/smoothcomp-sync.mjs",
     "sync:flo": "node scripts/flo-sync.mjs",
     "test:flo": "node --test scripts/flo.test.mjs",
@@ -14,12 +15,15 @@
     "test:data": "node --test scripts/data.test.mjs scripts/competition.test.mjs scripts/competition-ui.test.mjs scripts/directories.test.mjs scripts/flo.test.mjs scripts/state.test.mjs"
   },
   "dependencies": {
+    "bs58": "^6.0.0",
     "cheerio": "^1.2.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@open-wallet-standard/core": "^1.4.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",

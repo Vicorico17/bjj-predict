@@ -33,6 +33,7 @@ import featuredSnapshot from "./generated/featured-events.json";
 import { initialState } from "./data";
 import { CompetitionData } from "./CompetitionData";
 import { LiquidityPlanner } from "./LiquidityPlanner";
+import { OwsWallet } from "./OwsWallet";
 import { DataSourcesPanel, sourceLabels } from "./DataSourcesPanel";
 import discoverySnapshot from "./generated/data-discovery.json";
 import dataSnapshot from "./generated/data-snapshot.json";
@@ -486,6 +487,7 @@ function App() {
             <strong>{state.balance.toLocaleString()} pts</strong>
           </div>
         </div>
+        <OwsWallet />
       </aside>
 
       <main className="main-content">

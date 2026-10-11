@@ -159,6 +159,102 @@ a {
   font-size: 0.94rem;
 }
 
+.ows-wallet-card {
+  position: relative;
+  min-width: 190px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.ows-wallet-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ows-wallet-heading span,
+.ows-wallet-form p,
+.ows-wallet-step,
+.ows-wallet-card > p {
+  color: var(--faint);
+  font-size: 0.78rem;
+}
+
+.ows-wallet-heading strong {
+  display: block;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.ows-wallet-link-button,
+.ows-wallet-icon-button,
+.ows-wallet-command button,
+.ows-wallet-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ows-wallet-link-button,
+.ows-wallet-icon-button {
+  padding: 7px 8px;
+  color: var(--emerald);
+  background: var(--emerald-soft);
+  white-space: nowrap;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.ows-wallet-card > p { margin: 6px 0 0; }
+.ows-wallet-card .ows-wallet-notice { color: var(--emerald); }
+
+.ows-wallet-form {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 12px;
+  width: min(390px, calc(100vw - 24px));
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #101013;
+  box-shadow: 0 20px 50px #000a;
+}
+
+.ows-wallet-form p { margin: 0; }
+.ows-wallet-form label { display: grid; gap: 5px; color: var(--muted); font-size: 0.8rem; }
+.ows-wallet-form input {
+  min-width: 0;
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  outline: none;
+  color: var(--text);
+  background: var(--panel);
+}
+.ows-wallet-form input:focus { border-color: var(--emerald); }
+.ows-wallet-command {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+}
+.ows-wallet-command code { min-width: 0; overflow-wrap: anywhere; user-select: all; font-size: 0.7rem; }
+.ows-wallet-command button { flex: 0 0 auto; padding: 6px; color: var(--emerald); background: var(--emerald-soft); }
+.ows-wallet-submit { min-height: 38px; color: #06110c; background: var(--emerald); font-weight: 700; }
+
 .main-content {
   display: grid;
   gap: 28px;
@@ -1595,6 +1691,9 @@ input[type="url"]:focus,
     width: 100%;
     margin-left: 0;
   }
+
+  .ows-wallet-card { width: 100%; }
+  .ows-wallet-form { position: static; width: 100%; margin-top: 12px; box-shadow: none; }
 
   .nav-stack {
     gap: 6px;
