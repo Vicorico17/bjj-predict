@@ -1,3 +1,4 @@
+import { PredictionsProvider, PickButtons, MyPredictions } from "./Predictions";
 import { CompetitorPortrait } from "./CompetitorPortrait";
 import { WinnerBadge } from './WinnerBadge';
 import {
@@ -27,7 +28,7 @@ import {
   Wallet,
   X
 } from "lucide-react";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState, useRef } from "react";
 import { competitionImportance, currentEvents, isCurrentMatch, isMajorCompetition, isPastCompetition, searchCompetitions } from "./events";
 import featuredSnapshot from "./generated/featured-events.json";
 import { initialState } from "./data";
@@ -165,10 +166,10 @@ function App() {
   const [showOldCompetitions, setShowOldCompetitions] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(() => {
     if (window.location.hash === "#/app/brackets") return "e-gosofia-2387";
-    const initial = hydrateStateFromSnapshot(loadState());
+    const initial = state;
     const active = currentEvents(initial.events);
     return active.find(event => initial.matches.some(match => match.eventId === event.id && match.status !== "settled"))?.id ??
-      browseCompetitionEvents(initial.events, initial.matches).find(event => initial.matches.some(match => match.eventId === event.id))?.id ?? active[0]?.id ?? "";
+      active[0]?.id ?? browseCompetitionEvents(initial.events, initial.matches).find(event => initial.matches.some(match => match.eventId === event.id))?.id ?? "";
   });
   const [tradeSide, setTradeSide] = useState<TradeSide>("buy");
   const [amount, setAmount] = useState(100);
@@ -177,111 +178,34 @@ function App() {
   const [settlementFinish, setSettlementFinish] = useState(finishOptions[0]);
 
   useEffect(() => {
-    setStorageNotice(saveState(state) ? "" : "Browser storage is full or unavailable. Loaded data remains visible, but recent changes may not survive a reload.");
+    const timer = setTimeout(() => setStorageNotice(saveState(state) ? "" : "Browser storage is full or unavailable. Loaded data remains visible, but recent changes may not survive a reload."), 500);
+    const flush = () => saveState(state);
+    window.addEventListener('pagehide', flush);
+    return () => { clearTimeout(timer); window.removeEventListener('pagehide', flush); };
   }, [state]);
 
   useEffect(() => {
     const controller = new AbortController();
-    async function refreshCurrentMatches() {
-      setIsRefreshing(true);
-      setDataStatus("Refreshing published matchups…");
-      try {
-        const discoveryResponse = await fetch("/api/data/discover", { signal: controller.signal });
-        const discovery = await discoveryResponse.json().catch(() => ({})) as DiscoveryPayload & { error?: string };
-        if (!discoveryResponse.ok || !Array.isArray(discovery.events)) throw new Error(discovery.error || "Event discovery unavailable.");
-        setDiscoveryWarnings((discovery.providers || []).filter(provider => provider.status !== "ok").map(provider =>
-          `${sourceLabels[provider.source as AppEvent["source"]] || provider.source}: ${provider.error || provider.warnings?.join("; ") || "partial coverage"}`));
-        setState(current => applyDiscoveryEvents(current, discovery));
-        const now = Date.now();
-        const candidates = currentEvents(discovery.events.map(event => ({ ...event, sport: "bjj" as const,
-          organizer: event.organizer || sourceLabels[event.source], city: event.city || "", lastSyncedAt: discovery.checkedAt })))
-          .filter(event => (showAllCompetitions || isMajorCompetition(event)) &&
-            (isMajorCompetition(event) || Date.parse(event.startsAt) <= now + 14 * 24 * 60 * 60 * 1000));
-        const importedEvents = new Set<string>();
-        const importedMatches = new Set<string>();
-        const importFailures: string[] = [];
-        async function importCurrentEvent(event: AppEvent, bracketLimit = 100) {
-          try {
-            const response = await fetch("/api/data/import", {
-              method: "POST", signal: controller.signal,
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ eventUrl: event.sourceUrl, bracketLimit, matchLimit: 2000,
-                liveScoreLimit: event.source === "smoothcomp" || event.source === "ajp" ? Date.parse(event.startsAt) > Date.now() + 24 * 60 * 60 * 1000 ? 1 : 200 : 200,
-                seed: { name: event.name, startsAt: event.startsAt, endsAt: event.endsAt, status: event.status, city: event.city } })
-            });
-            const snapshot = await response.json().catch(() => ({})) as SmoothcompSnapshot & { error?: string };
-            if (!response.ok || !Array.isArray(snapshot.events) || !snapshot.events.length) {
-              importFailures.push(snapshot.error || `${sourceLabels[event.source]} import returned HTTP ${response.status}`);
-              return;
-            }
-            const firstEvent = snapshot.events[0];
-            firstEvent.name = event.name;
-            if (!firstEvent.startsAt) firstEvent.startsAt = event.startsAt;
-            if (!firstEvent.endsAt) firstEvent.endsAt = event.endsAt;
-            if (!firstEvent.status) firstEvent.status = event.status;
-            setState(current => {
-              const next = applySmoothcompSnapshot(current, snapshot);
-              return { ...next, positions: markPositions(next) };
-            });
-            if (!firstEvent.matches.length) return;
-            if (!importedEvents.size) setSelectedEventId(firstEvent.id);
-            importedEvents.add(firstEvent.id);
-            firstEvent.matches.forEach(match => importedMatches.add(`${firstEvent.id}:${match.sourceMatchId}`));
-            setDataStatus(`Loaded ${importedMatches.size} games · checking more competitions…`);
-          } catch (error) {
-            if (controller.signal.aborted) return;
-            importFailures.push(error instanceof Error ? error.message : "Match import failed");
-          }
-        }
-        const featured = candidates.filter(event => event.source === "one" || event.source === "ufcbjj" || event.source === "curated");
-        for (let index = 0; index < featured.length && !controller.signal.aborted; index += 3) {
-          await Promise.all(featured.slice(index, index + 3).map(event => importCurrentEvent(event)));
-        }
-        const bracketCandidates = candidates.filter(event => event.source === "smoothcomp" || event.source === "ajp");
-        let publishedBrackets = new Map<string, number>();
-        if (bracketCandidates.length && !controller.signal.aborted) {
-          try {
-            for (let index = 0; index < bracketCandidates.length && !controller.signal.aborted; index += 200) {
-              const response = await fetch("/api/data/probe", { method: "POST", signal: controller.signal,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ eventUrls: bracketCandidates.slice(index, index + 200).map(event => event.sourceUrl) }) });
-              const result = await response.json().catch(() => ({})) as { available?: Array<{ sourceUrl: string; brackets: number }>; unavailable?: number; error?: string };
-              if (!response.ok || !Array.isArray(result.available)) throw new Error(result.error || "Bracket check unavailable.");
-              for (const item of result.available) publishedBrackets.set(item.sourceUrl, item.brackets);
-              if (result.unavailable) importFailures.push(`${result.unavailable} bracket sources unavailable`);
-            }
-          } catch (error) {
-            if (controller.signal.aborted) return;
-            importFailures.push(error instanceof Error ? error.message : "Bracket check failed");
-            publishedBrackets = new Map(bracketCandidates.slice(0, 8).map(event => [event.sourceUrl, 100]));
-          }
-        }
-        const remaining = candidates.filter(event => event.source !== "one" && event.source !== "ufcbjj" && event.source !== "curated" &&
-          (event.source !== "smoothcomp" && event.source !== "ajp" || publishedBrackets.has(event.sourceUrl)));
-        for (let index = 0; index < remaining.length && !controller.signal.aborted; index += 3) {
-          await Promise.all(remaining.slice(index, index + 3).map(event => importCurrentEvent(event,
-            publishedBrackets.has(event.sourceUrl) ? Math.min(publishedBrackets.get(event.sourceUrl) || 12, 12) : 100)));
-        }
-        const largeBrackets = remaining.filter(event => (publishedBrackets.get(event.sourceUrl) || 0) > 12);
-        for (let index = 0; index < largeBrackets.length && !controller.signal.aborted; index += 2) {
-          await Promise.all(largeBrackets.slice(index, index + 2).map(event =>
-            importCurrentEvent(event, Math.min(publishedBrackets.get(event.sourceUrl) || 200, 200))));
-        }
-        if (controller.signal.aborted) return;
-        const firstFailure = importFailures[0];
-        setDataStatus(importedMatches.size ? `${importedMatches.size} games from ${importedEvents.size} current events${importFailures.length ? ` · Some imports failed: ${firstFailure}` : ""}` :
-          importFailures.length ? `Match imports unavailable · ${firstFailure}` :
-          "Current events checked · no published matchups found yet");
-      } catch (error) {
-        if (controller.signal.aborted) return;
-        setDataStatus(`Live data unavailable · ${error instanceof Error ? error.message : "try Admin → Discover"}`);
-      } finally {
-        if (!controller.signal.aborted) setIsRefreshing(false);
-      }
-    }
-    void refreshCurrentMatches();
+    setIsRefreshing(true);
+    setDiscoveryWarnings([]);
+    setDataStatus("Updating the competition directory…");
+    // Independent directories: a slow provider never blocks Smoothcomp or a selected event.
+    Promise.allSettled(["smoothcomp", "others"].map(async provider => {
+      const response = await fetch(`/api/data/discover?provider=${provider}`, { signal: controller.signal });
+      const discovery = await response.json() as DiscoveryPayload & { error?: string };
+      if (!response.ok || !Array.isArray(discovery.events)) throw new Error(discovery.error || "Directory unavailable");
+      if (controller.signal.aborted) return;
+      setState(current => applyDiscoveryEvents(current, discovery));
+      setDiscoveryWarnings(current => [...new Set([...current, ...(discovery.providers || []).filter(item => item.status !== "ok").map(item => `${item.source}: ${item.error || "partial coverage"}`)])]);
+      setDataStatus("Directory updated · open a competition to load its games");
+    })).then(results => {
+      if (controller.signal.aborted) return;
+      setIsRefreshing(false);
+      if (results.every(result => result.status === "rejected")) setDataStatus("Directory unavailable · showing saved competitions. You can still open an event to retry its games.");
+    });
     return () => controller.abort();
-  }, [refreshGeneration, showAllCompetitions]);
+  }, [refreshGeneration]);
+
 
   const scopedEvents = state.events.filter(event => showAllCompetitions || isMajorCompetition(event));
   const scopedEventIds = new Set(scopedEvents.map(event => event.id));
@@ -383,44 +307,65 @@ function App() {
     setTicket(null);
   }
 
-  async function importCompetitionMatches(event: AppEvent, offset = 0, all = false) {
+  const importController = useRef<AbortController | null>(null);
+  const activePage = useRef(0);
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  async function importCompetitionMatches(event: AppEvent, offset = 0, all = false, participants = false) {
+    importController.current?.abort();
+    const controller = new AbortController();
+    importController.current = controller;
+    activePage.current = offset;
     setImportingCompetitionId(event.id);
     setCompetitionNoticeEventId(event.id);
-    setCompetitionImportNotice("Loading published athletes and divisions…");
+    setCompetitionImportNotice("Loading this competition’s games…");
     const isBracketSource = event.source === "smoothcomp" || event.source === "ajp";
-    let cursor = offset, pages = 0, loadedMatches = 0;
+    let cursor = offset, pages = 0;
     try {
       do {
         const response = await fetch("/api/data/import", {
-          method: "POST", headers: { "Content-Type": "application/json" },
+          method: "POST", signal: AbortSignal.any([controller.signal, AbortSignal.timeout(45000)]), headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ eventUrl: event.sourceUrl, bracketOffset: cursor,
-            bracketLimit: isBracketSource ? all ? 12 : 1 : 100, matchLimit: 2000, liveScoreLimit: isBracketSource ? 20 : 200,
-            participants: isBracketSource && pages === 0, details: false,
+            bracketLimit: isBracketSource ? 3 : 100, matchLimit: 2000, liveScoreLimit: 12, liveOnly: true,
+            participants: participants && pages === 0, details: false,
             seed: { name: event.name, startsAt: event.startsAt, endsAt: event.endsAt, status: event.status, city: event.city } })
         });
         const snapshot = await response.json().catch(() => ({})) as SmoothcompSnapshot & { error?: string };
+        if (controller.signal.aborted) return;
         if (!response.ok || !snapshot.events?.length) throw new Error(snapshot.error || "Source data unavailable.");
         const incoming = snapshot.events[0];
         setState(current => {
           const next = applySmoothcompSnapshot(current, snapshot);
           return { ...next, positions: markPositions(next) };
         });
-        loadedMatches += incoming.matches.length;
-        pages += 1;
+        pages++;
         const next = incoming.coverage?.nextBracketOffset ?? 0;
         const total = incoming.coverage?.totalBrackets ?? 0;
-        setCompetitionImportNotice(isBracketSource
-          ? `${incoming.participants?.length || 0} athlete registrations in this fetch · ${total ? `checked divisions ${cursor + 1}–${next} of ${total}` : "no bracket catalog returned"}. ${incoming.warnings?.length ? "Some source data is unavailable; see data availability below." : ""}`
-          : `Loaded ${loadedMatches} published matchups.`);
+        setCompetitionImportNotice(`${incoming.matches.length} games updated · ${total ? `divisions ${cursor + 1}–${next} of ${total}` : "no published draw yet"}. ${incoming.warnings?.length ? "Some source data is unavailable; saved games are retained." : ""}`);
         if (!all || !isBracketSource || next <= cursor || next >= total) break;
         cursor = next;
-      } while (true);
+        activePage.current = cursor;
+      } while (!controller.signal.aborted);
     } catch (error) {
-      setCompetitionImportNotice(`${error instanceof Error ? error.message : "Source data unavailable."} Previously loaded athletes and brackets are retained.`);
+      if (!controller.signal.aborted) setCompetitionImportNotice(`${error instanceof Error ? error.message : "Source data unavailable."} Saved games are still available. Retry using Refresh data.`);
     } finally {
-      setImportingCompetitionId("");
+      if (importController.current === controller) { importController.current = null; setImportingCompetitionId(""); }
     }
   }
+  useEffect(() => {
+    const event = stateRef.current.events.find(item => item.id === selectedEventId);
+    if (!event || !["competitions", "matches"].includes(view)) return;
+    activePage.current = 0;
+    const loaded = event.brackets?.some(bracket => bracket.loaded) || stateRef.current.matches.some(match => match.eventId === event.id);
+    if (!loaded || Date.now() - Date.parse(event.lastSyncedAt) > 30000) void importCompetitionMatches(event);
+    const timer = setInterval(() => {
+      const current = stateRef.current.events.find(item => item.id === event.id);
+      if (!current || document.hidden || importController.current) return;
+      const now = Date.now(), start = Date.parse(current.startsAt), end = Date.parse(current.endsAt || '') || start + 86400000;
+      if (current.status !== 'complete' && start <= now && now <= end) void importCompetitionMatches(current, activePage.current);
+    }, 15000);
+    return () => { clearInterval(timer); importController.current?.abort(); importController.current = null; setImportingCompetitionId(""); };
+  }, [selectedEventId, view]);
 
   const resolvedPositions = state.positions.filter((position) => position.isResolved);
   const winningPositions = resolvedPositions.filter((position) => position.isWinner);
@@ -432,7 +377,7 @@ function App() {
   );
 
   return (
-    <div className="app-shell">
+    <PredictionsProvider matches={state.matches} events={state.events} competitors={state.competitors}><div className="app-shell">
       <aside className="side-nav" aria-label="Primary navigation">
         <div className="brand-mark">
           <Swords size={22} aria-hidden="true" />
@@ -579,6 +524,7 @@ function App() {
           onCompetitions={old => { setCompetitionSearch(""); setShowOldCompetitions(Boolean(old)); setView("competitions"); }}
         />}
 
+        {view === "markets" && <MyPredictions/>}
         {view === "markets" && <section className="metric-grid" aria-label="Prediction summary">
           <Metric icon={<CircleDollarSign size={18} />} label="Prediction volume" value={`${totalVolume.toLocaleString()} pts`} />
           <Metric icon={<Gauge size={18} />} label="Open picks" value={String(openMarkets.length)} />
@@ -797,7 +743,7 @@ function App() {
           </section>
         )}
       </main>
-    </div>
+    </div></PredictionsProvider>
   );
 }
 
@@ -838,7 +784,7 @@ function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps
 function CompetitionsView({ events, search, onSearch, selectedEvent, matches, competitors, onSelect, showingOldEvents, onToggleOldEvents, onImport, importingEventId, importNotice, noticeEventId }: {
   events: AppEvent[]; search: string; onSearch: (value: string) => void; selectedEvent?: AppEvent; matches: Match[]; competitors: Competitor[];
   onSelect: (id: string) => void; showingOldEvents: boolean; onToggleOldEvents: () => void;
-  onImport: (event: AppEvent, offset?: number, all?: boolean) => Promise<void>; importingEventId: string; importNotice: string; noticeEventId: string;
+  onImport: (event: AppEvent, offset?: number, all?: boolean, participants?: boolean) => Promise<void>; importingEventId: string; importNotice: string; noticeEventId: string;
 }) {
   const [matchView, setMatchView] = useState<"all" | "current" | "old">(showingOldEvents ? "all" : "current");
   useEffect(() => { setMatchView(showingOldEvents ? "all" : "current"); }, [showingOldEvents]);
@@ -886,7 +832,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
           <div className="competition-title-block"><EventArtwork event={selectedEvent}/><div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name.trim()}</h2><div className="competition-heading-tags"><span className={`competition-status ${isPastCompetition(selectedEvent) ? "past" : selectedEvent.status}`}>{selectedEvent.status === "complete" ? "Completed" : isPastCompetition(selectedEvent) ? "Past event" : selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div><div className="competition-organizer-line"><span>Organized by</span><strong>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</strong>{selectedEvent.city && <><i>·</i><MapPin size={13}/><span>{selectedEvent.city}</span></>}</div></div></div>
           <a className="icon-link" href={selectedEvent.officialUrl || selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Event listing</a>
         </div>
-        {(selectedEvent.source === "smoothcomp" || selectedEvent.source === "ajp" || Boolean(selectedEvent.brackets?.length)) ? <CompetitionData key={selectedEvent.id} event={selectedEvent} matches={selectedMatches} competitors={competitors} busy={Boolean(importingEventId)} notice={selectedEvent.id === noticeEventId ? importNotice : ""} onLoad={(offset, all) => onImport(selectedEvent, offset, all)}/> : <>
+        {(selectedEvent.source === "smoothcomp" || selectedEvent.source === "ajp" || Boolean(selectedEvent.brackets?.length)) ? <CompetitionData key={selectedEvent.id} event={selectedEvent} matches={selectedMatches} competitors={competitors} busy={importingEventId === selectedEvent.id} notice={selectedEvent.id === noticeEventId ? importNotice : ""} onLoad={(offset, all, participants) => onImport(selectedEvent, offset, all, participants)}/> : <>
         {!noUpcomingGames && <div className="competition-stats"><div><strong>{currentMatches.length}</strong><span>Live & upcoming</span></div><div><strong>{divisions.length}</strong><span>Divisions shown</span></div><div><strong>{liveCount}</strong><span>Live now</span></div><div><strong>{scheduledCount}</strong><span>Coming next</span></div><button className="primary-button" type="button" onClick={onToggleOldEvents}>{showingOldEvents ? "See upcoming events" : "See old events"}</button></div>}
         <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>{showingOldEvents ? "Past games & brackets" : "Live & upcoming games"}</h3></div>{displayedMatches.length > 0 && <span className="small-note">Pairings grouped by division and round</span>}</div>
         {canLoadMoreBrackets && <div className="bracket-import-action"><span>{selectedEvent.coverage?.importedBrackets} of {selectedEvent.coverage?.totalBrackets} published brackets loaded</span><button className="ghost-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Loading brackets…" : "Load more brackets"}</button>{importNotice && selectedEvent.id === noticeEventId && <span role="status">{importNotice}</span>}</div>}
@@ -929,7 +875,7 @@ function BracketDivision({ event, division, matches, competitors }: { event: App
   return <section className="bracket-division"><div className="bracket-division-title"><div><span className="eyebrow">Division</span><h4>{division}</h4></div><span>{matches.length} {matches.length === 1 ? "match" : "matches"} · {sorted.length} rounds</span></div><div className="bracket-rounds">{sorted.map(round => <div className="bracket-round" key={round}><span className="bracket-round-name">{round}</span>{matches.filter(match => (match.round || "Scheduled match") === round).map(match => {
     const left = competitors.find(competitor => competitor.id === match.competitorAId);
     const right = competitors.find(competitor => competitor.id === match.competitorBId);
-    return <article className={`bracket-match ${match.status}`} key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" && isCurrentMatch(match, [event]) ? "Live now" : match.status === "settled" ? "Final result" : isCurrentMatch(match, [event]) ? "Scheduled" : "Past · result unavailable"}<time>{formatDateTime(match.scheduledAt)}</time>{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}</div><div className={`bracket-side ${match.winnerId === left?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={left} compact/><span><strong>{left?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === left?.id) && <WinnerBadge/>}</strong><small>{left?.academy ?? "Academy not listed"}</small></span></div>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className={`bracket-side ${match.winnerId === right?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={right} compact/><span><strong>{right?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === right?.id) && <WinnerBadge/>}</strong><small>{right?.academy ?? "Academy not listed"}</small></span></div>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div><div className="bracket-match-bottom"><span>{match.mat || "Mat not assigned"}</span>{match.winnerId && <span className="winner-label">Winner recorded</span>}</div></article>;
+    return <article className={`bracket-match ${match.status}`} key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" && isCurrentMatch(match, [event]) ? "Live now" : match.status === "settled" ? "Final result" : isCurrentMatch(match, [event]) ? "Scheduled" : "Past · result unavailable"}<time>{formatDateTime(match.scheduledAt)}</time>{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}</div><div className={`bracket-side ${match.winnerId === left?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={left} compact/><span><strong>{left?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === left?.id) && <WinnerBadge/>}</strong><small>{left?.academy ?? "Academy not listed"}</small></span></div>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className={`bracket-side ${match.winnerId === right?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={right} compact/><span><strong>{right?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === right?.id) && <WinnerBadge/>}</strong><small>{right?.academy ?? "Academy not listed"}</small></span></div>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div><PickButtons matchId={match.id}/><div className="bracket-match-bottom"><span>{match.mat || "Mat not assigned"}</span>{match.winnerId && <span className="winner-label">Winner recorded</span>}</div></article>;
   })}</div>)}</div></section>;
 }
 
@@ -952,6 +898,8 @@ function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCo
 }) {
   const [showOldMatches, setShowOldMatches] = useState(false);
   const [eventFilter, setEventFilter] = useState("");
+  const [feedLimit, setFeedLimit] = useState(50);
+  useEffect(() => setFeedLimit(50), [eventFilter, showOldMatches]);
   const current = matches.filter(match => isCurrentMatch(match, events));
   const old = matches.filter(match => !isCurrentMatch(match, events));
   const source = showOldMatches ? old : current;
@@ -967,12 +915,13 @@ function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCo
   const competitionOptions = (showOldMatches ? events : currentEvents(events)).sort((a, b) => a.name.localeCompare(b.name));
   const upcomingEvents = currentEvents(events).filter(event => event.status === "upcoming" && Date.parse(event.startsAt) > Date.now());
   return <section className="upcoming-page" aria-label="Live and upcoming matches"><div className="section-heading"><div><span className="eyebrow">Worldwide mat schedule</span><h2>{showOldMatches ? "Old matches" : "Live & upcoming"}</h2>{(showOldMatches || current.length > 0) && <p>{showOldMatches ? "Completed results and past bouts." : "Published matchups from the selected competitions."}</p>}</div><button type="button" className="ghost-button" onClick={() => onCompetitions(false)}>Browse competitions</button></div>
+    {ordered.length > feedLimit && <button className="ghost-button" onClick={() => setFeedLimit(value => value + 50)}>Show 50 more games ({ordered.length} total)</button>}
     {!showOldMatches && upcomingEvents.length > 0 && <section className="upcoming-event-section" aria-label="Featured BJJ events">
       <div className="section-heading"><div><span className="eyebrow">On the calendar</span><h3>Featured BJJ events</h3></div><button type="button" className="text-button" onClick={() => onCompetitions(false)}>Browse all {upcomingEvents.length} events <ExternalLink size={14} aria-hidden="true"/></button></div>
       <div className="upcoming-event-grid">{upcomingEvents.slice(0, 8).map(event => <button type="button" className="upcoming-event-card" key={event.id} onClick={() => { onSelectEvent(event.id); onCompetitions(false); }}><EventArtwork event={event} compact/><span className="upcoming-event-copy"><strong>{event.name}</strong><span>{[formatCompetitionDate(event.startsAt, event.endsAt), event.city, sourceLabels[event.source]].filter(Boolean).join(" · ")}</span></span><span className="upcoming-event-when">{formatEventLead(event.startsAt)}</span></button>)}</div>
     </section>}
     <div className="match-filter-row"><div className="match-archive-toggle" role="group" aria-label="Choose matches to show"><button type="button" className={!showOldMatches ? "active" : ""} onClick={() => { setShowOldMatches(false); setEventFilter(""); }}>Live & upcoming <b>{current.length}</b></button><button type="button" className={showOldMatches ? "active" : ""} onClick={() => { setShowOldMatches(true); setEventFilter(""); }}>Old matches <b>{old.length}</b></button></div><label className="event-select-label">Competition<select aria-label="Filter by competition" onChange={event => { setEventFilter(event.target.value); if (event.target.value) onSelectEvent(event.target.value); }} value={eventFilter}><option value="">All competitions</option>{competitionOptions.map(event => <option value={event.id} key={event.id}>{event.name}</option>)}</select></label></div>
-    {ordered.length ? <div className="upcoming-match-list">{ordered.map(match => { const event = events.find(item => item.id === match.eventId); const left = competitors.find(item => item.id === match.competitorAId); const right = competitors.find(item => item.id === match.competitorBId); const winner = match.winnerId === left?.id ? left : match.winnerId === right?.id ? right : undefined; const stateLabel = !showOldMatches && match.status === "live" ? "Live now" : match.status === "settled" ? "Final result" : showOldMatches ? "Past schedule · result unavailable" : "Upcoming"; return <article className={`upcoming-match-card ${match.status === "live" ? "is-live" : ""} ${showOldMatches ? "is-archived" : ""}`} key={match.id}><div className="upcoming-match-event"><MapPin className="event-location-icon" size={17} aria-hidden="true"/><div><strong>{event?.name ?? "Competition"}</strong><span>{[event?.city, match.division].filter(Boolean).join(" · ")}</span></div><span className={`market-status ${match.status === "live" ? "live" : match.status === "settled" ? "settled" : ""}`}>{stateLabel}</span></div>{!showOldMatches && formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown upcoming">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}<div className="upcoming-pairing"><MatchCompetitor competitor={left} won={Boolean(match.winnerId && match.winnerId === left?.id)}/><b>VS</b><MatchCompetitor competitor={right} align="right" won={Boolean(match.winnerId && match.winnerId === right?.id)}/></div>{showOldMatches && <div className="archive-result">{winner ? <span className="archive-winner"><Trophy size={18} aria-hidden="true"/><strong>{winner.name}</strong><b>WINNER</b></span> : <span className="archive-no-winner">{match.status === "settled" ? "Winner not reported" : "Result unavailable"}</span>}{match.score?.left?.points != null && match.score?.right?.points != null ? <span className="archive-score"><small>FINAL SCORE</small><strong><span className={match.winnerId === left?.id ? "score-winner" : ""}>{match.score.left.points}</span><i>–</i><span className={match.winnerId === right?.id ? "score-winner" : ""}>{match.score.right.points}</span></strong></span> : <span className="archive-score missing"><small>SCORE</small><strong>Not reported</strong></span>}</div>}<div className="upcoming-match-footer"><span>{match.round || "Round not listed"}</span><span>{match.mat || "Mat TBA"}</span><span><CalendarDays size={14} />{match.sourceState === "card-announced" ? `Event begins ${formatRelativeMatchTime(match.scheduledAt, match.status).toLowerCase()}` : formatRelativeMatchTime(match.scheduledAt, showOldMatches && match.status === "live" ? "locked" : match.status)}</span>{!showOldMatches && match.score?.left?.points != null && match.score?.right?.points != null && <strong className="match-result-score">{match.score.left.points} – {match.score.right.points}</strong>}{match.sourceUrl && <a className="match-source-link" href={match.sourceUrl} target="_blank" rel="noreferrer">{match.sourceState === "card-announced" ? (match.sourceUrl.includes("ge.globo.com") || match.sourceUrl.includes("sportal.bg")) ? "Reported card" : "Official card" : "Source bracket"}<ExternalLink size={12} aria-hidden="true"/></a>}<button type="button" className="text-button" onClick={() => { if (event) { onSelectEvent(event.id); } onCompetitions(showOldMatches); }}>View competition <ExternalLink size={14} /></button></div></article>; })}</div> : <div className="panel empty-matchups empty-upcoming"><CalendarDays size={26} aria-hidden="true"/><strong>{showOldMatches ? "No old games found" : "No upcoming games yet"}</strong>{!showOldMatches && <button type="button" className="primary-button" onClick={() => onCompetitions(true)}>See old events</button>}</div>}
+    {ordered.length ? <div className="upcoming-match-list">{ordered.slice(0, feedLimit).map(match => { const event = events.find(item => item.id === match.eventId); const left = competitors.find(item => item.id === match.competitorAId); const right = competitors.find(item => item.id === match.competitorBId); const winner = match.winnerId === left?.id ? left : match.winnerId === right?.id ? right : undefined; const stateLabel = !showOldMatches && match.status === "live" ? "Live now" : match.status === "settled" ? "Final result" : showOldMatches ? "Past schedule · result unavailable" : "Upcoming"; return <article className={`upcoming-match-card ${match.status === "live" ? "is-live" : ""} ${showOldMatches ? "is-archived" : ""}`} key={match.id}><div className="upcoming-match-event"><MapPin className="event-location-icon" size={17} aria-hidden="true"/><div><strong>{event?.name ?? "Competition"}</strong><span>{[event?.city, match.division].filter(Boolean).join(" · ")}</span></div><span className={`market-status ${match.status === "live" ? "live" : match.status === "settled" ? "settled" : ""}`}>{stateLabel}</span></div>{!showOldMatches && formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown upcoming">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}<div className="upcoming-pairing"><MatchCompetitor competitor={left} won={Boolean(match.winnerId && match.winnerId === left?.id)}/><b>VS</b><MatchCompetitor competitor={right} align="right" won={Boolean(match.winnerId && match.winnerId === right?.id)}/></div>{showOldMatches && <div className="archive-result">{winner ? <span className="archive-winner"><Trophy size={18} aria-hidden="true"/><strong>{winner.name}</strong><b>WINNER</b></span> : <span className="archive-no-winner">{match.status === "settled" ? "Winner not reported" : "Result unavailable"}</span>}{match.score?.left?.points != null && match.score?.right?.points != null ? <span className="archive-score"><small>FINAL SCORE</small><strong><span className={match.winnerId === left?.id ? "score-winner" : ""}>{match.score.left.points}</span><i>–</i><span className={match.winnerId === right?.id ? "score-winner" : ""}>{match.score.right.points}</span></strong></span> : <span className="archive-score missing"><small>SCORE</small><strong>Not reported</strong></span>}</div>}<PickButtons matchId={match.id}/><div className="upcoming-match-footer"><span>{match.round || "Round not listed"}</span><span>{match.mat || "Mat TBA"}</span><span><CalendarDays size={14} />{match.sourceState === "card-announced" ? `Event begins ${formatRelativeMatchTime(match.scheduledAt, match.status).toLowerCase()}` : formatRelativeMatchTime(match.scheduledAt, showOldMatches && match.status === "live" ? "locked" : match.status)}</span>{!showOldMatches && match.score?.left?.points != null && match.score?.right?.points != null && <strong className="match-result-score">{match.score.left.points} – {match.score.right.points}</strong>}{match.sourceUrl && <a className="match-source-link" href={match.sourceUrl} target="_blank" rel="noreferrer">{match.sourceState === "card-announced" ? (match.sourceUrl.includes("ge.globo.com") || match.sourceUrl.includes("sportal.bg")) ? "Reported card" : "Official card" : "Source bracket"}<ExternalLink size={12} aria-hidden="true"/></a>}<button type="button" className="text-button" onClick={() => { if (event) { onSelectEvent(event.id); } onCompetitions(showOldMatches); }}>View competition <ExternalLink size={14} /></button></div></article>; })}</div> : <div className="panel empty-matchups empty-upcoming"><CalendarDays size={26} aria-hidden="true"/><strong>{showOldMatches ? "No old games found" : "No upcoming games yet"}</strong>{!showOldMatches && <button type="button" className="primary-button" onClick={() => onCompetitions(true)}>See old events</button>}</div>}
   </section>;
 }
 
@@ -1051,7 +1000,7 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
         </div>
         <div className={`market-status ${match.status === "live" ? "live" : market.status}`}>
           {market.status === "open" && !disabled ? <CircleDot size={13} aria-hidden="true" /> : <LockKeyhole size={13} aria-hidden="true" />}
-          <span>{match.status === "live" ? "Live now · picks locked" : market.status === "open" && !disabled ? "Predictions open" : match.status === "settled" ? "Final" : "Upcoming · picks locked"}</span>
+          <span>{match.status === "live" ? "Live now · picks locked" : market.status === "open" && !disabled ? "Points trading open" : match.status === "settled" ? "Final" : "Points trading locked"}</span>
         </div>
       </div>
 
@@ -1066,7 +1015,7 @@ function MarketCard({ competitors, market, match, positions, onPick }: MarketCar
         <span>LP risk {market.liquidityRisk.toLocaleString()} pts</span>
       </div>
 
-      <div className="fighter-options">
+      <PickButtons matchId={match.id}/><div className="fighter-options">
         <FighterOption
           competitor={competitors[0]}
           disabled={disabled}

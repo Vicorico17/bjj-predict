@@ -174,6 +174,10 @@ export function applySmoothcompSnapshot(
   let events = [...state.events];
   let matches = [...state.matches];
   let markets = [...state.markets];
+  const competitorIndex = new Map(competitors.map((item, index) => [item.id, index]));
+  const matchIndex = new Map(matches.map((item, index) => [item.id, index]));
+  const marketIndex = new Map(markets.map((item, index) => [item.id, index]));
+  const marketMatchIndex = new Map(markets.map((item, index) => [item.matchId, index]));
   const settlements: Array<{ marketId: string; winnerId: string; finish: string }> = [];
 
   for (const snapshotEvent of scopedEvents) {
@@ -221,17 +225,17 @@ export function applySmoothcompSnapshot(
       );
 
       for (const player of [competitorA, competitorB]) {
-        const previous = competitors.find(item => item.id === player.id);
+        const previous = competitors[competitorIndex.get(player.id) ?? -1];
         if (!player.imageUrl && previous?.imageUrl) { player.imageUrl = previous.imageUrl; player.imageFocus = previous.imageFocus; }
       }
-      competitors = upsertById(competitors, competitorA);
-      competitors = upsertById(competitors, competitorB);
+      competitors = upsertById(competitors, competitorA, competitorIndex);
+      competitors = upsertById(competitors, competitorB, competitorIndex);
 
       const winnerId = winnerIdFor(snapshotMatch, competitorA.id, competitorB.id, source);
       const localMatch = matchFromSnapshot(snapshotEvent, snapshotMatch, competitorA.id, competitorB.id, winnerId, source, observedAt);
-      const existingMatch = matches.find((match) => match.id === localMatch.id);
+      const existingMatch = matches[matchIndex.get(localMatch.id) ?? -1];
       if (older && existingMatch) {
-        matches = upsertById(matches, { ...existingMatch, sourceBracketId: existingMatch.sourceBracketId || localMatch.sourceBracketId });
+        matches = upsertById(matches, { ...existingMatch, sourceBracketId: existingMatch.sourceBracketId || localMatch.sourceBracketId }, matchIndex);
         continue;
       }
       if (existingMatch && (existingMatch.competitorAId !== localMatch.competitorAId || existingMatch.competitorBId !== localMatch.competitorBId ||
@@ -244,11 +248,12 @@ export function applySmoothcompSnapshot(
       }
       const mergedMatch = existingMatch ? mergeMatch(existingMatch, localMatch) : localMatch;
 
-      matches = upsertById(matches, mergedMatch);
+      matches = upsertById(matches, mergedMatch, matchIndex);
 
-      const existingMarket = markets.find((market) => market.matchId === mergedMatch.id);
+      const existingMarket = markets[marketMatchIndex.get(mergedMatch.id) ?? -1];
       const nextMarket = marketFromMatch(mergedMatch, existingMarket, snapshot.syncedAt);
-      markets = upsertById(markets, nextMarket);
+      markets = upsertById(markets, nextMarket, marketIndex);
+      marketMatchIndex.set(mergedMatch.id, marketIndex.get(nextMarket.id)!);
 
       if (winnerId && existingMarket && existingMarket.status !== "settled") {
         settlements.push({
@@ -262,10 +267,10 @@ export function applySmoothcompSnapshot(
 
   let nextState: AppState = {
     ...state,
-    competitors,
+    competitors: [...competitors.slice(state.competitors.length).reverse(), ...competitors.slice(0, state.competitors.length)],
     events,
-    matches,
-    markets
+    matches: [...matches.slice(state.matches.length).reverse(), ...matches.slice(0, state.matches.length)],
+    markets: [...markets.slice(state.markets.length).reverse(), ...markets.slice(0, state.markets.length)]
   };
 
   for (const settlement of settlements) {
@@ -447,7 +452,14 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-function upsertById<T extends { id: string }>(items: T[], nextItem: T) {
+function upsertById<T extends { id: string }>(items: T[], nextItem: T, ownedIndex?: Map<string, number>) {
+  // Indexed arrays belong to this snapshot application, never the caller's state.
+  if (ownedIndex) {
+    const index = ownedIndex.get(nextItem.id);
+    if (index === undefined) { ownedIndex.set(nextItem.id, items.length); items.push(nextItem); }
+    else items[index] = { ...items[index], ...nextItem };
+    return items;
+  }
   const index = items.findIndex((item) => item.id === nextItem.id);
 
   if (index === -1) {

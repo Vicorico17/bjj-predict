@@ -72,3 +72,51 @@ test('A blocked bracket source still returns an available public roster', async 
   assert.equal(result.events[0].participants[0].name, 'Alex Example');
   assert(result.events[0].warnings.some(warning => /Bracket .* unavailable/.test(warning)));
 });
+
+test('fast browsing skips all upcoming score calls and fetches only requested divisions', async () => {
+  const calls = [];
+  const upcoming = { ...fixture.raw.matches[0], state: 'pending', seats: fixture.raw.matches[0].seats.map(seat => ({ ...seat, isWinner: false })) };
+  const snapshot = await importData(base, { pauseMs: 0, liveOnly: true, bracketLimit: 3, fetchImpl: async url => {
+    calls.push(url);
+    if (url.endsWith('/brackets.json')) return json({ brackets: Array.from({length: 100}, (_, i) => ({ ...fixture.bracket, bracket_id: i + 1 })) });
+    if (url.includes('/bracket.json/')) return json({ matches: Array.from({length: 30}, (_, i) => ({ ...upcoming, id: Number(url.split('/').at(-1)) * 100 + i })) });
+    if (url.includes('getBracketMatch') || url.includes('/participants')) throw new Error('Unexpected expensive request');
+    return new Response('<script type="application/ld+json">{"@type":"SportsEvent","name":"Fast event","startDate":"2099-01-01"}</script>');
+  }});
+  assert.equal(snapshot.events[0].matches.length, 90);
+  assert.equal(calls.length, 5); // metadata + catalog + three draws, previously up to 95 requests
+  assert.equal(snapshot.events[0].coverage.nextBracketOffset, 3);
+  assert.equal(snapshot.events[0].coverage.liveScores, false);
+});
+
+test('active scoreboards are prioritized over finished bouts, with three requests at most in flight', async () => {
+  let inFlight = 0, peak = 0;
+  const requested = [];
+  const matches = Array.from({length: 10}, (_, i) => ({ ...fixture.raw.matches[0], id: i + 1, state: i < 6 ? 'finished' : 'started', seats: fixture.raw.matches[0].seats.map(seat => ({ ...seat, isWinner: false })) }));
+  const snapshot = await importData(base, { pauseMs: 0, liveOnly: true, bracketLimit: 1, liveScoreLimit: 4, fetchImpl: async url => {
+    if (url.endsWith('/brackets.json')) return json({ brackets: [fixture.bracket] });
+    if (url.includes('/bracket.json/')) return json({ matches });
+    if (url.includes('getBracketMatchData')) {
+      requested.push(Number(url.split('/').at(-1))); peak = Math.max(peak, ++inFlight);
+      await new Promise(resolve => setTimeout(resolve, 5)); inFlight--;
+      return json({ ...fixture.live, matchInfo: { ...fixture.live.matchInfo, state: 'started', winner: null } });
+    }
+    return new Response('<html></html>');
+  }});
+  assert.deepEqual(requested, [7, 8, 9, 10]);
+  assert(peak <= 3 && peak > 1);
+  assert.equal(snapshot.events[0].matches.find(match => match.sourceMatchId === '7').score.left.points, 4);
+});
+
+test('Smoothcomp source cache deduplicates concurrent calls and does not cache failures', async () => {
+  const { cachedSmoothcompText } = await import('./lib/smoothcomp-cache.mjs');
+  let calls = 0;
+  const url = `${base}/cache-test`;
+  const load = async () => { calls++; await new Promise(resolve => setTimeout(resolve, 5)); return 'verified'; };
+  assert.deepEqual(await Promise.all([cachedSmoothcompText(url, load), cachedSmoothcompText(url, load)]), ['verified', 'verified']);
+  assert.equal(await cachedSmoothcompText(url, load), 'verified');
+  assert.equal(calls, 1);
+  await assert.rejects(cachedSmoothcompText(`${url}/failure`, async () => { throw new Error('Unavailable'); }));
+  assert.equal(await cachedSmoothcompText(`${url}/failure`, load), 'verified');
+  assert.equal(calls, 2);
+});

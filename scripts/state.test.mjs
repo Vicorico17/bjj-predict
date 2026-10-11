@@ -7,10 +7,11 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const folder = await mkdtemp(path.join(os.tmpdir(), 'bjj-data-tests-'));
-await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
+await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts', 'src/Predictions.tsx'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
 const { applyDataSnapshot } = await import(pathToFileURL(path.join(folder, 'smoothcomp.mjs')));
 const { planLiquidity } = await import(pathToFileURL(path.join(folder, 'liquidity.mjs')));
 const { costToBuyShares, quantitiesFromProbabilities, quoteBuy, isMatchTradable } = await import(pathToFileURL(path.join(folder, 'market.mjs')));
+const { predictionClosed } = await import(pathToFileURL(path.join(folder, 'Predictions.mjs')));
 const { currentEvents, isCurrentMatch, isMajorCompetition, searchCompetitions } = await import(pathToFileURL(path.join(folder, 'events.mjs')));
 await rm(folder, { recursive: true });
 const fixture = JSON.parse(await readFile('src/generated/data-snapshot.json', 'utf8'));
@@ -217,4 +218,16 @@ test('withdrawn pairing is archived and cannot return after a stale refresh', as
   const refreshed = applyDataSnapshot(patched, old);
   assert.equal(refreshed.matches.find(match => match.id === withdrawn.id).sourceState, 'withdrawn');
   assert.equal(refreshed.matches.filter(match => match.sourceState !== 'withdrawn').length, 8);
+});
+
+
+test('winner picks lock at the scheduled start, on live/results, and for unknown or withdrawn matches', () => {
+  const now = Date.parse('2030-01-01T10:00:00Z');
+  const match = { status: 'locked', sourceState: 'pending', scheduledAt: '2030-01-01T11:00:00Z' };
+  const event = { status: 'upcoming', startsAt: match.scheduledAt };
+  assert.equal(predictionClosed(match, event, now), '');
+  assert(predictionClosed(match, event, now + 3600000));
+  for (const changed of [{ status: 'live' }, { status: 'settled' }, { winnerId: 'a' }, { sourceState: 'withdrawn' }, { sourceState: 'finished' }]) assert(predictionClosed({ ...match, ...changed }, event, now));
+  assert(predictionClosed(match, { ...event, status: 'complete' }, now));
+  assert(predictionClosed({ ...match, scheduledAt: '' }, { status: 'unknown', startsAt: '' }, now));
 });

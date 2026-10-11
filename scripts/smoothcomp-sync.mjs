@@ -1,3 +1,4 @@
+import { cachedSmoothcompText } from "./lib/smoothcomp-cache.mjs";
 import { load } from "cheerio";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -12,7 +13,7 @@ const DEFAULT_OUTPUT = "src/generated/smoothcomp-live-snapshot.json";
 export function createSmoothcompWorker(args = [], { persist = false, fetchImpl = fetch, maxRequests = 400, pauseMs = 100 } = {}) {
 const options = parseArgs(args);
 const warnings = [];
-const client = createSourceClient({ fetchImpl, maxRequests, pauseMs });
+const client = createSourceClient({ fetchImpl, maxRequests, pauseMs, timeoutMs: 10000 });
 
 async function main() {
   const startedAt = new Date().toISOString();
@@ -101,6 +102,7 @@ async function syncEvent(calendarEvent, stats) {
   const source = new URL(eventUrl).hostname.includes("ajptour.com") ? "ajp" : "smoothcomp";
   const eventWarnings = [];
   let sportsEvent = null;
+  const bracketRequest = fetchJson(`${eventBase}/schedule/brackets.json`).then(data => ({ data }), error => ({ error }));
 
   try {
     const eventHtml = await fetchText(eventUrl);
@@ -132,7 +134,7 @@ async function syncEvent(calendarEvent, stats) {
     warnings: eventWarnings
   };
 
-  const brackets = await fetchEventBrackets(eventBase, eventSnapshot, stats);
+  const brackets = await fetchEventBrackets(eventBase, eventSnapshot, stats, bracketRequest);
   eventSnapshot.brackets = brackets.map(bracket => bracketSummary(bracket, eventBase));
   if (options.participants) {
     try {
@@ -142,7 +144,7 @@ async function syncEvent(calendarEvent, stats) {
       if (result.warning) eventWarnings.push(result.warning);
     } catch (error) { eventSnapshot.participantsStatus = 'unavailable'; eventWarnings.push(`Athlete list unavailable: ${messageFor(error)}`); }
   }
-  let liveScoreRequests = 0;
+  let liveScoreRequests = 0, successfulLiveScores = 0;
 
   let importedBrackets = 0, attemptedBrackets = 0;
   for (const bracket of limitItems(brackets.slice(options.bracketOffset), options.bracketLimit)) {
@@ -166,24 +168,31 @@ async function syncEvent(calendarEvent, stats) {
         if (seat.participant && !eventSnapshot.participants.some(player => player.sourceId === seat.participant.sourceId && player.division === seat.participant.division)) eventSnapshot.participants.push(seat.participant);
       }
 
+      // Prioritize active scoreboards, then published finals; upcoming bouts need no score request.
+      const active = match => /^(started|running|current|live|ongoing|paused)$/i.test(match.state);
+      const scoreCandidates = rawMatches.filter(match => match.id && (!options.liveOnly || active(match) || /^(finished|completed|ended|end)$/i.test(match.state)))
+        .sort((a, b) => Number(active(b)) - Number(active(a)))
+        .slice(0, Math.max(0, options.liveScoreLimit - liveScoreRequests));
+      const liveResults = new Map();
+      liveScoreRequests += scoreCandidates.length;
+      for (let index = 0; index < scoreCandidates.length; index += 3) {
+        await Promise.all(scoreCandidates.slice(index, index + 3).map(async match => {
+          try { liveResults.set(match.id, await fetchJson(`${origin}/en/getBracketMatchData/${match.id}`)); successfulLiveScores++; }
+          catch (error) {
+            stats.failedLiveScores++;
+            eventWarnings.push(`Live score data unavailable for match ${match.id}: ${messageFor(error)}`);
+          }
+        }));
+      }
+      if (options.liveOnly && rawMatches.filter(active).length > scoreCandidates.filter(active).length) eventWarnings.push('Some active scoreboards exceed this page’s refresh limit.');
+
       for (const rawMatch of rawMatches) {
         if (Number.isFinite(options.matchLimit) && eventSnapshot.matches.length >= options.matchLimit) {
           break;
         }
 
-        let liveData = null;
+        const liveData = liveResults.get(rawMatch.id) || null;
         let detailData = null;
-
-        if (liveScoreRequests < options.liveScoreLimit) {
-          liveScoreRequests += 1;
-          try {
-            await pause();
-            liveData = await fetchJson(`${origin}/en/getBracketMatchData/${rawMatch.id}`);
-          } catch (error) {
-            stats.failedLiveScores += 1;
-            eventWarnings.push(`Live score data unavailable for match ${rawMatch.id}: ${messageFor(error)}`);
-          }
-        }
 
         if (options.details) try {
           await pause();
@@ -217,7 +226,7 @@ async function syncEvent(calendarEvent, stats) {
     totalBrackets: brackets.length, importedBrackets,
     nextBracketOffset: Math.min(options.bracketOffset + attemptedBrackets, brackets.length),
     level: eventWarnings.length ? "partial" : importedBrackets < brackets.length || eventSnapshot.matches.length >= options.matchLimit ? "limited" : "published",
-    liveScores: true
+    liveScores: successfulLiveScores > 0
   });
   if (importedBrackets < brackets.length) eventWarnings.push(`Imported ${importedBrackets} of ${brackets.length} published brackets. Increase limits to expand coverage.`);
   return eventSnapshot;
@@ -245,10 +254,12 @@ async function fetchPublicParticipants(eventBase) {
   return { participants: [...athletes.values()], warning };
 }
 
-async function fetchEventBrackets(eventBase, eventSnapshot, stats) {
+async function fetchEventBrackets(eventBase, eventSnapshot, stats, prefetched) {
   try {
     await pause();
-    const bracketResponse = await fetchJson(`${eventBase}/schedule/brackets.json`);
+    const result = prefetched ? await prefetched : { data: await fetchJson(`${eventBase}/schedule/brackets.json`) };
+    if (result.error) throw result.error;
+    const bracketResponse = result.data;
     const brackets = Array.isArray(bracketResponse.brackets) ? bracketResponse.brackets : [];
     return brackets.filter((bracket) => bracket.bracket_id || bracket.id);
   } catch (error) {
@@ -538,7 +549,7 @@ async function fetchJson(url) {
 }
 
 async function fetchText(url) {
-  return client.text(url);
+  return fetchImpl === fetch ? cachedSmoothcompText(url, () => client.text(url)) : client.text(url);
 }
 
 function limitItems(items, limit) {
@@ -556,6 +567,7 @@ function parseArgs(args) {
     bracketOffset: 0,
     participants: args.includes("--participants"),
     details: !args.includes("--no-details"),
+    liveOnly: args.includes("--live-only"),
     eventUrls: []
   };
 

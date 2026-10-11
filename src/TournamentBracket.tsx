@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { CompetitionBracket, PublishedBout } from './types';
 
 const CARD_WIDTH = 252;
-const CARD_HEIGHT = 196;
+const CARD_HEIGHT = 286;
 const ROW_GAP = 28;
 const ROUND_GAP = 48;
 const HEADER = 44;

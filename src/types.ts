@@ -38,6 +38,7 @@ export type EventParticipant = {
   imageFocus?: ImageFocus; sourceUrl?: string;
 };
 export type PublishedBout = {
+  observedAt?: string;
   advancesFrom?: string[];
   sourceId: string; number: string; round: string; roundOrder: number; state: string;
   mat: string; startsAt: string; finish: string; clock: string; score?: MatchScore;

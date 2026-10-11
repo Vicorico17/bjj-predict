@@ -12,14 +12,14 @@ export default async function handler(req, res) {
       if (body[key] !== undefined && (!Number.isInteger(body[key]) || body[key] < 1 || body[key] > max)) throw new Error(`Invalid ${key}; maximum ${max}.`);
     }
     if (body.bracketOffset !== undefined && (!Number.isInteger(body.bracketOffset) || body.bracketOffset < 0 || body.bracketOffset > 1000000)) throw new Error('Invalid bracket offset.');
-    for (const key of ['participants', 'details']) if (body[key] !== undefined && typeof body[key] !== 'boolean') throw new Error(`Invalid ${key}.`);
+    for (const key of ['participants', 'details', 'liveOnly']) if (body[key] !== undefined && typeof body[key] !== 'boolean') throw new Error(`Invalid ${key}.`);
     if (body.seed !== undefined) {
       if (!body.seed || typeof body.seed !== 'object' || Array.isArray(body.seed)) throw new Error('Invalid event metadata.');
       for (const key of ['name', 'startsAt', 'endsAt', 'city']) if (body.seed[key] !== undefined && (typeof body.seed[key] !== 'string' || body.seed[key].length > 500)) throw new Error(`Invalid event metadata field: ${key}.`);
       if (body.seed.status !== undefined && !['live', 'upcoming', 'complete', 'unknown'].includes(body.seed.status)) throw new Error('Invalid event status.');
     }
   } catch (error) { return res.status(400).json({ error: error.message }); }
-  const options = { bracketOffset: body.bracketOffset, participants: body.participants, details: body.details, bracketLimit: body.bracketLimit, matchLimit: body.matchLimit, liveScoreLimit: body.liveScoreLimit, seed: body.seed };
+  const options = { liveOnly: body.liveOnly, bracketOffset: body.bracketOffset, participants: body.participants, details: body.details, bracketLimit: body.bracketLimit, matchLimit: body.matchLimit, liveScoreLimit: body.liveScoreLimit, seed: body.seed };
   // Undefined values must use adapter defaults.
   for (const key of Object.keys(options)) if (options[key] === undefined) delete options[key];
   const key = JSON.stringify([body.eventUrl, options]);

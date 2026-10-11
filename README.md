@@ -101,3 +101,16 @@ Install the [Open Wallet Standard CLI](https://openwallet.sh/) on your own compu
 Open the BJJ Predict app and select **Link OWS** next to the demo balance. Run `ows wallet list` locally, enter the Solana address and OWS wallet name, then run the one-time signing command shown in the app. Paste only the resulting signature into the app. The browser verifies the Ed25519 signature and remembers the public address locally. Unlinking removes that association from browser storage.
 
 This links a public Solana address to the browser's existing points account. Predictions, balances, and settlements still use demo points in browser storage; linking does not send Solana transactions or create an on-chain market.
+
+
+## Competition loading and winner picks
+
+- App startup refreshes the Smoothcomp directory independently from the other directories. It no longer probes and imports every event in the background.
+- Opening an event fetches three divisions first. Use **Load next 3 divisions**, choose a specific division, or explicitly load the full event. The public athlete roster is fetched only on request.
+- Changing events aborts the previous browser request. Completed responses cannot replace the newly selected event. Large lists render 50 items at a time.
+- Smoothcomp metadata and draw responses have bounded server-instance caches and concurrent-request deduplication. Active scoreboards take priority over completed bouts, with at most three scoreboard requests in flight and 12 scoreboards per page.
+- During an event, the last opened divisions refresh every 15 seconds while the app is visible. HTTP failures retain saved data. Public sources may deny access (403); unavailable scores are not invented.
+- **Who wins?** buttons save one changeable winner pick per matchup in this browser. Picks lock at the scheduled start, when a bout is live, or when a result is known. Confirmed winners resolve picks in **Predictions → My winner picks**. Changed matchups void the previous pick. Unknown start times remain paused.
+- Winner picks are a local demo feature, separate from points trading and the optional wallet link. There is no server account or cross-device synchronization.
+
+Verification includes a 90-upcoming-bout fixture loaded through five upstream requests (metadata, catalog, three draws), live-score priority/concurrency tests, and browser checks for switching events, pagination, score polling, pick persistence, and settlement.

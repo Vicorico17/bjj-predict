@@ -83,11 +83,11 @@ export async function discoverData({ selectedProviders = [...directoryProviders.
   return { checkedAt: new Date().toISOString(), providers: results.map(({ events, ...result }) => result), events: deduplicateDiscoveredEvents(results.flatMap(result => result.events)) };
 }
 
-export async function importData(input, { bracketLimit = 30, matchLimit = 1000, liveScoreLimit = 120, bracketOffset = 0, participants = false, details = false, seed, ...options } = {}) {
+export async function importData(input, { bracketLimit = 30, matchLimit = 1000, liveScoreLimit = 120, bracketOffset = 0, participants = false, details = false, liveOnly = false, seed, ...options } = {}) {
   const source = providerFor(input);
   let event;
   if (source === 'smoothcomp' || source === 'ajp') {
-    const worker = createSmoothcompWorker(['--event', input, ...(details ? [] : ['--no-details']), ...(participants ? ['--participants'] : []), `--bracket-offset=${bracketOffset}`, `--bracket-limit=${bracketLimit}`, `--match-limit=${matchLimit}`, `--live-score-limit=${liveScoreLimit}`], options);
+    const worker = createSmoothcompWorker(['--event', input, ...(details ? [] : ['--no-details']), ...(liveOnly ? ['--live-only'] : []), ...(participants ? ['--participants'] : []), `--bracket-offset=${bracketOffset}`, `--bracket-limit=${bracketLimit}`, `--match-limit=${matchLimit}`, `--live-score-limit=${liveScoreLimit}`], options);
     const snapshot = await worker.run();
     event = snapshot.events[0];
     if (!event) throw new Error(snapshot.warnings[0] || 'Event import failed.');
