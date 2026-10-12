@@ -163,7 +163,7 @@ function App() {
     return () => clearTimeout(timer);
   }, [isRefreshing]);
   const [showHistory, setShowHistory] = useState(false);
-  const [showOldCompetitions, setShowOldCompetitions] = useState(false);
+  const [showOldCompetitions, setShowOldCompetitions] = useState(() => window.location.hash === "#/app/brackets" && state.events.some(event => event.id === "e-gosofia-2387" && isPastCompetition(event)));
   const [selectedEventId, setSelectedEventId] = useState(() => {
     if (window.location.hash === "#/app/brackets") return "e-gosofia-2387";
     const initial = state;
