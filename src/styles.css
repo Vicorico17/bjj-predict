@@ -1991,3 +1991,10 @@ input[type="url"]:focus,
   .app-shell .event-hero { padding: 18px; }
   .app-shell .upcoming-event-section .section-heading { flex-wrap: wrap; }
 }
+.app-shell .upcoming-match-list { grid-template-columns: minmax(0, 1fr); }
+.app-shell .upcoming-match-footer > span { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 380px) {
+  .app-shell .match-competitor, .app-shell .match-competitor.right { flex-direction: column; align-items: flex-start; }
+  .app-shell .match-competitor.right { align-items: flex-end; }
+  .app-shell .upcoming-match-footer > span { flex-wrap: wrap; }
+}
