@@ -114,3 +114,9 @@ This links a public Solana address to the browser's existing points account. Pre
 - Winner picks are a local demo feature, separate from points trading and the optional wallet link. There is no server account or cross-device synchronization.
 
 Verification includes a 90-upcoming-bout fixture loaded through five upstream requests (metadata, catalog, three draws), live-score priority/concurrency tests, and browser checks for switching events, pagination, score polling, pick persistence, and settlement.
+
+## Competitor profiles
+
+Click an athlete’s name in games, brackets, or the athlete list to open their profile. Prediction cards also have a separate **View competitor profile** control. Profiles combine imported athlete details, divisions, published registrations, and loaded match results. Smoothcomp profile URLs identify the same athlete across registrations when supplied; names alone are never used to merge athletes. Win/loss totals describe loaded matches only, not lifetime records.
+
+Use the competition’s bracket/athlete import controls to load additional public Smoothcomp information. Official athlete profile links are retained when the source publishes them. Direct Smoothcomp profile pages may require a browser challenge, so the app uses competition imports and offers the official link instead of depending on profile-page scraping. Missing fields remain marked as unavailable.

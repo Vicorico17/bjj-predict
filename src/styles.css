@@ -2005,3 +2005,29 @@ input[type="url"]:focus,
   .app-shell .match-archive-toggle { flex-wrap: wrap; }
   .app-shell .match-archive-toggle button { white-space: normal; }
 }
+
+/* Athlete profiles use the browser's modal focus handling and Escape support. */
+.competitor-profile-link { display: inline; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: inherit; cursor: pointer; text-decoration: underline; text-decoration-color: #98bd6a80; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.competitor-profile-link:hover { color: #b4e380; }
+.competitor-profile-link:focus-visible { outline: 2px solid #b4e380; outline-offset: 4px; border-radius: 3px; }
+.fighter-option-with-profile { min-width: 0; }
+.fighter-option-with-profile > .fighter-option { width: 100%; }
+.fighter-option-with-profile > .competitor-profile-link { margin: 8px 0; font-size: 12px; }
+.athlete-profile-dialog { padding: 0; width: min(680px, calc(100vw - 24px)); max-height: 88dvh; overflow: auto; color: #edf2e8; background: #17251e; border: 1px solid #4c624e; border-radius: 20px; box-shadow: 0 24px 80px #0009; }
+.athlete-profile-dialog::backdrop { background: #06120dcc; }
+.athlete-profile-content { padding: 24px; overflow-wrap: anywhere; }
+.profile-close { display: block; margin-left: auto; margin-bottom: 20px; }
+.athlete-profile-header { display: flex; align-items: center; gap: 18px; }
+.athlete-profile-header h2 { margin: 6px 0; font-size: clamp(22px, 5vw, 32px); }
+.athlete-profile-header p { margin: 0; color: #b4c3b7; }
+.athlete-profile-header .competitor-portrait { width: 80px; height: 80px; flex-shrink: 0; }
+.athlete-profile-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 24px 0; }
+.athlete-profile-facts > div { padding: 14px; border-radius: 10px; background: #23372b; }
+.athlete-profile-facts dt { color: #b4c3b7; font-size: 12px; }
+.athlete-profile-facts dd { margin: 6px 0 0; font-weight: 700; text-transform: capitalize; }
+.athlete-profile-content section { margin-top: 26px; }
+.athlete-profile-history { list-style: none; padding: 0; }
+.athlete-profile-history li { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid #354c3d; padding: 14px 0; }
+.athlete-profile-history small { display: block; margin-top: 5px; color: #b4c3b7; }
+.athlete-profile-history b { font-size: 12px; text-align: right; }
+@media (max-width: 480px) { .athlete-profile-content { padding: 16px; } }

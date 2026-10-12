@@ -326,7 +326,7 @@ function competitorFromSeat(seat, liveSide, detailSeat, division, side) {
     record: liveSide?.wins !== undefined && liveSide?.wins !== null ? `Wins listed: ${liveSide.wins}` : "Record not listed",
     imageUrl: absoluteAssetUrl(firstPhotoUrl(liveSide, detailSeat, seat)),
     clubLogoUrl: absoluteAssetUrl(detailSeat?.player_club_logo || detailSeat?.player_competition_team_logo || null),
-    sourceUrl: liveSide?.profile_link || seat?.profile_link || null
+    sourceUrl: liveSide?.profile_link || seat?.profile_link || detailSeat?.profile_link || null
   };
 }
 

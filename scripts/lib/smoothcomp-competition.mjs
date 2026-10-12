@@ -51,7 +51,8 @@ export function parsePublicParticipants(html, base) {
       const sourceId = String($(row).attr('data-registration-id') || profileUrl || `${name}:${division}`);
       const academyIndex = column(/academy|club|affiliation/);
       participants.set(`${sourceId}:${division}`, { sourceId, name, division,
-        academy: academyIndex >= 0 ? clean(cells.eq(academyIndex).text()) : '', country: '', sourceUrl: profileUrl,
+        academy: academyIndex >= 0 ? clean(cells.eq(academyIndex).text()) : '',
+        country: column(/country|nationality/) >= 0 ? clean(cells.eq(column(/country|nationality/)).text()) : '', sourceUrl: profileUrl,
         imageUrl: link(nameCell.find('img').attr('src'), base) });
     });
   });

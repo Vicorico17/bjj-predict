@@ -1,3 +1,4 @@
+import { CompetitorProfiles, CompetitorProfileLink } from "./CompetitorProfile";
 import { PredictionsProvider, PickButtons, MyPredictions } from "./Predictions";
 import { CompetitorPortrait } from "./CompetitorPortrait";
 import { WinnerBadge } from './WinnerBadge';
@@ -379,7 +380,7 @@ function App() {
   );
 
   return (
-    <PredictionsProvider matches={state.matches} events={state.events} competitors={state.competitors}><div className="app-shell">
+    <CompetitorProfiles competitors={state.competitors} matches={state.matches} events={state.events}><PredictionsProvider matches={state.matches} events={state.events} competitors={state.competitors}><div className="app-shell">
       <aside className="side-nav" aria-label="Primary navigation">
         <a className="brand-mark" href="/" aria-label="BJJ Predict landing page">
           <Swords size={22} aria-hidden="true" />
@@ -745,7 +746,7 @@ function App() {
           </section>
         )}
       </main>
-    </div></PredictionsProvider>
+    </div></PredictionsProvider></CompetitorProfiles>
   );
 }
 
@@ -877,7 +878,7 @@ function BracketDivision({ event, division, matches, competitors }: { event: App
   return <section className="bracket-division"><div className="bracket-division-title"><div><span className="eyebrow">Division</span><h4>{division}</h4></div><span>{matches.length} {matches.length === 1 ? "match" : "matches"} · {sorted.length} rounds</span></div><div className="bracket-rounds">{sorted.map(round => <div className="bracket-round" key={round}><span className="bracket-round-name">{round}</span>{matches.filter(match => (match.round || "Scheduled match") === round).map(match => {
     const left = competitors.find(competitor => competitor.id === match.competitorAId);
     const right = competitors.find(competitor => competitor.id === match.competitorBId);
-    return <article className={`bracket-match ${match.status}`} key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" && isCurrentMatch(match, [event]) ? "Live now" : match.status === "settled" ? "Final result" : isCurrentMatch(match, [event]) ? "Scheduled" : "Past · result unavailable"}<time>{formatDateTime(match.scheduledAt)}</time>{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}</div><div className={`bracket-side ${match.winnerId === left?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={left} compact/><span><strong>{left?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === left?.id) && <WinnerBadge/>}</strong><small>{left?.academy ?? "Academy not listed"}</small></span></div>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className={`bracket-side ${match.winnerId === right?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={right} compact/><span><strong>{right?.name ?? "Competitor TBA"}{Boolean(match.winnerId && match.winnerId === right?.id) && <WinnerBadge/>}</strong><small>{right?.academy ?? "Academy not listed"}</small></span></div>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div><PickButtons matchId={match.id}/><div className="bracket-match-bottom"><span>{match.mat || "Mat not assigned"}</span>{match.winnerId && <span className="winner-label">Winner recorded</span>}</div></article>;
+    return <article className={`bracket-match ${match.status}`} key={match.id}><div className="bracket-match-meta"><span className={`match-live-dot ${match.status}`} />{match.status === "live" && isCurrentMatch(match, [event]) ? "Live now" : match.status === "settled" ? "Final result" : isCurrentMatch(match, [event]) ? "Scheduled" : "Past · result unavailable"}<time>{formatDateTime(match.scheduledAt)}</time>{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced") && <span className="match-countdown">{formatApproxStart(match.scheduledAt, match.status, match.sourceState === "card-announced")}</span>}</div><div className={`bracket-side ${match.winnerId === left?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={left} compact/><span><strong><CompetitorProfileLink competitor={left}/>{Boolean(match.winnerId && match.winnerId === left?.id) && <WinnerBadge/>}</strong><small>{left?.academy ?? "Academy not listed"}</small></span></div>{match.score?.left?.points != null && <b>{match.score.left.points}</b>}</div><div className={`bracket-side ${match.winnerId === right?.id ? "winner" : ""}`}><div className="bracket-player"><CompetitorPortrait competitor={right} compact/><span><strong><CompetitorProfileLink competitor={right}/>{Boolean(match.winnerId && match.winnerId === right?.id) && <WinnerBadge/>}</strong><small>{right?.academy ?? "Academy not listed"}</small></span></div>{match.score?.right?.points != null && <b>{match.score.right.points}</b>}</div><PickButtons matchId={match.id}/><div className="bracket-match-bottom"><span>{match.mat || "Mat not assigned"}</span>{match.winnerId && <span className="winner-label">Winner recorded</span>}</div></article>;
   })}</div>)}</div></section>;
 }
 
@@ -892,7 +893,7 @@ function roundOrder(round: string) {
 }
 
 function MatchCompetitor({ competitor, align = "left", won = false }: { competitor?: Competitor; align?: "left" | "right"; won?: boolean }) {
-  return <span className={`match-competitor ${align}`}><CompetitorPortrait competitor={competitor}/><span className="match-competitor-copy"><strong>{competitor?.name ?? "Competitor TBA"}{won && <WinnerBadge/>}</strong><small>{competitor?.academy ?? "Academy not listed"}</small></span></span>;
+  return <span className={`match-competitor ${align}`}><CompetitorPortrait competitor={competitor}/><span className="match-competitor-copy"><strong><CompetitorProfileLink competitor={competitor}/>{won && <WinnerBadge/>}</strong><small>{competitor?.academy ?? "Academy not listed"}</small></span></span>;
 }
 
 function UpcomingMatchesView({ events, matches, competitors, onSelectEvent, onCompetitions }: {
@@ -1075,7 +1076,7 @@ type FighterOptionProps = {
 
 function FighterOption({ competitor, disabled, ownedShares, probability, won, onPick }: FighterOptionProps) {
   return (
-    <button className={won ? "fighter-option winner" : "fighter-option"} disabled={disabled} onClick={onPick} type="button">
+    <div className="fighter-option-with-profile"><button className={won ? "fighter-option winner" : "fighter-option"} disabled={disabled} onClick={onPick} type="button">
       <div className="fighter-main">
         <CompetitorPortrait competitor={competitor} />
         {competitor.seed > 0 && <div className="seed-badge">#{competitor.seed}</div>}
@@ -1096,7 +1097,7 @@ function FighterOption({ competitor, disabled, ownedShares, probability, won, on
         {won ? <Trophy size={16} aria-hidden="true" /> : <CircleDollarSign size={16} aria-hidden="true" />}
         <span>{formatPercent(probability)}</span>
       </div>
-    </button>
+    </button><CompetitorProfileLink competitor={competitor}>View competitor profile ↗</CompetitorProfileLink></div>
   );
 }
 
@@ -1302,7 +1303,7 @@ function PortfolioPanel({ competitors, matches, positions }: PortfolioPanelProps
           return (
             <div className="position-row" key={position.id}>
               <div>
-                <strong className="portrait-name"><CompetitorPortrait competitor={competitor} compact/>{competitor?.name ?? "Unknown competitor"}</strong>
+                <strong className="portrait-name"><CompetitorPortrait competitor={competitor} compact/><CompetitorProfileLink competitor={competitor}> {competitor?.name ?? "Unknown competitor"}</CompetitorProfileLink></strong>
                 <span>{match?.round ?? "Match"} · {roundShares(position.shares).toLocaleString()} shares</span>
               </div>
               <div>
@@ -1340,7 +1341,7 @@ function RecentTrades({ competitors, trades }: RecentTradesProps) {
           const competitor = competitors.find((item) => item.id === trade.competitorId);
           return (
             <div className="trade-row" key={trade.id}>
-              <span className="portrait-name"><CompetitorPortrait competitor={competitor} compact/>{trade.side === "sell" ? "Sold" : "Bought"} · {competitor?.name ?? "Outcome"}</span>
+              <span className="portrait-name"><CompetitorPortrait competitor={competitor} compact/>{trade.side === "sell" ? "Sold" : "Bought"} · <CompetitorProfileLink competitor={competitor}>{competitor?.name ?? "Outcome"}</CompetitorProfileLink></span>
               <strong>{trade.amount.toLocaleString()} pts</strong>
             </div>
           );
