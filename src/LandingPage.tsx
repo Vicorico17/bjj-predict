@@ -9,7 +9,7 @@ export function LandingPage() {
   const first = quarterfinals[0];
   return <div className="landing">
     <nav className="landing-nav" aria-label="Main navigation">
-      <a className="landing-brand" href="#"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span></a>
+      <a className="landing-brand" href="/" aria-label="BJJ Predict landing page"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span></a>
       <div className="landing-nav-links"><a href="#" aria-current="page">Landing page</a></div>
       <a className="landing-entry" href="#/app">Enter app <ArrowRight size={17}/></a>
     </nav>
@@ -43,6 +43,6 @@ export function LandingPage() {
       ].map(({icon: Icon, ...item}) => <article key={item.number}><div><Icon size={26}/><span>{item.number}</span></div><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></section>
       <section className="landing-final"><p className="landing-kicker">YOU KNOW WHAT TO LOOK FOR.</p><h2>Now make your move.</h2><a className="landing-cta" href="#/app">Enter BJJ Predict <ArrowRight size={20}/></a><p>No real-money wagering. Just the sport, and your instincts.</p></section>
     </main>
-    <footer className="landing-footer"><a href="#" className="landing-brand"><Swords size={20}/><span>BJJ<span className="brand-light">Predict</span></span></a><span>Built for the grappling obsessed.</span><a href="#/app">Open app <ArrowRight size={14}/></a></footer>
+    <footer className="landing-footer"><a href="/" className="landing-brand" aria-label="BJJ Predict landing page"><Swords size={20}/><span>BJJ<span className="brand-light">Predict</span></span></a><span>Built for the grappling obsessed.</span><a href="#/app">Open app <ArrowRight size={14}/></a></footer>
   </div>;
 }
