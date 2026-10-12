@@ -2031,3 +2031,26 @@ input[type="url"]:focus,
 .athlete-profile-history small { display: block; margin-top: 5px; color: #b4c3b7; }
 .athlete-profile-history b { font-size: 12px; text-align: right; }
 @media (max-width: 480px) { .athlete-profile-content { padding: 16px; } }
+
+.competitors-page { display: grid; gap: 22px; }
+.competitors-page .section-heading p { color: var(--muted); margin-bottom: 0; }
+.athlete-directory-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.athlete-directory-filters label { display: grid; gap: 8px; min-width: 0; }
+.athlete-directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 245px), 1fr)); gap: 18px; }
+.athlete-directory-card { display: flex; flex-direction: column; align-items: flex-start; padding: 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); min-width: 0; }
+.athlete-directory-card .competitor-portrait { width: 96px; height: 96px; }
+.athlete-directory-card h3 { margin: 18px 0 6px; font-size: 1.2rem; }
+.athlete-directory-card p { margin: 0 0 8px; color: var(--muted); }
+.athlete-directory-card :is(h3, p, button) { overflow-wrap: anywhere; max-width: 100%; }
+.athlete-event-links { display: grid; gap: 8px; margin: 18px 0; }
+.athlete-event-links button { text-align: left; white-space: normal; }
+.athlete-directory-card > .competitor-profile-link:last-child { margin-top: auto; color: var(--emerald); }
+.competition-browse-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+.competition-browse-controls .small-note { width: 100%; margin: 0; }
+.competition-browse-controls > label { display: flex; align-items: center; gap: 12px; }
+.competition-browse-controls .match-archive-toggle { flex-wrap: wrap; }
+@media (max-width: 620px) {
+  .athlete-directory-filters { grid-template-columns: 1fr; }
+  .competition-browse-controls .match-archive-toggle { width: 100%; }
+  .competition-browse-controls .match-archive-toggle button { flex: 1; white-space: normal; padding: 10px; }
+}

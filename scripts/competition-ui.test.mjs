@@ -23,8 +23,8 @@ function render(extra = {}) {
 test('games are visible by default and only the confirmed winner receives a tick', () => {
   const html = render();
   assert.match(html, /aria-selected="true"[^>]*>.*?Games/);
-  assert.match(html, /Alice<span class="winner-tick"/);
-  assert.doesNotMatch(html, /Bea<span class="winner-tick"/);
+  assert.match(html, /Alice<\/button><span class="winner-tick"/);
+  assert.doesNotMatch(html, /Bea<\/button><span class="winner-tick"/);
   assert.equal((html.match(/aria-label="Winner"/g) || []).length, 1);
 });
 test('a high score without a reported winner does not receive a tick', () => {
@@ -38,7 +38,7 @@ test('partial catalogs retain saved matchups and byes stay in brackets', () => {
     competitors: [{ ...player('Alice'), id: 'a' }, { ...player('Bea'), id: 'b' }],
     matches: [{ id: 'saved', sourceBracketId: 'division', division: 'Adult', competitorAId: 'a', competitorBId: 'b', winnerId: 'a', status: 'settled', round: 'Final', scheduledAt: '' }],
   });
-  assert.match(html, /Alice<span class="winner-tick"/);
+  assert.match(html, /Alice<\/button><span class="winner-tick"/);
   const bye = { ...bout, seats: [bout.seats[0], { label: 'Bye', participant: null, winner: false }] };
   assert.match(render({ event: { ...event, brackets: [{ ...event.brackets[0], bouts: [bye] }] } }), /No games with both athletes loaded yet/);
 });

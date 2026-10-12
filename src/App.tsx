@@ -1,3 +1,4 @@
+import { CompetitorsPage } from "./CompetitorsPage";
 import { CompetitorProfiles, CompetitorProfileLink } from "./CompetitorProfile";
 import { PredictionsProvider, PickButtons, MyPredictions } from "./Predictions";
 import { CompetitorPortrait } from "./CompetitorPortrait";
@@ -62,7 +63,7 @@ import {
 import { loadState, resetState, saveState } from "./storage";
 import type { AppState, Competitor, Event as AppEvent, Market, Match, Position, TradeQuote, TradeSide } from "./types";
 
-type View = "competitions" | "matches" | "markets" | "leaderboard" | "admin";
+type View = "competitors" | "competitions" | "matches" | "markets" | "leaderboard" | "admin";
 
 type Ticket = {
   marketId: string;
@@ -152,8 +153,16 @@ function App() {
   const [importingCompetitionId, setImportingCompetitionId] = useState("");
   const [competitionImportNotice, setCompetitionImportNotice] = useState("");
   const [competitionNoticeEventId, setCompetitionNoticeEventId] = useState("");
-  const [view, setView] = useState<View>(() => window.location.hash === "#/app/brackets" ? "competitions" : "matches");
+  const readView = (): View => {
+    const route = window.location.hash.split("/")[2];
+    return route === "brackets" ? "competitions" : ["competitors", "competitions", "markets", "leaderboard", "admin"].includes(route) ? route as View : "matches";
+  };
+  const [view, setCurrentView] = useState<View>(readView);
+  function setView(next: View) { setCurrentView(next); window.location.hash = next === "matches" ? "/app" : `/app/${next}`; }
+  useEffect(() => { const navigate = () => setCurrentView(readView()); window.addEventListener("hashchange", navigate); return () => window.removeEventListener("hashchange", navigate); }, []);
   const [showAllCompetitions, setShowAllCompetitions] = useState(false);
+  const [competitionAvailability, setCompetitionAvailability] = useState<"ready" | "listed">("ready");
+  const [allCompetitionDates, setAllCompetitionDates] = useState(true);
   const [competitionSearch, setCompetitionSearch] = useState("");
   const [refreshGeneration, setRefreshGeneration] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(true);
@@ -214,12 +223,13 @@ function App() {
     ? { ...match, status: "locked" as const, sourceState: "started-update-delayed" } : match);
   const scopedMatches = displayMatches.filter(match => scopedEventIds.has(match.eventId));
   const visibleEvents = showHistory ? scopedEvents : currentEvents(scopedEvents);
-  const competitionPool = showOldCompetitions
-    ? browseCompetitionEvents(state.events, state.matches).filter(event => isPastCompetition(event))
-    : currentEvents(state.events);
-  const competitionEvents = competitionSearch.trim()
-    ? searchCompetitions(competitionPool, state.matches, state.competitors, competitionSearch)
-    : competitionPool.filter(event => showAllCompetitions || isMajorCompetition(event));
+  const readyEventIds = new Set(state.matches.filter(match => match.sourceState !== "withdrawn" && match.competitorAId && match.competitorBId).map(match => match.eventId));
+  for (const event of state.events) if (event.brackets?.some(bracket => bracket.bouts?.some(bout => bout.seats.some(seat => seat.participant)))) readyEventIds.add(event.id);
+  const currentCompetitionStatuses = new Map(currentEvents(state.events).map(event => [event.id, event]));
+  const competitionPool = allCompetitionDates ? browseCompetitionEvents(state.events, state.matches).map(event => currentCompetitionStatuses.get(event.id) || event)
+    : showOldCompetitions ? browseCompetitionEvents(state.events, state.matches).filter(event => isPastCompetition(event)) : currentEvents(state.events);
+  const searchedCompetitions = searchCompetitions(competitionPool, state.matches, state.competitors, competitionSearch);
+  const competitionEvents = searchedCompetitions.filter(event => competitionAvailability === "ready" ? readyEventIds.has(event.id) : !readyEventIds.has(event.id));
   const selectedEventPool = view === "competitions" ? competitionEvents : visibleEvents;
   const selectedEvent = selectedEventPool.find((event) => event.id === selectedEventId) ??
     selectedEventPool.find(event => state.matches.some(match => match.eventId === event.id)) ?? selectedEventPool[0];
@@ -337,6 +347,9 @@ function App() {
         if (controller.signal.aborted) return;
         if (!response.ok || !snapshot.events?.length) throw new Error(snapshot.error || "Source data unavailable.");
         const incoming = snapshot.events[0];
+        if (view === "competitions" && (incoming.matches.length || incoming.brackets?.some(bracket => bracket.bouts?.some(bout => bout.seats.some(seat => seat.participant))))) {
+          setCompetitionAvailability("ready"); setSelectedEventId(event.id);
+        }
         setState(current => {
           const next = applySmoothcompSnapshot(current, snapshot);
           return { ...next, positions: markPositions(next) };
@@ -356,7 +369,7 @@ function App() {
     }
   }
   useEffect(() => {
-    const event = stateRef.current.events.find(item => item.id === selectedEventId);
+    const event = stateRef.current.events.find(item => item.id === selectedEvent?.id);
     if (!event || !["competitions", "matches"].includes(view)) return;
     activePage.current = 0;
     const loaded = event.brackets?.some(bracket => bracket.loaded) || stateRef.current.matches.some(match => match.eventId === event.id);
@@ -368,7 +381,7 @@ function App() {
       if (!isPastCompetition(current, now) && start <= now && now <= end) void importCompetitionMatches(current, activePage.current);
     }, 15000);
     return () => { clearInterval(timer); importController.current?.abort(); importController.current = null; setImportingCompetitionId(""); };
-  }, [selectedEventId, view]);
+  }, [selectedEvent?.id, view]);
 
   const resolvedPositions = state.positions.filter((position) => position.isResolved);
   const winningPositions = resolvedPositions.filter((position) => position.isWinner);
@@ -387,6 +400,7 @@ function App() {
           <span>BJJ<span className="app-brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span>
         </a>
         <nav className="nav-stack">
+          <button className={view === "competitors" ? "nav-button active" : "nav-button"} onClick={() => setView("competitors")} type="button"><UsersRound size={18}/><span>Competitors</span></button>
           <button
             className={view === "matches" ? "nav-button active" : "nav-button"}
             onClick={() => setView("matches")}
@@ -439,16 +453,16 @@ function App() {
       </aside>
 
       <main className="main-content">
-        <header className="topbar topbar-compact">
+        {view !== "competitors" && <header className="topbar topbar-compact">
           <div className="source-summary">
-            <span className={`status-pill ${currentMatchCount ? "live" : "warning"}`} title={dataStatus}><RefreshCw size={12} aria-hidden="true" />{currentMatchCount ? `${currentMatchCount} games` : isRefreshing ? "Loading games…" : "No matchups loaded"}</span>
+            <span className={`status-pill ${currentMatchCount ? "live" : "warning"}`} title={dataStatus}><RefreshCw size={12} aria-hidden="true" />{view === "competitions" ? `${competitionEvents.length} competitions` : currentMatchCount ? `${currentMatchCount} games` : isRefreshing ? "Loading games…" : "No matchups loaded"}</span>
             <span>{visibleEvents.length} competitions</span>
             {currentMatchCount > 0 && <span>{scopedMatches.filter(match => match.status === "live" && isCurrentMatch(match, scopedEvents)).length} live</span>}
             {view === "markets" && <span>{state.matches.filter(match => match.status === "settled").length} settled</span>}
           </div>
           <div className="topbar-actions">
             {view === "markets" && <label><input type="checkbox" checked={showHistory} onChange={event => setShowHistory(event.target.checked)} /> Include settled markets</label>}
-            <label className="event-scope-toggle"><input type="checkbox" checked={showAllCompetitions} onChange={event => setShowAllCompetitions(event.target.checked)} /> Show all events</label>
+            {view !== "competitions" && <label className="event-scope-toggle"><input type="checkbox" checked={showAllCompetitions} onChange={event => setShowAllCompetitions(event.target.checked)} /> Show all events</label>}
             <button className="primary-button" disabled={isRefreshing} onClick={() => setRefreshGeneration(value => value + 1)}>{isRefreshing ? "Refreshing…" : "Refresh matches"}</button>
             <a className="icon-link" href={selectedEvent?.sourceUrl} target="_blank" rel="noreferrer">
               <ExternalLink size={17} aria-hidden="true" />
@@ -459,7 +473,7 @@ function App() {
               <span>Reset demo</span>
             </button>
           </div>
-        </header>
+        </header>}
 
         {storageNotice && <p className="coverage-note" role="status">{storageNotice}</p>}
         {!isRefreshing && dataStatus.startsWith("Directory unavailable") && <p className="data-refresh-status" role="status">Competition updates are unavailable. Showing saved data.</p>}
@@ -503,7 +517,19 @@ function App() {
           {selectedEvent.warnings?.length ? <details><summary>Coverage notes ({selectedEvent.warnings.length})</summary>{selectedEvent.warnings.map((warning, index) => <p key={index}>{warning}</p>)}</details> : null}
         </div>}
 
+        {view === "competitors" && <CompetitorsPage competitors={state.competitors} events={state.events} matches={state.matches} onCompetition={event => {
+          setCompetitionSearch(""); setAllCompetitionDates(true); setCompetitionAvailability(readyEventIds.has(event.id) ? "ready" : "listed"); setSelectedEventId(event.id); setView("competitions");
+        }}/>}
+        {view === "competitions" && <section className="competition-browse-controls" aria-label="Competition availability">
+          <div className="match-archive-toggle" role="group" aria-label="Published matchups">
+            <button className={competitionAvailability === "ready" ? "active" : ""} aria-pressed={competitionAvailability === "ready"} onClick={() => setCompetitionAvailability("ready")}>Matchups & brackets ({searchedCompetitions.filter(event => readyEventIds.has(event.id)).length})</button>
+            <button className={competitionAvailability === "listed" ? "active" : ""} aria-pressed={competitionAvailability === "listed"} onClick={() => setCompetitionAvailability("listed")}>Event listings ({searchedCompetitions.filter(event => !readyEventIds.has(event.id)).length})</button>
+          </div>
+          <label>Event dates<select value={allCompetitionDates ? "all" : showOldCompetitions ? "past" : "upcoming"} onChange={e => { setAllCompetitionDates(e.target.value === "all"); setShowOldCompetitions(e.target.value === "past"); }}><option value="all">All dates</option><option value="upcoming">Live & upcoming</option><option value="past">Past events</option></select></label>
+          <p className="small-note">{competitionAvailability === "ready" ? "These events have loaded matchups or populated brackets. Open one to see the games." : "These are event listings only. Open an event to check for published matchups and athletes."}</p>
+        </section>}
         {view === "competitions" && <CompetitionsView
+          listingOnly={competitionAvailability === "listed"}
           events={competitionEvents}
           search={competitionSearch}
           onSearch={setCompetitionSearch}
@@ -523,7 +549,7 @@ function App() {
           events={scopedEvents}
           matches={scopedMatches}
           competitors={state.competitors}
-          onSelectEvent={setSelectedEventId}
+          onSelectEvent={id => { setSelectedEventId(id); setAllCompetitionDates(true); setCompetitionAvailability(readyEventIds.has(id) ? "ready" : "listed"); }}
           onCompetitions={old => { setCompetitionSearch(""); setShowOldCompetitions(Boolean(old)); setView("competitions"); }}
         />}
 
@@ -784,14 +810,17 @@ function EventSwitcher({ groups, selectedEventId, onSelect }: EventSwitcherProps
   );
 }
 
-function CompetitionsView({ events, search, onSearch, selectedEvent, matches, competitors, onSelect, showingOldEvents, onToggleOldEvents, onImport, importingEventId, importNotice, noticeEventId }: {
-  events: AppEvent[]; search: string; onSearch: (value: string) => void; selectedEvent?: AppEvent; matches: Match[]; competitors: Competitor[];
+function CompetitionsView({ listingOnly, events, search, onSearch, selectedEvent, matches, competitors, onSelect, showingOldEvents, onToggleOldEvents, onImport, importingEventId, importNotice, noticeEventId }: {
+  listingOnly: boolean; events: AppEvent[]; search: string; onSearch: (value: string) => void; selectedEvent?: AppEvent; matches: Match[]; competitors: Competitor[];
   onSelect: (id: string) => void; showingOldEvents: boolean; onToggleOldEvents: () => void;
   onImport: (event: AppEvent, offset?: number, all?: boolean, participants?: boolean) => Promise<void>; importingEventId: string; importNotice: string; noticeEventId: string;
 }) {
-  const [matchView, setMatchView] = useState<"all" | "current" | "old">(showingOldEvents ? "all" : "current");
-  useEffect(() => { setMatchView(showingOldEvents ? "all" : "current"); }, [showingOldEvents]);
-  const menuEvents = events;
+  const [matchView, setMatchView] = useState<"all" | "current" | "old">("all");
+  useEffect(() => { setMatchView("all"); }, [showingOldEvents]);
+  const [menuLimit, setMenuLimit] = useState(50);
+  useEffect(() => setMenuLimit(50), [search, listingOnly, showingOldEvents]);
+  const menuEvents = events.slice(0, menuLimit);
+  if (selectedEvent && !menuEvents.some(event => event.id === selectedEvent.id)) menuEvents.unshift(selectedEvent);
   const selectedMatches = matches.filter(match => match.eventId === selectedEvent?.id && match.sourceState !== "withdrawn");
   const currentMatches = selectedMatches.filter(match => isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
   const oldMatches = selectedMatches.filter(match => !isCurrentMatch(match, selectedEvent ? [selectedEvent] : []));
@@ -809,23 +838,24 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
   const dateLabel = selectedEvent ? formatCompetitionDate(selectedEvent.startsAt, selectedEvent.endsAt) : "Date not published";
   return <section className="competition-browser" aria-label="Competitions and brackets">
     <aside className="competition-menu">
-      <div className="section-heading"><div><span className="eyebrow">Browse</span><h2>{showingOldEvents ? "Old events" : "Upcoming competitions"}</h2></div><span className="menu-count">{menuEvents.length}</span></div>
+      <div className="section-heading"><div><span className="eyebrow">Browse</span><h2>{listingOnly ? "Event listings" : "Matchups & brackets"}</h2></div><span className="menu-count">{events.length}</span></div>
       <div className="competition-search">
         <label htmlFor="competition-search">Search competitions</label>
         <div className="competition-search-input"><Search size={17} aria-hidden="true"/><input id="competition-search" type="search" value={search} onChange={event => onSearch(event.target.value)} placeholder="Event, location or competitor" aria-describedby="competition-search-help"/>{search && <button type="button" aria-label="Clear competition search" onClick={() => onSearch("")}><X size={16}/></button>}</div>
         <small id="competition-search-help">Search all events in this view. Competitor names use loaded matchups.</small>
-        <span role="status">{menuEvents.length} {menuEvents.length === 1 ? "competition" : "competitions"}{search.trim() ? " found" : ""}</span>
+        <span role="status">{events.length} {events.length === 1 ? "competition" : "competitions"}{search.trim() ? " found" : ""}</span>
       </div>
       <div className="competition-menu-list">
         {menuEvents.map(event => {
           const count = matches.filter(match => match.eventId === event.id && match.sourceState !== "withdrawn").length;
           const importance = competitionImportance(event);
-          return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setMatchView(showingOldEvents ? "all" : "current"); onSelect(event.id); }}>
+          return <button type="button" key={event.id} className={`competition-menu-item ${selectedEvent?.id === event.id ? "selected" : ""}`} onClick={() => { setMatchView("all"); onSelect(event.id); }}>
             <span className="competition-live-slot"><EventArtwork event={event} compact/>{event.status === "live" && !isPastCompetition(event) && <span className="competition-status-label live">LIVE</span>}</span>
-            <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><span className="competition-importance" aria-label={`Estimated importance: ${importance} out of 5 stars`} title={`Estimated competition scale: ${importance} out of 5. Based on event name and organizer.`}>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} fill={index < importance ? "currentColor" : "none"} />)}<small>{count ? `${count} published ${count === 1 ? "match" : "matches"}` : event.coverage?.level === "discovered" ? "Bracket not imported yet" : "No matches published"}</small></span></span>
+            <span className="competition-menu-copy"><strong>{event.name}</strong><span>{[event.city, formatDateTime(event.startsAt)].filter(Boolean).join(" · ")}</span><span className="competition-importance" aria-label={`Estimated importance: ${importance} out of 5 stars`} title={`Estimated competition scale: ${importance} out of 5. Based on event name and organizer.`}>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} fill={index < importance ? "currentColor" : "none"} />)}<small>{count ? `${count} published ${count === 1 ? "match" : "matches"}` : event.coverage?.level === "discovered" ? "Bracket not imported yet" : "Matchups not loaded"}</small></span></span>
             <span className="menu-chevron">›</span>
           </button>;
         })}
+        {events.length > menuLimit && <button className="ghost-button" onClick={() => setMenuLimit(value => value + 50)}>Show more events ({events.length - menuLimit})</button>}
         {!menuEvents.length && <div className="menu-empty">No competitions found. Try another event, city, country or competitor name.</div>}
       </div>
     </aside>
@@ -847,7 +877,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
           <section className="competition-map-card" aria-label="Competition location"><div className="competition-map-heading"><div><span className="eyebrow">Where it happens</span><h3>{venue || city || "Location not published"}</h3><p>{venue && city && venue !== city ? city : "Organizer-published location"}</p></div><a href={location === "Location not published" ? selectedEvent.sourceUrl : `https://maps.google.com/?q=${encodeURIComponent(location)}`} target="_blank" rel="noreferrer">{location === "Location not published" ? "Check event page" : "Open map"}<ExternalLink size={13}/></a></div>{mapUrl ? <iframe title={`Map showing ${location}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /> : <div className="map-placeholder"><span>📍</span><strong>Venue location not listed</strong><p>The organizer has not published a location. Check the official event listing for updates.</p></div>}</section>
         </div>
         {selectedEvent.coverage && !noUpcomingGames && <div className="coverage-note competition-coverage"><strong>Match data coverage · {selectedEvent.coverage.level}</strong><span>{selectedEvent.coverage.importedBrackets ?? divisions.length} of {selectedEvent.coverage.totalBrackets ?? divisions.length} brackets loaded · {selectedEvent.coverage.scoredMatches} scored matches{selectedEvent.coverage.liveScores ? " · live scoring available" : ""}</span></div>}
-      </> : <div className="panel empty-matchups"><strong>{search.trim() ? "No competitions match your search" : `No ${showingOldEvents ? "old" : "upcoming"} competition available`}</strong><span>{search.trim() ? "Try another name or location, or switch between upcoming and old events. Competitor search covers loaded matchups." : "Check the other event view or enable Show all events."}</span><button className="primary-button" type="button" onClick={onToggleOldEvents}>{showingOldEvents ? "See upcoming events" : "See old events"}</button></div>}
+      </> : <div className="panel empty-matchups"><strong>{search.trim() ? "No competitions match your search" : listingOnly ? "No event listings in this view" : "No loaded matchups in this view"}</strong><span>{search.trim() ? "Try another name or location, or switch between upcoming and old events. Competitor search covers loaded matchups." : "Choose All dates above, or switch between Matchups & brackets and Event listings."}</span><button className="primary-button" type="button" onClick={onToggleOldEvents}>{showingOldEvents ? "See upcoming events" : "See old events"}</button></div>}
     </div>
   </section>;
 }

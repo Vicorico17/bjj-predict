@@ -10,7 +10,7 @@ function profileUrl(value?: string) {
     return url.protocol === 'https:' && !url.username && !url.password ? url.href : undefined;
   } catch { return undefined; }
 }
-function identityUrl(value?: string) {
+export function identityUrl(value?: string) {
   const url = profileUrl(value);
   if (!url) return undefined;
   const parsed = new URL(url);
