@@ -7,12 +7,13 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const folder = await mkdtemp(path.join(os.tmpdir(), 'bjj-data-tests-'));
-await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts', 'src/Predictions.tsx'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
+await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts', 'src/Predictions.tsx', 'src/storage.ts'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
 const { applyDataSnapshot } = await import(pathToFileURL(path.join(folder, 'smoothcomp.mjs')));
 const { planLiquidity } = await import(pathToFileURL(path.join(folder, 'liquidity.mjs')));
 const { costToBuyShares, quantitiesFromProbabilities, quoteBuy, isMatchTradable } = await import(pathToFileURL(path.join(folder, 'market.mjs')));
 const { predictionClosed } = await import(pathToFileURL(path.join(folder, 'Predictions.mjs')));
-const { currentEvents, isCurrentMatch, isMajorCompetition, searchCompetitions } = await import(pathToFileURL(path.join(folder, 'events.mjs')));
+const { compactState, loadState, saveState } = await import(pathToFileURL(path.join(folder, 'storage.mjs')));
+const { hasFreshLiveMatch, isPastCompetition, currentEvents, isCurrentMatch, isMajorCompetition, searchCompetitions } = await import(pathToFileURL(path.join(folder, 'events.mjs')));
 await rm(folder, { recursive: true });
 const fixture = JSON.parse(await readFile('src/generated/data-snapshot.json', 'utf8'));
 const empty = () => ({ balance: 1000, competitors: [], events: [], matches: [], markets: [], positions: [], trades: [] });
@@ -123,7 +124,7 @@ test('Announced cards without end times and delayed bouts remain visible during 
   assert.equal(isCurrentMatch({ ...match, status: 'settled' }, [event], now), false);
   assert.equal(isCurrentMatch(match, [{ ...event, status: 'complete' }], now), false);
   assert.equal(isCurrentMatch(match, [event], now + 2 * 86400000), false);
-  assert.equal(currentEvents([event], now)[0].status, 'live');
+  assert.equal(currentEvents([event], now)[0].status, 'unknown');
   assert.equal(currentEvents([{ ...event, startsAt: '2026-10-09T00:00:00Z', endsAt: '2026-10-12T20:00:00Z' }], now).length, 1);
 });
 
@@ -230,4 +231,50 @@ test('winner picks lock at the scheduled start, on live/results, and for unknown
   for (const changed of [{ status: 'live' }, { status: 'settled' }, { winnerId: 'a' }, { sourceState: 'withdrawn' }, { sourceState: 'finished' }]) assert(predictionClosed({ ...match, ...changed }, event, now));
   assert(predictionClosed(match, { ...event, status: 'complete' }, now));
   assert(predictionClosed({ ...match, scheduledAt: '' }, { status: 'unknown', startsAt: '' }, now));
+});
+
+
+test('Expired and unverified events never appear live', () => {
+  const now = Date.parse('2026-10-12T09:00:00Z');
+  const event = { id: 'e-gosofia-2387', source: 'gosofia', startsAt: '2026-10-11T16:00:00Z', name: 'Grappling Grand Prix 88', status: 'live', lastSyncedAt: new Date(now).toISOString(), coverage: { liveScores: true } };
+  assert(isPastCompetition(event, now));
+  assert.equal(currentEvents([event], now).length, 0);
+  const current = { ...event, id: 'other', startsAt: new Date(now - 3600000).toISOString() };
+  assert.equal(currentEvents([current], now)[0].status, 'live');
+  assert.equal(currentEvents([{ ...current, lastSyncedAt: new Date(now - 60000).toISOString() }], now)[0].status, 'unknown');
+  assert.equal(currentEvents([{ ...current, coverage: { liveScores: false } }], now)[0].status, 'unknown');
+});
+
+test('Large tournament caches shrink without losing personal records or winner picks', () => {
+  const state = applyDataSnapshot(empty(), fixture);
+  state.balance = 4321;
+  const match = state.matches[0];
+  state.positions = [{ matchId: match.id }];
+  const picked = state.matches[1];
+  const writes = [];
+  globalThis.window = { localStorage: {
+    getItem: key => key.includes('winner-picks') ? JSON.stringify({ [picked.id]: { matchId: picked.id } }) : null,
+    setItem: (key, value) => { writes.push(value); if (writes.length === 1) throw new Error('QuotaExceededError'); }
+  } };
+  const compact = compactState(state, 0);
+  assert.equal(compact.balance, 4321);
+  assert.deepEqual(compact.matches.map(m => m.id), [match.id, picked.id]);
+  assert.equal(compact.positions.length, 1);
+  assert(compact.events.every(event => !event.brackets && !event.participants));
+  assert.equal(saveState(state), true);
+  assert.equal(writes.length, 2);
+  assert.equal(JSON.parse(writes[1]).matches.length, 2);
+  window.localStorage.getItem = () => { throw new Error('SecurityError'); };
+  assert.doesNotThrow(() => loadState());
+  window.localStorage.setItem = () => { throw new Error('SecurityError'); };
+  assert.equal(saveState(state), false);
+  delete globalThis.window;
+});
+
+test('Live match badges expire when score observations stop arriving', () => {
+  const now = Date.parse('2026-10-12T09:00:00Z');
+  const match = { status: 'live', sourceObservedAt: new Date(now - 15000).toISOString() };
+  assert(hasFreshLiveMatch(match, [], now));
+  assert.equal(hasFreshLiveMatch({ ...match, sourceObservedAt: '' }, [], now), false);
+  assert.equal(hasFreshLiveMatch(match, [], now + 45000), false);
 });

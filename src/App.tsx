@@ -29,7 +29,7 @@ import {
   X
 } from "lucide-react";
 import { ReactNode, useEffect, useMemo, useState, useRef } from "react";
-import { competitionImportance, currentEvents, isCurrentMatch, isMajorCompetition, isPastCompetition, searchCompetitions } from "./events";
+import { competitionImportance, hasFreshLiveMatch, currentEvents, isCurrentMatch, isMajorCompetition, isPastCompetition, searchCompetitions } from "./events";
 import featuredSnapshot from "./generated/featured-events.json";
 import { initialState } from "./data";
 import { CompetitionData } from "./CompetitionData";
@@ -178,7 +178,7 @@ function App() {
   const [settlementFinish, setSettlementFinish] = useState(finishOptions[0]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setStorageNotice(saveState(state) ? "" : "Browser storage is full or unavailable. Loaded data remains visible, but recent changes may not survive a reload."), 500);
+    const timer = setTimeout(() => setStorageNotice(saveState(state) ? "" : "Changes could not be saved on this device. Keep this tab open to retain this session."), 500);
     const flush = () => saveState(state);
     window.addEventListener('pagehide', flush);
     return () => { clearTimeout(timer); window.removeEventListener('pagehide', flush); };
@@ -209,7 +209,9 @@ function App() {
 
   const scopedEvents = state.events.filter(event => showAllCompetitions || isMajorCompetition(event));
   const scopedEventIds = new Set(scopedEvents.map(event => event.id));
-  const scopedMatches = state.matches.filter(match => scopedEventIds.has(match.eventId));
+  const displayMatches = state.matches.map(match => match.status === "live" && !hasFreshLiveMatch(match, state.events)
+    ? { ...match, status: "locked" as const, sourceState: "started-update-delayed" } : match);
+  const scopedMatches = displayMatches.filter(match => scopedEventIds.has(match.eventId));
   const visibleEvents = showHistory ? scopedEvents : currentEvents(scopedEvents);
   const competitionPool = showOldCompetitions
     ? browseCompetitionEvents(state.events, state.matches).filter(event => isPastCompetition(event))
@@ -362,7 +364,7 @@ function App() {
       const current = stateRef.current.events.find(item => item.id === event.id);
       if (!current || document.hidden || importController.current) return;
       const now = Date.now(), start = Date.parse(current.startsAt), end = Date.parse(current.endsAt || '') || start + 86400000;
-      if (current.status !== 'complete' && start <= now && now <= end) void importCompetitionMatches(current, activePage.current);
+      if (!isPastCompetition(current, now) && start <= now && now <= end) void importCompetitionMatches(current, activePage.current);
     }, 15000);
     return () => { clearInterval(timer); importController.current?.abort(); importController.current = null; setImportingCompetitionId(""); };
   }, [selectedEventId, view]);
@@ -459,7 +461,7 @@ function App() {
         </header>
 
         {storageNotice && <p className="coverage-note" role="status">{storageNotice}</p>}
-        <p className="data-refresh-status" role="status">{dataStatus} · {showAllCompetitions ? "All events" : "Major championships & pro shows"}</p>
+        {!isRefreshing && dataStatus.startsWith("Directory unavailable") && <p className="data-refresh-status" role="status">Competition updates are unavailable. Showing saved data.</p>}
 
         {discoveryWarnings.length > 0 && <details className="coverage-note"><summary>Discovery incomplete · {discoveryWarnings.length} sources need attention</summary>{discoveryWarnings.map(warning => <p key={warning}>{warning}</p>)}</details>}
 
@@ -505,7 +507,7 @@ function App() {
           search={competitionSearch}
           onSearch={setCompetitionSearch}
           selectedEvent={selectedEvent}
-          matches={state.matches}
+          matches={displayMatches}
           competitors={state.competitors}
           onSelect={setSelectedEventId}
           showingOldEvents={showOldCompetitions}
@@ -829,7 +831,7 @@ function CompetitionsView({ events, search, onSearch, selectedEvent, matches, co
     <div className="competition-detail">
       {selectedEvent ? <>
         <div className="competition-detail-heading">
-          <div className="competition-title-block"><EventArtwork event={selectedEvent}/><div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name.trim()}</h2><div className="competition-heading-tags"><span className={`competition-status ${isPastCompetition(selectedEvent) ? "past" : selectedEvent.status}`}>{selectedEvent.status === "complete" ? "Completed" : isPastCompetition(selectedEvent) ? "Past event" : selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "upcoming" ? "Upcoming" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div><div className="competition-organizer-line"><span>Organized by</span><strong>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</strong>{selectedEvent.city && <><i>·</i><MapPin size={13}/><span>{selectedEvent.city}</span></>}</div></div></div>
+          <div className="competition-title-block"><EventArtwork event={selectedEvent}/><div><span className="eyebrow">Competition overview</span><h2>{selectedEvent.name.trim()}</h2><div className="competition-heading-tags"><span className={`competition-status ${isPastCompetition(selectedEvent) ? "past" : selectedEvent.status}`}>{selectedEvent.status === "complete" ? "Completed" : isPastCompetition(selectedEvent) ? "Past event" : selectedEvent.status === "live" ? "Live now" : selectedEvent.status === "upcoming" ? "Upcoming" : Date.parse(selectedEvent.startsAt) <= Date.now() ? "Awaiting live updates" : "Schedule pending"}</span><span>{sourceLabels[selectedEvent.source]} listing</span><span className="competition-importance detail" aria-label={`Estimated importance: ${competitionImportance(selectedEvent)} out of 5 stars`} title="Estimated from the event name and organizer"><span>{Array.from({ length: 5 }, (_, index) => <Star key={index} size={14} fill={index < competitionImportance(selectedEvent) ? "currentColor" : "none"} />)}</span>Importance estimate</span></div><div className="competition-organizer-line"><span>Organized by</span><strong>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</strong>{selectedEvent.city && <><i>·</i><MapPin size={13}/><span>{selectedEvent.city}</span></>}</div></div></div>
           <a className="icon-link" href={selectedEvent.officialUrl || selectedEvent.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink size={16} />Event listing</a>
         </div>
         {(selectedEvent.source === "smoothcomp" || selectedEvent.source === "ajp" || Boolean(selectedEvent.brackets?.length)) ? <CompetitionData key={selectedEvent.id} event={selectedEvent} matches={selectedMatches} competitors={competitors} busy={importingEventId === selectedEvent.id} notice={selectedEvent.id === noticeEventId ? importNotice : ""} onLoad={(offset, all, participants) => onImport(selectedEvent, offset, all, participants)}/> : <>

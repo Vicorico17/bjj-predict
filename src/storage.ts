@@ -8,20 +8,17 @@ export function loadState(): AppState {
     return initialState;
   }
 
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return initialState;
-  }
-
   try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return initialState;
     const saved = JSON.parse(raw) as Partial<AppState>;
 
     return {
       balance: typeof saved.balance === "number" ? saved.balance : STARTING_BALANCE,
-      competitors: saved.competitors?.length ? saved.competitors : initialState.competitors,
-      events: saved.events?.length ? saved.events : initialState.events,
-      markets: saved.markets?.length ? saved.markets : initialState.markets,
-      matches: saved.matches?.length ? saved.matches : initialState.matches,
+      competitors: Array.isArray(saved.competitors) ? saved.competitors : initialState.competitors,
+      events: Array.isArray(saved.events) ? saved.events : initialState.events,
+      markets: Array.isArray(saved.markets) ? saved.markets : initialState.markets,
+      matches: Array.isArray(saved.matches) ? saved.matches : initialState.matches,
       positions: Array.isArray(saved.positions) ? saved.positions : [],
       trades: Array.isArray(saved.trades) ? saved.trades : []
     };
@@ -30,16 +27,40 @@ export function loadState(): AppState {
   }
 }
 
-export function saveState(state: AppState) {
+// Tournament draws are a replaceable cache. Never let them crowd out personal records.
+export function compactState(state: AppState, cacheLimit = 150): AppState {
+  const protectedIds = new Set([...state.positions, ...state.trades].map(item => item.matchId));
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    return true;
-  } catch {
-    // Large tournament draws can exceed browser storage. Keep the live session usable.
-    return false;
+    const picks = JSON.parse(window.localStorage.getItem("bjj-predict-winner-picks-v1") || "{}");
+    for (const id of Object.keys(picks)) protectedIds.add(id);
+  } catch { /* Storage access is checked by saveState below. */ }
+  const optional = new Set((cacheLimit > 0 ? state.matches.slice(-cacheLimit) : []).map(match => match.id));
+  const matches = state.matches.filter(match => protectedIds.has(match.id) || optional.has(match.id));
+  const matchIds = new Set(matches.map(match => match.id));
+  const competitorIds = new Set(matches.flatMap(match => [match.competitorAId, match.competitorBId]));
+  const eventIds = new Set(matches.map(match => match.eventId));
+  return {
+    ...state,
+    matches,
+    markets: state.markets.filter(market => matchIds.has(market.matchId)),
+    competitors: state.competitors.filter(competitor => competitorIds.has(competitor.id)),
+    events: state.events.filter((event, index) => eventIds.has(event.id) || cacheLimit > 0 && index < 200)
+      .map(({ participants, brackets, participantsStatus, coverage, ...event }) => ({ ...event,
+        ...(coverage ? { coverage: { ...coverage, importedBrackets: 0, nextBracketOffset: 0 } } : {})
+      }))
+  };
+}
+
+export function saveState(state: AppState) {
+  for (const limit of [150, 0]) {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(compactState(state, limit)));
+      return true;
+    } catch { /* Retry with personal records only when the optional cache is too large. */ }
   }
+  return false;
 }
 
 export function resetState() {
-  window.localStorage.removeItem(STORAGE_KEY);
+  try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Reset in memory still works. */ }
 }

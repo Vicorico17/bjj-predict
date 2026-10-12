@@ -130,7 +130,10 @@ export function CompetitionData({ event, matches, competitors, busy, notice, onL
 }
 export function gameStatus(bout: PublishedBout): 'live' | 'upcoming' | 'finished' | 'unreported' {
   if (bout.seats.some(seat => seat.winner) || /^(finished|completed|settled|ended|done)$/i.test(bout.state)) return 'finished';
-  if (/^(live|running|started)$/i.test(bout.state)) return 'live';
+  if (/^(live|running|started)$/i.test(bout.state)) {
+    const age = Date.now() - Date.parse(bout.observedAt || '');
+    return Number.isFinite(age) && age >= 0 && age < 45000 ? 'live' : 'unreported';
+  }
   if (bout.startsAt && Date.parse(bout.startsAt) < Date.now()) return 'unreported';
   return 'upcoming';
 }

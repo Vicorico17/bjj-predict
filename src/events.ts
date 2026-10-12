@@ -3,6 +3,8 @@ import type { Competitor, Event, Match } from "./types";
 const DAY = 24 * 60 * 60 * 1000;
 
 export function isPastCompetition(event: Event, now = Date.now()) {
+  // Completion reported on 12 October; the listing only publishes a start time.
+  if (event.id === "e-gosofia-2387" && now >= Date.parse("2026-10-12T00:00:00+03:00")) return true;
   const end = Date.parse(event.endsAt || "");
   const start = Date.parse(event.startsAt);
   return event.status === "complete" || (Number.isFinite(end) ? end < now : Number.isFinite(start) && start + DAY < now);
@@ -25,7 +27,7 @@ export function isMajorCompetition(event: Pick<Event, "name" | "source"> & { org
 export function currentEvents(events: Event[], now = Date.now()) {
   return events.filter(event => event.source !== "manual" && !/\b(cancelled|canceled)\b/i.test(event.name) &&
     !isPastCompetition(event, now) && (Number.isFinite(Date.parse(event.startsAt)) || event.status === "unknown"))
-    .map(event => ({ ...event, status: !Number.isFinite(Date.parse(event.startsAt)) ? "unknown" as const : Date.parse(event.startsAt) > now ? "upcoming" as const : "live" as const }))
+    .map(event => ({ ...event, status: !Number.isFinite(Date.parse(event.startsAt)) ? "unknown" as const : Date.parse(event.startsAt) > now ? "upcoming" as const : event.status === "live" && event.coverage?.liveScores && now - Date.parse(event.lastSyncedAt) >= 0 && now - Date.parse(event.lastSyncedAt) < 45000 ? "live" as const : "unknown" as const }))
     .sort((a, b) => Number(b.status === "live") - Number(a.status === "live") ||
       Date.parse(a.startsAt) - Date.parse(b.startsAt) || competitionImportance(b) - competitionImportance(a));
 }
@@ -63,4 +65,10 @@ export function searchCompetitions(events: Event[], matches: Match[], competitor
       ...(event.participants || []).map(player => `${player.name} ${player.academy}`), ...(participants.get(event.id) || [])].filter(Boolean).join(" "));
     return terms.every(term => text.includes(term));
   });
+}
+
+export function hasFreshLiveMatch(match: Match, events: Event[], now = Date.now()) {
+  const age = now - Date.parse(match.sourceObservedAt || "");
+  const event = events.find(event => event.id === match.eventId);
+  return match.status === "live" && Number.isFinite(age) && age >= 0 && age < 45000 && (!event || !isPastCompetition(event, now));
 }
