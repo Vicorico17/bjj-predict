@@ -6,7 +6,6 @@
 .landing-brand > svg { color: var(--acid); }
 .brand-light { font-weight: 400; }
 .landing-brand small { display: block; letter-spacing: 1.7px; font-size: 8px; font-weight: 500; color: #9ba698; margin-top: 2px; }
-.landing-nav-links { display: flex; gap: 30px; font-size: 13px; color: #b4bcb1; }
 .landing-entry { display: flex; align-items: center; gap: 24px; border: 1px solid #59614e; padding: 12px 18px; border-radius: 5px; font-size: 13px; }
 .landing a:focus-visible { outline: 2px solid var(--acid); outline-offset: 6px; }
 .landing-entry:hover, .landing-text-link:hover { color: var(--acid); border-color: var(--acid); }
@@ -86,7 +85,6 @@
 }
 @media(max-width: 750px) {
  .landing-nav { height: 86px; }
- .landing-nav-links { display: none; }
  .landing-nav, .landing-hero, .landing-featured, .landing-experience, .landing-footer { padding-left: 22px; padding-right: 22px; }
  .landing-brand { font-size: 20px; }
  .landing-entry { gap: 10px; padding: 10px 12px; font-size: 11px; }
@@ -124,15 +122,14 @@
 }
 @media(prefers-reduced-motion: reduce) { .landing-cta { transition: none; } }
 
-/* Keep both navigation destinations visible at every screen size. */
-.landing-nav-links { margin-left: auto; }
-.landing-nav-links a[aria-current="page"] { color: var(--acid); }
+/* Keep the logo and app entry compact on small screens. */
 @media (max-width: 750px) {
   .landing-nav { height: auto; min-height: 86px; flex-wrap: wrap; gap: 16px; padding-top: 20px; padding-bottom: 20px; }
-  .landing-nav-links { display: flex; font-size: 12px; }
   .landing-entry { gap: 12px; padding: 10px 13px; font-size: 12px; }
 }
 @media (max-width: 480px) {
-  .landing-nav .landing-brand { flex-basis: 100%; }
-  .landing-nav-links { margin-left: 0; }
+  .landing-nav { flex-wrap: nowrap; gap: 12px; }
+  .landing-nav .landing-brand { font-size: 20px; }
+  .landing-nav .landing-brand small { font-size: 6px; letter-spacing: 1px; }
+  .landing-nav .landing-entry { flex-shrink: 0; }
 }
