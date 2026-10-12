@@ -1998,3 +1998,10 @@ input[type="url"]:focus,
   .app-shell .match-competitor.right { align-items: flex-end; }
   .app-shell .upcoming-match-footer > span { flex-wrap: wrap; }
 }
+.app-shell .upcoming-page { grid-template-columns: minmax(0, 1fr); }
+.app-shell .upcoming-page > * { min-width: 0; }
+.app-shell .match-filter-row { min-width: 0; }
+@media (max-width: 380px) {
+  .app-shell .match-archive-toggle { flex-wrap: wrap; }
+  .app-shell .match-archive-toggle button { white-space: normal; }
+}
