@@ -379,10 +379,10 @@ function App() {
   return (
     <PredictionsProvider matches={state.matches} events={state.events} competitors={state.competitors}><div className="app-shell">
       <aside className="side-nav" aria-label="Primary navigation">
-        <div className="brand-mark">
+        <a className="brand-mark" href="#" aria-label="BJJ Predict landing page">
           <Swords size={22} aria-hidden="true" />
-          <span>BJJ Predict</span>
-        </div>
+          <span>BJJ<span className="app-brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span>
+        </a>
         <nav className="nav-stack">
           <button
             className={view === "matches" ? "nav-button active" : "nav-button"}

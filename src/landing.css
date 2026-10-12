@@ -123,3 +123,16 @@
  .landing-footer > span { order: 3; width: 100%; }
 }
 @media(prefers-reduced-motion: reduce) { .landing-cta { transition: none; } }
+
+/* Keep both navigation destinations visible at every screen size. */
+.landing-nav-links { margin-left: auto; }
+.landing-nav-links a[aria-current="page"] { color: var(--acid); }
+@media (max-width: 750px) {
+  .landing-nav { height: auto; min-height: 86px; flex-wrap: wrap; gap: 16px; padding-top: 20px; padding-bottom: 20px; }
+  .landing-nav-links { display: flex; font-size: 12px; }
+  .landing-entry { gap: 12px; padding: 10px 13px; font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .landing-nav .landing-brand { flex-basis: 100%; }
+  .landing-nav-links { margin-left: 0; }
+}

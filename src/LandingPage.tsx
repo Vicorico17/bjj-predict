@@ -10,7 +10,7 @@ export function LandingPage() {
   return <div className="landing">
     <nav className="landing-nav" aria-label="Main navigation">
       <a className="landing-brand" href="#"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span></a>
-      <div className="landing-nav-links"><a href="#the-game">The experience</a><a href="#featured-card">Featured card</a></div>
+      <div className="landing-nav-links"><a href="#" aria-current="page">Landing page</a></div>
       <a className="landing-entry" href="#/app">Enter app <ArrowRight size={17}/></a>
     </nav>
     <main>
