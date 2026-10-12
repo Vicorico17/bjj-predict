@@ -9,7 +9,7 @@ export function LandingPage() {
   const first = quarterfinals[0];
   return <div className="landing">
     <nav className="landing-nav" aria-label="Main navigation">
-      <a className="landing-brand" href="/" aria-label="BJJ Predict landing page"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span></a>
+      <a className="landing-brand" href="/" aria-label="BJJ Predict landing page"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span></span></a>
       <a className="landing-entry" href="#/app">Enter app <ArrowRight size={17}/></a>
     </nav>
     <main>

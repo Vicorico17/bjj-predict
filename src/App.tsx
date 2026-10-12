@@ -397,7 +397,7 @@ function App() {
       <aside className="side-nav" aria-label="Primary navigation">
         <a className="brand-mark" href="/" aria-label="BJJ Predict landing page">
           <Swords size={22} aria-hidden="true" />
-          <span>BJJ<span className="app-brand-light">Predict</span><small>THE NEXT MOVE IS YOURS.</small></span>
+          <span>BJJ<span className="app-brand-light">Predict</span></span>
         </a>
         <nav className="nav-stack">
           <button className={view === "competitors" ? "nav-button active" : "nav-button"} onClick={() => setView("competitors")} type="button"><UsersRound size={18}/><span>Competitors</span></button>
