@@ -1,47 +1,45 @@
 import { ArrowDown, ArrowRight, GitBranch, Swords, Trophy, Radar, MoveUpRight } from 'lucide-react';
-import { CompetitorPortrait } from './CompetitorPortrait';
-import featured from './generated/featured-events.json';
 import './landing.css';
+import { featuredChampionship, featuredChampionshipLink } from './featuredChampionship';
 
 export function LandingPage() {
-  const event = featured.events[0];
-  const quarterfinals = event.matches.filter(match => match.round === 'Quarterfinal');
-  const first = quarterfinals[0];
+  const eventLink = featuredChampionshipLink;
+  const officialUrl = featuredChampionship.officialUrl;
+  const bracketsUrl = featuredChampionship.sourceUrl;
   return <div className="landing">
+    <a className="landing-skip" href="#main-content">Skip to content</a>
     <nav className="landing-nav" aria-label="Main navigation">
       <a className="landing-brand" href="/" aria-label="BJJ Predict landing page"><Swords size={25}/><span>BJJ<span className="brand-light">Predict</span></span></a>
-      <a className="landing-entry" href="#/app">Enter app <ArrowRight size={17}/></a>
+      <a className="landing-entry" href={eventLink}>Enter app <ArrowRight size={17}/></a>
     </nav>
-    <main>
+    <main id="main-content">
       <section className="landing-hero">
-        <div className="hero-copy"><p className="landing-kicker"><span/> FOR THE ONES WHO KNOW THE GAME</p>
-          <h1>Read the fight.<br/>See the path.<br/><em>Make your call.</em></h1>
-          <p className="hero-description">Every matchup has a story. Follow the brackets, study the athletes, and put your grappling instincts to the test.</p>
-          <div className="hero-actions"><a className="landing-cta" href="#/app">Step onto the mat <ArrowRight size={20}/></a><span>Free to explore.<br/>Predictions with demo points.</span></div>
-          <a className="hero-scroll" href="#featured-card"><ArrowDown size={15}/> Discover the next matchup</a>
+        <div className="hero-copy"><p className="landing-kicker"><span/> ROME, ITALY · 2026</p>
+          <h1>European<br/>IBJJF No-Gi<br/><em>Championship 2026.</em></h1>
+          <p className="hero-description">Europe’s No-Gi championship takes center stage in Rome. Follow the competition at PalaPellicone, October 28–November 1, 2026.</p>
+          <div className="hero-actions"><a className="landing-cta" href={eventLink}>Explore the championship <ArrowRight size={20}/></a><a className="hero-official-link" href={bracketsUrl} target="_blank" rel="noreferrer">Official brackets <MoveUpRight size={16}/></a></div>
+          <a className="hero-scroll" href="#featured-card"><ArrowDown size={15}/> Discover the championship</a>
         </div>
-        <div className="hero-visual" aria-label="Featured tournament matchup">
-          <div className="visual-grid"/><span className="hero-watermark" aria-hidden="true">88</span>
-          <div className="visual-topline"><span>THE MATCHUP</span><span>01 / 04 · QUARTERFINAL</span></div>
-          <div className="hero-athlete athlete-left"><CompetitorPortrait competitor={first.competitorA}/><span>BG</span><strong>KALIN<br/>ZHELEZOV</strong></div>
-          <div className="hero-versus" aria-hidden="true">VS</div>
-          <div className="hero-athlete athlete-right"><CompetitorPortrait competitor={first.competitorB}/><span>RO</span><strong>SEBASTIAN<br/>CURELARU</strong></div>
-          <div className="visual-bottomline"><span><i/> GRAPPLING GRAND PRIX 88</span><span>SOFIA, BULGARIA</span></div>
-          <div className="visual-caption"><GitBranch size={17}/> Eight athletes. One path to the title.</div>
+        <div className="hero-visual championship-visual" aria-label="European IBJJF No-Gi Championship 2026 in Rome">
+          <div className="visual-grid"/>
+          <div className="visual-topline"><span>IBJJF · EUROPEAN CHAMPIONSHIP</span><span>2026</span></div>
+          <div className="championship-poster"><span role="img" aria-label="Italy">🇮🇹</span><Trophy size={64} strokeWidth={1}/><strong>EUROPEAN<br/>NO-GI</strong><p>28 OCT — 01 NOV</p><span>PALAPELLICONE · ROME</span></div>
+          <div className="visual-bottomline"><span>JIU-JITSU WITHOUT THE GI</span><span>ITALY</span></div>
+          <div className="visual-caption"><GitBranch size={17}/> Follow the path to the European title.</div>
         </div>
       </section>
       <div className="landing-strip" aria-label="App features"><span>FOLLOW THE CARD</span><i>✳</i><span>READ THE BRACKET</span><i>✳</i><span>BACK YOUR INSTINCTS</span><i>✳</i><span>KNOW YOUR SPORT</span></div>
       <section className="landing-featured" id="featured-card">
-        <div className="featured-copy"><p className="landing-kicker">IN FOCUS / 001</p><h2>One night.<br/>Every route<br/>to the final.</h2><p>Grappling Grand Prix 88<br/><span>11 October 2026 · Mixtape 5, Sofia</span></p><a className="landing-text-link" href="#/app/brackets">Explore the full bracket <MoveUpRight size={18}/></a></div>
-        <div className="landing-draw-preview"><header><span>THE −88 KG TOURNAMENT</span><GitBranch size={20}/></header><div className="landing-mini-draw"><div className="mini-quarterfinals">{quarterfinals.map((match, i) => <div className="mini-bout" key={match.sourceMatchId}><small>QF {i + 1}</small>{[match.competitorA, match.competitorB].map(player => <div key={player.sourceId}><CompetitorPortrait competitor={player} compact/><span>{player.name}</span><b>—</b></div>)}</div>)}</div><div className="mini-advances" aria-hidden="true"><span/><span/></div><div className="mini-title"><Trophy size={29}/><span>THE FINAL</span><strong>Earn your<br/>place.</strong></div></div><footer>4 quarterfinals <span>→</span> 2 semifinals <span>→</span> 1 final</footer></div>
+        <div className="featured-copy"><p className="landing-kicker">IN FOCUS / EUROPEAN NO-GI</p><h2>Five days.<br/>One European<br/>stage.</h2><p>European IBJJF Jiu-Jitsu No-Gi Championship 2026<br/><span>28 October–1 November · PalaPellicone, Lido di Ostia, Italy</span></p><a className="landing-text-link" href={eventLink}>Explore the championship <MoveUpRight size={18}/></a></div>
+        <div className="landing-draw-preview championship-details"><header><span>YOUR GUIDE TO THE CHAMPIONSHIP</span><Trophy size={20}/></header><h3>Rome. No-Gi. European titles.</h3><p>Find your division and follow the published draw, from the opening match to the final.</p><a className="landing-text-link" href={bracketsUrl} target="_blank" rel="noreferrer">Official brackets <MoveUpRight size={18}/></a><a className="landing-text-link" href={officialUrl} target="_blank" rel="noreferrer">Schedule & event information <MoveUpRight size={18}/></a><footer>IBJJF <span>·</span> Juvenile, Adult & Master divisions</footer></div>
       </section>
       <section className="landing-experience" id="the-game"><div className="experience-heading"><p className="landing-kicker">MORE THAN A SPECTATOR</p><h2>Your mat-side advantage.</h2><p>The details matter. Get closer to the sport you love.</p></div><div className="experience-grid">{[
         { icon: Radar, title: 'Find your next event.', text: 'Explore competitions and published matchups in one place, with links back to the sources.', number: '01' },
         { icon: GitBranch, title: 'See the whole picture.', text: 'Follow the tournament from the opening round to the final. Athletes, opponents, and the route ahead.', number: '02' },
         { icon: Trophy, title: 'Trust your read.', text: 'Try predictions with demo points when markets are available. Follow confirmed results as they come in.', number: '03' }
       ].map(({icon: Icon, ...item}) => <article key={item.number}><div><Icon size={26}/><span>{item.number}</span></div><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></section>
-      <section className="landing-final"><p className="landing-kicker">YOU KNOW WHAT TO LOOK FOR.</p><h2>Now make your move.</h2><a className="landing-cta" href="#/app">Enter BJJ Predict <ArrowRight size={20}/></a><p>No real-money wagering. Just the sport, and your instincts.</p></section>
+      <section className="landing-final"><p className="landing-kicker">YOU KNOW WHAT TO LOOK FOR.</p><h2>Now make your move.</h2><a className="landing-cta" href={eventLink}>Enter BJJ Predict <ArrowRight size={20}/></a><p>No real-money wagering. Just the sport, and your instincts.</p></section>
     </main>
-    <footer className="landing-footer"><a href="/" className="landing-brand" aria-label="BJJ Predict landing page"><Swords size={20}/><span>BJJ<span className="brand-light">Predict</span></span></a><span>Built for the grappling obsessed.</span><a href="#/app">Open app <ArrowRight size={14}/></a></footer>
+    <footer className="landing-footer"><a href="/" className="landing-brand" aria-label="BJJ Predict landing page"><Swords size={20}/><span>BJJ<span className="brand-light">Predict</span></span></a><span>Built for the grappling obsessed.</span><a href={eventLink}>Open app <ArrowRight size={14}/></a></footer>
   </div>;
 }

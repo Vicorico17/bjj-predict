@@ -1,3 +1,4 @@
+import { linkedCompetitionId, withFeaturedChampionship } from './featuredChampionship';
 import { CompetitorsPage } from "./CompetitorsPage";
 import { CompetitorProfiles, CompetitorProfileLink } from "./CompetitorProfile";
 import { PredictionsProvider, PickButtons, MyPredictions } from "./Predictions";
@@ -108,7 +109,7 @@ function applyDiscoveryEvents(state: AppState, discovery: DiscoveryPayload): App
       ...(previous?.warnings ? { warnings: previous.warnings } : {})
     });
   }
-  return { ...state, events: [...byId.values()] };
+  return { ...state, events: withFeaturedChampionship([...byId.values()]) };
 }
 
 function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnapshot) {
@@ -126,13 +127,15 @@ function hydrateStateFromSnapshot(baseState: AppState, snapshot = smoothcompSnap
     .filter(event => !named.events.some(existing => existing.id === event.id))
     .map(event => ({
       id: event.id, sport: "bjj" as const, name: event.name,
-      organizer: event.source, city: [(event as { city?: string }).city, (event as { country?: string }).country].filter(Boolean).join(", "), startsAt: event.startsAt,
+      organizer: (event as { organizer?: string }).organizer || sourceLabels[event.source as AppEvent["source"]],
+      venue: (event as { venue?: string }).venue, officialUrl: (event as { officialUrl?: string }).officialUrl,
+      coverage: (event as { coverage?: AppEvent["coverage"] }).coverage, city: [(event as { city?: string }).city, (event as { country?: string }).country].filter(Boolean).join(", "), startsAt: event.startsAt,
       imageUrl: (event as typeof event & { coverImage?: string }).coverImage,
       endsAt: (event as typeof event & { endsAt?: string }).endsAt,
       sourceUrl: event.sourceUrl, source: event.source as AppEvent["source"], status: event.status as AppEvent["status"],
       lastSyncedAt: discoverySnapshot.checkedAt
     }));
-  const discovered = { ...named, events: [...named.events, ...discoveredEvents] };
+  const discovered = { ...named, events: withFeaturedChampionship([...named.events, ...discoveredEvents]) };
   return { ...discovered, positions: markPositions(discovered) };
 }
 
@@ -161,7 +164,7 @@ function App() {
   function setView(next: View) { setCurrentView(next); window.location.hash = next === "matches" ? "/app" : `/app/${next}`; }
   useEffect(() => { const navigate = () => setCurrentView(readView()); window.addEventListener("hashchange", navigate); return () => window.removeEventListener("hashchange", navigate); }, []);
   const [showAllCompetitions, setShowAllCompetitions] = useState(false);
-  const [competitionAvailability, setCompetitionAvailability] = useState<"ready" | "listed">("ready");
+  const [competitionAvailability, setCompetitionAvailability] = useState<"ready" | "listed">(() => Boolean(linkedCompetitionId(window.location.hash)) ? "listed" : "ready");
   const [allCompetitionDates, setAllCompetitionDates] = useState(true);
   const [competitionSearch, setCompetitionSearch] = useState("");
   const [refreshGeneration, setRefreshGeneration] = useState(0);
@@ -175,12 +178,27 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [showOldCompetitions, setShowOldCompetitions] = useState(() => window.location.hash === "#/app/brackets" && state.events.some(event => event.id === "e-gosofia-2387" && isPastCompetition(event)));
   const [selectedEventId, setSelectedEventId] = useState(() => {
+    const linkedEventId = linkedCompetitionId(window.location.hash);
+    if (linkedEventId && state.events.some(event => event.id === linkedEventId)) return linkedEventId;
     if (window.location.hash === "#/app/brackets") return "e-gosofia-2387";
     const initial = state;
     const active = currentEvents(initial.events);
     return active.find(event => initial.matches.some(match => match.eventId === event.id && match.status !== "settled"))?.id ??
       active[0]?.id ?? browseCompetitionEvents(initial.events, initial.matches).find(event => initial.matches.some(match => match.eventId === event.id))?.id ?? "";
   });
+  useEffect(() => {
+    const navigate = () => {
+      const id = linkedCompetitionId(window.location.hash);
+      if (!id) return;
+      setSelectedEventId(id);
+      setAllCompetitionDates(true);
+      setCompetitionSearch("");
+      setCompetitionAvailability(stateRef.current.matches.some(match => match.eventId === id && match.sourceState !== "withdrawn") || stateRef.current.events.find(event => event.id === id)?.brackets?.some(bracket => bracket.bouts?.some(bout => bout.seats.some(seat => seat.participant))) ? "ready" : "listed");
+    };
+    navigate();
+    window.addEventListener("hashchange", navigate);
+    return () => window.removeEventListener("hashchange", navigate);
+  }, []);
   const [tradeSide, setTradeSide] = useState<TradeSide>("buy");
   const [amount, setAmount] = useState(100);
   const [sellShares, setSellShares] = useState(1);
@@ -231,7 +249,7 @@ function App() {
   const searchedCompetitions = searchCompetitions(competitionPool, state.matches, state.competitors, competitionSearch);
   const competitionEvents = searchedCompetitions.filter(event => competitionAvailability === "ready" ? readyEventIds.has(event.id) : !readyEventIds.has(event.id));
   const selectedEventPool = view === "competitions" ? competitionEvents : visibleEvents;
-  const selectedEvent = selectedEventPool.find((event) => event.id === selectedEventId) ??
+  const selectedEvent = (view === "competitions" && linkedCompetitionId(window.location.hash) === selectedEventId ? state.events.find(event => event.id === selectedEventId) : undefined) ?? selectedEventPool.find((event) => event.id === selectedEventId) ??
     selectedEventPool.find(event => state.matches.some(match => match.eventId === event.id)) ?? selectedEventPool[0];
   const visibleEventIds = new Set(visibleEvents.map(event => event.id));
   const visibleMatches = state.matches.filter(match => visibleEventIds.has(match.eventId) && match.sourceState !== "withdrawn");
@@ -870,7 +888,7 @@ function CompetitionsView({ listingOnly, events, search, onSearch, selectedEvent
         <div className="bracket-heading"><div><span className="eyebrow">Competition draws</span><h3>{showingOldEvents ? "Past games & brackets" : "Live & upcoming games"}</h3></div>{displayedMatches.length > 0 && <span className="small-note">Pairings grouped by division and round</span>}</div>
         {canLoadMoreBrackets && <div className="bracket-import-action"><span>{selectedEvent.coverage?.importedBrackets} of {selectedEvent.coverage?.totalBrackets} published brackets loaded</span><button className="ghost-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Loading brackets…" : "Load more brackets"}</button>{importNotice && selectedEvent.id === noticeEventId && <span role="status">{importNotice}</span>}</div>}
         {selectedMatches.length > 0 && <div className="match-archive-toggle" role="group" aria-label="Choose matches to show"><button type="button" className={matchView === "current" ? "active" : ""} onClick={() => setMatchView("current")}>Live & upcoming <b>{currentMatches.length}</b></button><button type="button" className={matchView === "old" ? "active" : ""} onClick={() => setMatchView("old")}>Past & results <b>{oldMatches.length}</b></button><button type="button" className={matchView === "all" ? "active" : ""} onClick={() => setMatchView("all")}>All games <b>{selectedMatches.length}</b></button></div>}
-        {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} event={selectedEvent} division={division} matches={displayedMatches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : noUpcomingGames ? <div className="panel empty-matchups empty-upcoming"><CalendarDays size={26} aria-hidden="true"/><strong>{selectedMatches.length ? "No current games in this view" : "No matchups loaded yet"}</strong><div className="empty-actions"><button className="primary-button" type="button" onClick={onToggleOldEvents}>See old events</button><button className="ghost-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Checking…" : "Check brackets"}</button></div>{importNotice && selectedEvent.id === noticeEventId && <span role="status" title={importNotice}>{/not published|has not published/i.test(importNotice) ? "No pairings published yet" : "Brackets unavailable right now"}</span>}</div> : <div className="panel empty-matchups"><strong>{matchView === "current" ? "No upcoming games published yet" : selectedMatches.length ? "No past games in this view" : "Brackets are not published yet"}</strong><span>{matchView === "current" ? "The organizer may publish pairings closer to the event. Refresh the official brackets to check again." : selectedMatches.length ? "Choose another match view to see the stored bouts for this competition." : "This competition is listed by its organizer. Try loading its official bracket data, or check back when matchups are published."}</span>{(matchView === "current" || !selectedMatches.length) && <button className="primary-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Loading official brackets…" : "Refresh official matchups"}</button>}{importNotice && selectedEvent.id === noticeEventId && <span role="status">{importNotice}</span>}</div>}
+        {divisions.length ? <div className="bracket-list">{divisions.map(division => <BracketDivision key={division} event={selectedEvent} division={division} matches={displayedMatches.filter(match => (match.division || "Division not listed") === division)} competitors={competitors} />)}</div> : noUpcomingGames ? <div className="panel empty-matchups empty-upcoming"><CalendarDays size={26} aria-hidden="true"/><strong>{selectedMatches.length ? "No current games in this view" : "No matchups loaded yet"}</strong><div className="empty-actions"><button className="primary-button" type="button" onClick={onToggleOldEvents}>See old events</button><button className="ghost-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Checking…" : "Check brackets"}</button></div>{importNotice && selectedEvent.id === noticeEventId && <span role="status" title={importNotice}>{/not published|has not published/i.test(importNotice) ? "No pairings published yet" : "Brackets unavailable right now"}</span>}</div> : <div className="panel empty-matchups"><strong>{matchView === "current" ? "No upcoming games published yet" : selectedMatches.length ? "No past games in this view" : "Matchups haven’t been loaded yet"}</strong><span>{matchView === "current" ? "The organizer may publish pairings closer to the event. Refresh the official brackets to check again." : selectedMatches.length ? "Choose another match view to see the stored bouts for this competition." : "Open the official draw to see published brackets, or load available matchups here."}</span>{!selectedMatches.length && <a className="ghost-button" href={selectedEvent.source === "ibjjf" ? selectedEvent.sourceUrl : selectedEvent.officialUrl || selectedEvent.sourceUrl} target="_blank" rel="noreferrer">Open official draw ↗</a>}{(matchView === "current" || !selectedMatches.length) && <button className="primary-button" type="button" disabled={importingEventId === selectedEvent.id} onClick={() => onImport(selectedEvent)}>{importingEventId === selectedEvent.id ? "Loading official brackets…" : "Refresh official matchups"}</button>}{importNotice && selectedEvent.id === noticeEventId && <span role="status">{importNotice}</span>}</div>}
         </>}
         <div className="competition-info-grid">
           <section className="competition-facts" aria-label="Competition details"><div className="competition-facts-title"><CalendarDays size={18}/><h3>Event details</h3></div><dl><div><dt>Dates</dt><dd>{dateLabel}</dd></div><div><dt>Organizer</dt><dd>{selectedEvent.organizer || sourceLabels[selectedEvent.source]}</dd></div><div><dt>Location</dt><dd>{location}</dd></div><div><dt>Data source</dt><dd>{sourceLabels[selectedEvent.source]} · <a href={selectedEvent.sourceUrl} target="_blank" rel="noreferrer">View event listing <ExternalLink size={12}/></a></dd></div></dl><div className="competition-facts-updated">Data last checked {formatDateTime(selectedEvent.lastSyncedAt)}</div></section>

@@ -133,3 +133,26 @@
   .landing-nav .landing-brand small { font-size: 6px; letter-spacing: 1px; }
   .landing-nav .landing-entry { flex-shrink: 0; }
 }
+
+.championship-poster { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 16px; text-align: center; color: var(--acid); padding: 72px 24px; box-sizing: border-box; }
+.championship-poster > span:first-child { font-size: 30px; }
+.championship-poster > strong { font-size: clamp(38px, 4vw, 60px); line-height: .95; letter-spacing: -2px; }
+.championship-poster p { margin: 4px 0; font-size: 18px; letter-spacing: 2px; color: var(--paper); }
+.championship-poster > span:last-child { font-size: 10px; letter-spacing: 2px; }
+.championship-details { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.championship-details > header { width: 100%; gap: 16px; }
+.championship-details h3 { font-size: 30px; font-weight: 550; margin: 24px 0 12px; }
+.championship-details p { color: #aab4a7; line-height: 1.8; }
+.championship-details > footer { margin-top: 24px; }
+.hero-official-link { display: inline-flex; align-items: center; gap: 8px; color: var(--paper); font-size: 13px; padding: 12px 0; border-bottom: 1px solid #59614e; }
+.hero-official-link:hover { color: var(--acid); }
+.landing-skip { position: fixed; top: 12px; left: 12px; z-index: 100; padding: 12px 20px; background: var(--acid); color: #17200d; transform: translateY(-150%); }
+.landing-skip:focus { transform: translateY(0); }
+.landing-hero > *, .landing-featured > * { min-width: 0; }
+.landing h1 { overflow-wrap: break-word; }
+@media (max-width: 380px) {
+  .landing h1 { font-size: 40px; letter-spacing: -2px; }
+  .landing h1 em { letter-spacing: -2px; }
+  .hero-actions .landing-cta { width: 100%; gap: 16px; padding: 16px; box-sizing: border-box; }
+  .visual-caption { font-size: 10px; right: 0; }
+}

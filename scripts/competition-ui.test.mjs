@@ -55,3 +55,39 @@ test('reviewed tournament shows all rounds and portraits without platform-only a
   assert.doesNotMatch(html, /Load all divisions|Refresh all divisions|View on Smoothcomp/);
   assert.doesNotMatch(html, /aria-label="Winner"/);
 });
+
+const profileOutput = await build({ entryPoints: ['src/CompetitorProfile.tsx'], bundle: true, write: false, format: 'cjs', platform: 'node', packages: 'external', jsx: 'automatic' });
+const profileMod = { exports: {} };
+new Function('require', 'module', 'exports', profileOutput.outputFiles[0].text)(createRequire(import.meta.url), profileMod, profileMod.exports);
+const { profileHistory, ProfileDialog, CountryFlag, sameAthlete } = profileMod.exports;
+
+test('Sebastian profile includes his published bracket game and Romanian flag from every entry point', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const featured = JSON.parse(await readFile('src/generated/featured-events.json', 'utf8')).events[0];
+  const athlete = featured.participants.find(player => player.name === 'Sebastian Curelaru');
+  assert.ok(athlete);
+  const history = profileHistory(athlete, [], [], [featured]);
+  assert.equal(history.length, 1);
+  assert.equal(history[0].opponent, 'Kalin Zhelezov');
+  const html = renderToStaticMarkup(React.createElement(ProfileDialog, { athlete, competitors: [], matches: [], events: [featured], onClose() {} }));
+  assert.match(html, /vs Kalin Zhelezov/);
+  assert.match(html, /🇷🇴/);
+  assert.match(renderToStaticMarkup(React.createElement(CountryFlag, { country: 'de' })), /🇩🇪/);
+  assert.equal(sameAthlete(athlete, { ...athlete, id: 'c-curated-sebastian-curelaru' }), true);
+});
+
+test('profile combines bracket and saved games across events without duplicate results or byes', () => {
+  const alice = { ...player('Alice'), id: 'a' }, bea = { ...player('Bea'), id: 'b' };
+  const saved = { id: 'saved', eventId: 'event', sourceMatchId: 'bout', sourceBracketId: 'division', division: 'Adult', competitorAId: 'a', competitorBId: 'b', winnerId: 'a', status: 'settled', round: 'Final', scheduledAt: '' };
+  const secondEvent = { ...event, id: 'other-event' };
+  const rows = profileHistory(alice, [alice, bea], [saved], [event, secondEvent]);
+  assert.equal(rows.length, 2);
+  assert.ok(rows.every(row => row.outcome === 'Win'));
+  assert.equal(profileHistory(alice, [alice, bea], [{ ...saved, sourceState: 'withdrawn' }], [event]).length, 0);
+  const bye = { ...bout, seats: [bout.seats[0], { participant: null, label: 'Bye', winner: false }] };
+  assert.equal(profileHistory(alice, [], [], [{ ...event, brackets: [{ ...event.brackets[0], bouts: [bye] }] }]).length, 0);
+});
+
+test('profile identity does not merge different official athletes with matching names', () => {
+  assert.equal(sameAthlete({ ...player('Alice'), sourceUrl: 'https://smoothcomp.com/en/profile/1' }, { ...player('Alice'), sourceUrl: 'https://smoothcomp.com/en/profile/2' }), false);
+});

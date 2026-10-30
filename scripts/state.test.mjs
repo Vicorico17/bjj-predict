@@ -7,13 +7,14 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const folder = await mkdtemp(path.join(os.tmpdir(), 'bjj-data-tests-'));
-await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts', 'src/Predictions.tsx', 'src/storage.ts'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
+await build({ entryPoints: ['src/smoothcomp.ts', 'src/liquidity.ts', 'src/market.ts', 'src/events.ts', 'src/Predictions.tsx', 'src/storage.ts', 'src/featuredChampionship.ts'], outdir: folder, bundle: true, platform: 'node', format: 'esm', outExtension: { '.js': '.mjs' } });
 const { applyDataSnapshot } = await import(pathToFileURL(path.join(folder, 'smoothcomp.mjs')));
 const { planLiquidity } = await import(pathToFileURL(path.join(folder, 'liquidity.mjs')));
 const { costToBuyShares, quantitiesFromProbabilities, quoteBuy, isMatchTradable } = await import(pathToFileURL(path.join(folder, 'market.mjs')));
 const { predictionClosed } = await import(pathToFileURL(path.join(folder, 'Predictions.mjs')));
 const { compactState, loadState, saveState } = await import(pathToFileURL(path.join(folder, 'storage.mjs')));
 const { hasFreshLiveMatch, isPastCompetition, currentEvents, isCurrentMatch, isMajorCompetition, searchCompetitions } = await import(pathToFileURL(path.join(folder, 'events.mjs')));
+const { featuredChampionship, withFeaturedChampionship, linkedCompetitionId } = await import(pathToFileURL(path.join(folder, 'featuredChampionship.mjs')));
 await rm(folder, { recursive: true });
 const fixture = JSON.parse(await readFile('src/generated/data-snapshot.json', 'utf8'));
 const empty = () => ({ balance: 1000, competitors: [], events: [], matches: [], markets: [], positions: [], trades: [] });
@@ -277,4 +278,27 @@ test('Live match badges expire when score observations stop arriving', () => {
   assert(hasFreshLiveMatch(match, [], now));
   assert.equal(hasFreshLiveMatch({ ...match, sourceObservedAt: '' }, [], now), false);
   assert.equal(hasFreshLiveMatch(match, [], now + 45000), false);
+});
+
+
+test('featured championship preserves imported results and official metadata across discovery updates', () => {
+  const cached = { ...featuredChampionship, name: 'Directory name', city: '', venue: '', startsAt: '',
+    lastSyncedAt: '2026-10-30T12:00:00Z', coverage: { level: 'published', matchCount: 12, scoredMatches: 3 },
+    brackets: [{ sourceId: 'division', loaded: true, bouts: [] }] };
+  const events = withFeaturedChampionship([{ ...cached, id: 'e-bjjcalendar-2155' }, cached]);
+  assert.equal(events.length, 1);
+  assert.equal(events[0].name, featuredChampionship.name);
+  assert.equal(events[0].venue, featuredChampionship.venue);
+  assert.equal(events[0].startsAt, featuredChampionship.startsAt);
+  assert.equal(events[0].coverage.matchCount, 12);
+  assert.equal(events[0].brackets[0].loaded, true);
+  assert.equal(events[0].lastSyncedAt, cached.lastSyncedAt);
+  assert.equal(withFeaturedChampionship([])[0].source, 'ibjjf');
+});
+
+test('competition links recognize the official event and retain old homepage links', () => {
+  assert.equal(linkedCompetitionId('#/app/competitions/e-ibjjf-3313'), 'e-ibjjf-3313');
+  assert.equal(linkedCompetitionId('#/app/competitions/e-bjjcalendar-2155'), 'e-ibjjf-3313');
+  assert.equal(linkedCompetitionId('#/app/competitions'), undefined);
+  assert.equal(linkedCompetitionId('#/app/competitors/e-ibjjf-3313'), undefined);
 });
